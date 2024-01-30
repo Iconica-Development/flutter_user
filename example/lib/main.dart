@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/flutter_auth.dart';
+import 'package:flutter_user/flutter_user.dart';
 import 'package:go_router/go_router.dart';
 
 void main(List<String> args) {

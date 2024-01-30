@@ -1,6 +1,6 @@
 // import 'dart:typed_data';
 
-// import 'package:flutter_auth/src/models/user.dart';
+// import 'package:flutter_user/src/models/user.dart';
 // import 'package:flutter_profile/flutter_profile.dart';
 
 // abstract class UserService<T extends OnboardingMixin> {

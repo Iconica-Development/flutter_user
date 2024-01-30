@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/src/models/onboarding_configuration.dart';
+import 'package:flutter_user/src/models/onboarding_configuration.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_registration/flutter_registration.dart';
 

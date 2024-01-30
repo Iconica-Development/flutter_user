@@ -1,4 +1,4 @@
-# flutter_auth
+# flutter_user
 
 A new Flutter project.
 

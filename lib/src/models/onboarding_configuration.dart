@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/flutter_auth.dart';
+import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_form_wizard/utils/form.dart';
 import 'package:flutter_image_picker/flutter_image_picker.dart';
 import 'package:flutter_stepper/stepper.dart';

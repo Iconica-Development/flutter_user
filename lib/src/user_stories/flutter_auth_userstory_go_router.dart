@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/flutter_auth.dart';
-import 'package:flutter_auth/src/default_configs.dart/image_picker_configuration.dart';
-import 'package:flutter_auth/src/default_configs.dart/stepper_theme.dart';
-import 'package:flutter_auth/src/go_router.dart';
-import 'package:flutter_auth/src/services/example_registration_service.dart';
-import 'package:flutter_auth/src/widgets/onboarding.dart';
+import 'package:flutter_user/flutter_user.dart';
+import 'package:flutter_user/src/default_configs.dart/image_picker_configuration.dart';
+import 'package:flutter_user/src/default_configs.dart/stepper_theme.dart';
+import 'package:flutter_user/src/go_router.dart';
+import 'package:flutter_user/src/services/example_registration_service.dart';
+import 'package:flutter_user/src/widgets/onboarding.dart';
 import 'package:go_router/go_router.dart';
 
 List<GoRoute> getStartStoryRoutes(

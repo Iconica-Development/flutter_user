@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/src/widgets/image_picker_input.dart';
+import 'package:flutter_user/src/widgets/image_picker_input.dart';
 import 'package:flutter_image_picker/flutter_image_picker.dart';
 import 'package:flutter_stepper/stepper.dart';
 

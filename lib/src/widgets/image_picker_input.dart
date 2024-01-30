@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/src/default_configs.dart/image_picker_theme.dart';
+import 'package:flutter_user/src/default_configs.dart/image_picker_theme.dart';
 import 'package:flutter_form_wizard/flutter_form.dart';
 import 'package:flutter_image_picker/flutter_image_picker.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/flutter_auth.dart';
+import 'package:flutter_user/flutter_user.dart';
 
 class ExampleRegistrationRepository with RegistrationRepository {
   @override
