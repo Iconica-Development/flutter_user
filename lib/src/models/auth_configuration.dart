@@ -7,20 +7,25 @@ import 'package:flutter_user/src/models/onboarding_configuration.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_registration/flutter_registration.dart';
 
+export 'package:flutter_login/flutter_login.dart';
+export 'package:flutter_registration/flutter_registration.dart';
+export 'package:flutter_profile/flutter_profile.dart';
+
 @immutable
 class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
     required this.onLogin,
+    required this.loginOptions,
     this.registrationOptions,
     this.onRequestForgotPassword,
     this.onRegister,
     this.onForgotPassword,
-    this.loginOptions,
     this.useRegistration = true,
     this.showForgotPassword = true,
     this.forgotPasswordDescription = const Center(
       child: Text('description'),
     ),
+    this.loginPageBuilder,
     this.forgotPasswordTitle,
     this.onboardingConfiguration,
     this.onboardingScreen,
@@ -30,16 +35,17 @@ class AuthUserStoryConfiguration {
   //Login
 
   /// Called when the user logs in.
-  final FutureOr<void> Function(String, String, BuildContext) onLogin;
+  final FutureOr<void> Function(String email, String password, BuildContext)
+      onLogin;
 
   /// Called when the user registers.
-  final FutureOr<void> Function(String, String)? onRegister;
+  final FutureOr<void> Function(String email, String password)? onRegister;
 
   /// Called when the user forgot their password.
   final void Function(String)? onForgotPassword;
 
   /// Options for the login screen.
-  final LoginOptions? loginOptions;
+  final LoginOptions loginOptions;
 
   /// Whether to show the forgot password button.
   final bool showForgotPassword;
@@ -70,4 +76,11 @@ class AuthUserStoryConfiguration {
 
   /// Configuration for the onboarding screen.
   final OnboardingConfiguration? onboardingConfiguration;
+
+  final Widget Function(BuildContext context, Widget loginWidget)?
+      loginPageBuilder;
+
+  // pagebuilder for beforeRegistrationPage
+
+  // pagebuilder for afterRegistrationPage
 }

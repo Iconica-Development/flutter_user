@@ -35,12 +35,12 @@ List<GoRoute> getStartStoryRoutes(
                         .push(AuthUserStoryRoutes.forgotPasswordScreen);
                   }
                 : null,
-            options: configuration.loginOptions ?? const LoginOptions(),
+            options: configuration.loginOptions,
           );
           return buildScreenWithoutTransition(
             context: context,
             state: state,
-            child: Scaffold(
+            child: configuration.loginPageBuilder?.call(context, loginScreen) ?? Scaffold(
               body: loginScreen,
             ),
           );
@@ -72,7 +72,7 @@ List<GoRoute> getStartStoryRoutes(
         path: AuthUserStoryRoutes.forgotPasswordScreen,
         pageBuilder: (context, state) {
           var forgotPasswordScreen = ForgotPasswordForm(
-            options: configuration.loginOptions ?? const LoginOptions(),
+            options: configuration.loginOptions,
             description: configuration.forgotPasswordDescription,
             onRequestForgotPassword:
                 configuration.onRequestForgotPassword ?? (email) {},

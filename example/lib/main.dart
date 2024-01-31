@@ -58,7 +58,7 @@ GoRouter _router(BuildContext context) => GoRouter(
 AuthUserStoryConfiguration configuration(BuildContext context) =>
     AuthUserStoryConfiguration(
       onLogin: (password, email, context) {
-        debugPrint('onLogin: $password, $email');
+        debugPrint('on<L<GoRou> ()>: $password, $email');
         context.go(AuthUserStoryRoutes.onboarding);
       },
       onboardingConfiguration: OnboardingConfiguration(
