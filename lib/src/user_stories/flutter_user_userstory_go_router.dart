@@ -40,9 +40,10 @@ List<GoRoute> getStartStoryRoutes(
           return buildScreenWithoutTransition(
             context: context,
             state: state,
-            child: configuration.loginPageBuilder?.call(context, loginScreen) ?? Scaffold(
-              body: loginScreen,
-            ),
+            child: configuration.loginPageBuilder?.call(context, loginScreen) ??
+                Scaffold(
+                  body: loginScreen,
+                ),
           );
         },
       ),

@@ -1,15 +1,15 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_wizard/flutter_form.dart';
+import 'package:flutter_image_picker/flutter_image_picker.dart';
+import 'package:flutter_stepper/stepper.dart';
 import 'package:flutter_user/src/models/onboarding_configuration.dart';
 import 'package:flutter_user/src/widgets/access_page.dart';
 import 'package:flutter_user/src/widgets/completion_page.dart';
 import 'package:flutter_user/src/widgets/image_picker_input.dart';
 import 'package:flutter_user/src/widgets/personal_info_page.dart';
 import 'package:flutter_user/src/widgets/photo_page.dart';
-import 'package:flutter_form_wizard/flutter_form.dart';
-import 'package:flutter_image_picker/flutter_image_picker.dart';
-import 'package:flutter_stepper/stepper.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({

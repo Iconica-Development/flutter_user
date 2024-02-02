@@ -3,13 +3,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_user/src/models/onboarding_configuration.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_registration/flutter_registration.dart';
+import 'package:flutter_user/src/models/onboarding_configuration.dart';
 
 export 'package:flutter_login/flutter_login.dart';
-export 'package:flutter_registration/flutter_registration.dart';
 export 'package:flutter_profile/flutter_profile.dart';
+export 'package:flutter_registration/flutter_registration.dart';
 
 @immutable
 class AuthUserStoryConfiguration {
