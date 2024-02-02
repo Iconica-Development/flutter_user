@@ -16,14 +16,20 @@ List<GoRoute> getStartStoryRoutes(
         pageBuilder: (context, state) {
           var loginScreen = EmailPasswordLoginForm(
             onLogin: (email, password) async {
-              configuration.onLogin.call(password, email, context);
+              configuration.onLogin.call(email, password, context);
             },
             onRegister: configuration.useRegistration
                 ? (email, password) async {
                     if (configuration.onRegister != null) {
                       return configuration.onRegister?.call(email, password);
                     }
-                    await context.push(AuthUserStoryRoutes.registrationScreen);
+                    if (configuration.beforeRegistrationPage != null) {
+                      await context
+                          .push(AuthUserStoryRoutes.beforeRegistration);
+                    } else {
+                      await context
+                          .push(AuthUserStoryRoutes.registrationScreen);
+                    }
                   }
                 : null,
             onForgotPassword: configuration.showForgotPassword
@@ -51,14 +57,17 @@ List<GoRoute> getStartStoryRoutes(
         path: AuthUserStoryRoutes.registrationScreen,
         pageBuilder: (context, state) {
           var registrationScreen = RegistrationScreen(
-            registrationOptions: configuration.registrationOptions == null
-                ? RegistrationOptions(
-                    registrationRepository: ExampleRegistrationRepository(),
-                    registrationSteps: RegistrationOptions.getDefaultSteps(),
-                    afterRegistration: () =>
-                        context.go(AuthUserStoryRoutes.loginScreen),
-                  )
-                : configuration.registrationOptions!(context),
+            registrationOptions:
+                configuration.registrationOptions?.call(context) ??
+                    RegistrationOptions(
+                      registrationRepository: ExampleRegistrationRepository(),
+                      registrationSteps: RegistrationOptions.getDefaultSteps(),
+                      afterRegistration: () => context.go(
+                        configuration.afterRegistrationPage != null
+                            ? AuthUserStoryRoutes.afterRegistration
+                            : AuthUserStoryRoutes.loginScreen,
+                      ),
+                    ),
           );
           return buildScreenWithoutTransition(
             context: context,
@@ -128,4 +137,24 @@ List<GoRoute> getStartStoryRoutes(
           );
         },
       ),
+      if (configuration.beforeRegistrationPage != null) ...[
+        GoRoute(
+          path: AuthUserStoryRoutes.beforeRegistration,
+          pageBuilder: (context, state) => buildScreenWithoutTransition(
+            context: context,
+            state: state,
+            child: configuration.beforeRegistrationPage!.call(context),
+          ),
+        ),
+      ],
+      if (configuration.afterRegistrationPage != null) ...[
+        GoRoute(
+          path: AuthUserStoryRoutes.afterRegistration,
+          pageBuilder: (context, state) => buildScreenWithoutTransition(
+            context: context,
+            state: state,
+            child: configuration.afterRegistrationPage!.call(context),
+          ),
+        ),
+      ],
     ];

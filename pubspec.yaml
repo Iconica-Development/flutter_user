@@ -1,5 +1,5 @@
 name: flutter_user
-description: "A new Flutter project."
+description: "Flutter Userstory for onboarding, login, and registration."
 publish_to: "none"
 version: 1.0.0+1
 
@@ -17,11 +17,11 @@ dependencies:
   flutter_registration:
     git:
       url: https://github.com/Iconica-Development/flutter_registration
-      ref: 1.2.0
+      ref: feat/buttons_and_fields
   flutter_form_wizard:
     git:
       url: https://github.com/Iconica-Development/flutter_form_wizard
-      ref: 6.2.1
+      ref: 6.2.2
   flutter_stepper:
     git:
       url: https://github.com/Iconica-Development/stepper

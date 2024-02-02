@@ -27,6 +27,8 @@ class AuthUserStoryConfiguration {
     ),
     this.loginPageBuilder,
     this.forgotPasswordTitle,
+    this.beforeRegistrationPage,
+    this.afterRegistrationPage,
     this.onboardingConfiguration,
     this.onboardingScreen,
     this.useOnboarding = true,
@@ -81,6 +83,8 @@ class AuthUserStoryConfiguration {
       loginPageBuilder;
 
   // pagebuilder for beforeRegistrationPage
+  final WidgetBuilder? beforeRegistrationPage;
 
   // pagebuilder for afterRegistrationPage
+  final WidgetBuilder? afterRegistrationPage;
 }
