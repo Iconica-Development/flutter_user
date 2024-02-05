@@ -46,7 +46,10 @@ List<GoRoute> getStartStoryRoutes(
           return buildScreenWithoutTransition(
             context: context,
             state: state,
-            child: configuration.loginPageBuilder?.call(context, loginScreen) ??
+            child: configuration.loginPageBuilder?.call(
+                  context,
+                  loginScreen,
+                ) ??
                 Scaffold(
                   body: loginScreen,
                 ),
@@ -72,9 +75,13 @@ List<GoRoute> getStartStoryRoutes(
           return buildScreenWithoutTransition(
             context: context,
             state: state,
-            child: Scaffold(
-              body: registrationScreen,
-            ),
+            child: configuration.registrationPageBuilder?.call(
+                  context,
+                  registrationScreen,
+                ) ??
+                Scaffold(
+                  body: registrationScreen,
+                ),
           );
         },
       ),
@@ -91,14 +98,17 @@ List<GoRoute> getStartStoryRoutes(
           return buildScreenWithoutTransition(
             context: context,
             state: state,
-            child: Scaffold(
-              appBar: AppBar(),
-              body: SafeArea(
-                child: Center(
-                  child: forgotPasswordScreen,
+            child: configuration.forgotPasswordBuilder?.call(
+                  context,
+                  forgotPasswordScreen,
+                ) ??
+                Scaffold(
+                  body: SafeArea(
+                    child: Center(
+                      child: forgotPasswordScreen,
+                    ),
+                  ),
                 ),
-              ),
-            ),
           );
         },
       ),

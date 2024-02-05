@@ -16,6 +16,7 @@ class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
     required this.onLogin,
     required this.loginOptions,
+    this.userBuilder,
     this.registrationOptions,
     this.onRequestForgotPassword,
     this.onRegister,
@@ -26,6 +27,8 @@ class AuthUserStoryConfiguration {
       child: Text('description'),
     ),
     this.loginPageBuilder,
+    this.registrationPageBuilder,
+    this.forgotPasswordBuilder,
     this.forgotPasswordTitle,
     this.beforeRegistrationPage,
     this.afterRegistrationPage,
@@ -48,6 +51,12 @@ class AuthUserStoryConfiguration {
 
   /// Options for the login screen.
   final LoginOptions loginOptions;
+
+  /// Wrap in a custom page
+  final Widget Function(
+    BuildContext context,
+    Widget userPage,
+  )? userBuilder;
 
   /// Whether to show the forgot password button.
   final bool showForgotPassword;
@@ -81,6 +90,16 @@ class AuthUserStoryConfiguration {
 
   final Widget Function(BuildContext context, Widget loginWidget)?
       loginPageBuilder;
+
+  final Widget Function(
+    BuildContext context,
+    Widget registrationScreen,
+  )? registrationPageBuilder;
+
+  final Widget Function(
+    BuildContext context,
+    Widget forgotPasswordPage,
+  )? forgotPasswordBuilder;
 
   // pagebuilder for beforeRegistrationPage
   final WidgetBuilder? beforeRegistrationPage;
