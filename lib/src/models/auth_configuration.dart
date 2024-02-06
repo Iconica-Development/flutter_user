@@ -15,17 +15,15 @@ export 'package:flutter_registration/flutter_registration.dart';
 class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
     required this.onLogin,
-    required this.loginOptions,
+    required this.loginOptionsBuilder,
     this.userBuilder,
-    this.registrationOptions,
+    this.registrationOptionsBuilder,
     this.onRequestForgotPassword,
     this.onRegister,
     this.onForgotPassword,
     this.useRegistration = true,
     this.showForgotPassword = true,
-    this.forgotPasswordDescription = const Center(
-      child: Text('description'),
-    ),
+    this.forgotPasswordDescription,
     this.loginPageBuilder,
     this.registrationPageBuilder,
     this.forgotPasswordBuilder,
@@ -40,17 +38,24 @@ class AuthUserStoryConfiguration {
   //Login
 
   /// Called when the user logs in.
-  final FutureOr<void> Function(String email, String password, BuildContext)
-      onLogin;
+  final FutureOr<void> Function(
+    String email,
+    String password,
+    BuildContext context,
+  ) onLogin;
 
   /// Called when the user registers.
-  final FutureOr<void> Function(String email, String password)? onRegister;
+  final FutureOr<void> Function(
+    String email,
+    String password,
+    BuildContext context,
+  )? onRegister;
 
   /// Called when the user forgot their password.
-  final void Function(String)? onForgotPassword;
+  final void Function(String, BuildContext context)? onForgotPassword;
 
   /// Options for the login screen.
-  final LoginOptions loginOptions;
+  final LoginOptions Function(BuildContext context)? loginOptionsBuilder;
 
   /// Wrap in a custom page
   final Widget Function(
@@ -64,20 +69,22 @@ class AuthUserStoryConfiguration {
   //Registration
 
   /// Options for the registration screen.
-  final RegistrationOptions Function(BuildContext context)? registrationOptions;
+  final RegistrationOptions Function(BuildContext context)?
+      registrationOptionsBuilder;
 
   /// Whether to use the registration screen.
   final bool useRegistration;
 
   //forgot-password
   /// Text to show on the forgot password screen.
-  final Widget forgotPasswordDescription;
+  final Widget? Function(BuildContext context)? forgotPasswordDescription;
 
   /// Called when the user requests a password reset.
-  final FutureOr<void> Function(String)? onRequestForgotPassword;
+  final FutureOr<void> Function(String email, BuildContext context)?
+      onRequestForgotPassword;
 
   /// Title to show on the forgot password screen.
-  final Widget? forgotPasswordTitle;
+  final Widget Function(BuildContext context)? forgotPasswordTitle;
 
   //onboarding
 

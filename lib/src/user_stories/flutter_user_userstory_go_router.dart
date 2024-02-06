@@ -21,7 +21,8 @@ List<GoRoute> getStartStoryRoutes(
             onRegister: configuration.useRegistration
                 ? (email, password) async {
                     if (configuration.onRegister != null) {
-                      return configuration.onRegister?.call(email, password);
+                      return configuration.onRegister
+                          ?.call(email, password, context);
                     }
                     if (configuration.beforeRegistrationPage != null) {
                       await context
@@ -35,13 +36,17 @@ List<GoRoute> getStartStoryRoutes(
             onForgotPassword: configuration.showForgotPassword
                 ? (email) async {
                     if (configuration.onForgotPassword != null) {
-                      return configuration.onForgotPassword?.call(email);
+                      return configuration.onForgotPassword?.call(
+                        email,
+                        context,
+                      );
                     }
                     await context
                         .push(AuthUserStoryRoutes.forgotPasswordScreen);
                   }
                 : null,
-            options: configuration.loginOptions,
+            options: configuration.loginOptionsBuilder?.call(context) ??
+                const LoginOptions(),
           );
           return buildScreenWithoutTransition(
             context: context,
@@ -61,7 +66,7 @@ List<GoRoute> getStartStoryRoutes(
         pageBuilder: (context, state) {
           var registrationScreen = RegistrationScreen(
             registrationOptions:
-                configuration.registrationOptions?.call(context) ??
+                configuration.registrationOptionsBuilder?.call(context) ??
                     RegistrationOptions(
                       registrationRepository: ExampleRegistrationRepository(),
                       registrationSteps: RegistrationOptions.getDefaultSteps(),
@@ -89,11 +94,17 @@ List<GoRoute> getStartStoryRoutes(
         path: AuthUserStoryRoutes.forgotPasswordScreen,
         pageBuilder: (context, state) {
           var forgotPasswordScreen = ForgotPasswordForm(
-            options: configuration.loginOptions,
-            description: configuration.forgotPasswordDescription,
-            onRequestForgotPassword:
-                configuration.onRequestForgotPassword ?? (email) {},
-            title: configuration.forgotPasswordTitle,
+            options: configuration.loginOptionsBuilder?.call(context) ??
+                const LoginOptions(),
+            description:
+                configuration.forgotPasswordDescription?.call(context) ??
+                    const Center(child: Text('description')),
+            onRequestForgotPassword: (email) async =>
+                configuration.onRequestForgotPassword?.call(
+              email,
+              context,
+            ),
+            title: configuration.forgotPasswordTitle?.call(context),
           );
           return buildScreenWithoutTransition(
             context: context,

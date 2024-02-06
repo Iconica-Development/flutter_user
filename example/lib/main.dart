@@ -67,12 +67,13 @@ AuthUserStoryConfiguration configuration(BuildContext context) =>
           context.go('/');
         },
       ),
-      loginOptions: loginOptions,
-      registrationOptions: (context) => getRegistrationOptions(context),
+      loginOptionsBuilder: (_) => loginOptions,
+      registrationOptionsBuilder: (context) => getRegistrationOptions(context),
       useRegistration: true,
       onRequestForgotPassword: (p0) {},
-      forgotPasswordTitle: const Center(child: Text('Forgot password')),
-      forgotPasswordDescription:
+      forgotPasswordTitle: (context) =>
+          const Center(child: Text('Forgot password')),
+      forgotPasswordDescription: (context) =>
           const Center(child: Text('Forgot password description')),
     );
 final loginOptions = LoginOptions(
