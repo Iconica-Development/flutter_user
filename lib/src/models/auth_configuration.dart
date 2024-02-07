@@ -30,6 +30,7 @@ class AuthUserStoryConfiguration {
     this.forgotPasswordTitle,
     this.beforeRegistrationPage,
     this.afterRegistrationPage,
+    this.pageOverlayBuilder,
     this.onboardingConfiguration,
     this.onboardingScreen,
     this.useOnboarding = true,
@@ -107,6 +108,10 @@ class AuthUserStoryConfiguration {
     BuildContext context,
     Widget forgotPasswordPage,
   )? forgotPasswordBuilder;
+
+  /// This can be used to show something above the other pages.
+  /// For instance to indicate that there is no internet.
+  final WidgetBuilder? pageOverlayBuilder;
 
   // pagebuilder for beforeRegistrationPage
   final WidgetBuilder? beforeRegistrationPage;

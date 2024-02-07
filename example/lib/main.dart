@@ -70,7 +70,7 @@ AuthUserStoryConfiguration configuration(BuildContext context) =>
       loginOptionsBuilder: (_) => loginOptions,
       registrationOptionsBuilder: (context) => getRegistrationOptions(context),
       useRegistration: true,
-      onRequestForgotPassword: (p0) {},
+      onRequestForgotPassword: (p0, context) {},
       forgotPasswordTitle: (context) =>
           const Center(child: Text('Forgot password')),
       forgotPasswordDescription: (context) =>
