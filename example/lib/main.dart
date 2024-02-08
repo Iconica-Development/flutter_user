@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_login_interface/src/login_interface.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:go_router/go_router.dart';
 

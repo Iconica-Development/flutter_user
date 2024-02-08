@@ -18,7 +18,10 @@ List<GoRoute> getStartStoryRoutes(
             children: [
               EmailPasswordLoginForm(
                 onLogin: (email, password) async {
-                  configuration.onLogin?.call(email, password, context);
+                  if (configuration.onLogin != null) {
+                    configuration.onLogin?.call(email, password, context);
+                    return;
+                  }
                   var result = await configuration.loginService
                       .loginWithEmailAndPassword(email, password);
                   if (result && context.mounted) {
