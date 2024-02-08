@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_user/flutter_user.dart';
-import 'package:flutter_user/src/default_configs.dart/image_picker_configuration.dart';
-import 'package:flutter_user/src/default_configs.dart/stepper_theme.dart';
+import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
+import 'package:flutter_user/src/default_configs/stepper_theme.dart';
 import 'package:flutter_user/src/go_router.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
@@ -18,14 +18,41 @@ List<GoRoute> getStartStoryRoutes(
             children: [
               EmailPasswordLoginForm(
                 onLogin: (email, password) async {
-                  configuration.onLogin.call(email, password, context);
+                  configuration.onLogin?.call(email, password, context);
+                  var result = await configuration.loginService
+                      .loginWithEmailAndPassword(email, password);
+                  if (result && context.mounted) {
+                    var user =
+                        await configuration.loginService.getLoggedInUser();
+                    if (context.mounted)
+                      return context.go(
+                        !(user is User &&
+                                    user is OnboardedUserMixin &&
+                                    (user.onboarded ?? false)) &&
+                                configuration.useOnboarding
+                            ? AuthUserStoryRoutes.onboarding
+                            : configuration.afterLoginRoute!,
+                      );
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Login ${result ? 'successful' : 'failed'}",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 onRegister: configuration.useRegistration
                     ? (email, password) async {
-                        if (configuration.onRegister != null) {
-                          return configuration.onRegister
-                              ?.call(email, password, context);
-                        }
+                        configuration.onRegister
+                            ?.call(email, password, context);
+
                         if (configuration.beforeRegistrationPage != null) {
                           await context
                               .push(AuthUserStoryRoutes.beforeRegistration);
@@ -37,12 +64,11 @@ List<GoRoute> getStartStoryRoutes(
                     : null,
                 onForgotPassword: configuration.showForgotPassword
                     ? (email) async {
-                        if (configuration.onForgotPassword != null) {
-                          return configuration.onForgotPassword?.call(
-                            email,
-                            context,
-                          );
-                        }
+                        configuration.onForgotPassword?.call(
+                          email,
+                          context,
+                        );
+
                         await context
                             .push(AuthUserStoryRoutes.forgotPasswordScreen);
                       }
@@ -113,11 +139,13 @@ List<GoRoute> getStartStoryRoutes(
                 description:
                     configuration.forgotPasswordDescription?.call(context) ??
                         const Center(child: Text('description')),
-                onRequestForgotPassword: (email) async =>
-                    configuration.onRequestForgotPassword?.call(
-                  email,
-                  context,
-                ),
+                onRequestForgotPassword: (email) async {
+                  configuration.onRequestForgotPassword?.call(
+                    email,
+                    context,
+                  );
+                  await configuration.loginService.requestChangePassword(email);
+                },
                 title: configuration.forgotPasswordTitle?.call(context),
               ),
               configuration.pageOverlayBuilder?.call(context) ??

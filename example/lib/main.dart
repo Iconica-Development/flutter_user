@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login_interface/src/login_interface.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,31 +14,38 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router(context),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp.router(
+        routerConfig: _router(context),
+      );
 }
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Home'),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              context.go('/login');
+            },
+            child: const Text('Login'),
+          ),
+        ),
+      );
 }
 
-class _HomeState extends State<Home> {
+class AfterLogin extends StatelessWidget {
+  const AfterLogin({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: ElevatedButton(
-          child: const Text('Go to Login'),
-          onPressed: () {
-            context.go(AuthUserStoryRoutes.loginScreen);
-          },
-        ),
+        child: Text('After login'),
       ),
     );
   }
@@ -51,24 +60,58 @@ GoRouter _router(BuildContext context) => GoRouter(
           },
         ),
         ...getStartStoryRoutes(configuration(context)),
+        GoRoute(
+            path: '/afterlogin',
+            builder: (context, state) {
+              return const AfterLogin();
+            }),
       ],
-      initialLocation: AuthUserStoryRoutes.onboarding,
     );
+
+class ExampleLoginService implements LoginService {
+  @override
+  late LoginInterface dataSource;
+  AuthUser user = AuthUser();
+  @override
+  Future getLoggedInUser() {
+    return Future.value(AuthUser(
+      onboarded: false,
+    ));
+  }
+
+  @override
+  Future loginWithEmailAndPassword(String email, String password,
+      {Function(dynamic resolver)? onMFA}) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> logout() {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> requestChangePassword(String email) {
+    return Future.value(true);
+  }
+}
 
 AuthUserStoryConfiguration configuration(BuildContext context) =>
     AuthUserStoryConfiguration(
+      afterLoginRoute: '/afterlogin',
+      afterLoginPage: (context) =>
+          const Scaffold(body: Center(child: Text('After login'))),
+      useOnboarding: true,
+      loginService: ExampleLoginService(),
       onLogin: (password, email, context) {
         debugPrint('on<L<GoRou> ()>: $password, $email');
-        context.go(AuthUserStoryRoutes.onboarding);
       },
       onboardingConfiguration: OnboardingConfiguration(
         onboardingFinished: (results, context) {
-          debugPrint('onboardingFinished: $results');
-          context.go('/');
+          context.go('/login');
         },
       ),
       loginOptionsBuilder: (_) => loginOptions,
-      registrationOptionsBuilder: (context) => getRegistrationOptions(context),
       useRegistration: true,
       onRequestForgotPassword: (p0, context) {},
       forgotPasswordTitle: (context) =>
@@ -106,18 +149,65 @@ final loginOptions = LoginOptions(
   },
 );
 
-getRegistrationOptions(BuildContext context) => RegistrationOptions(
-      registrationRepository: ExampleRegistrationRepository(),
-      registrationSteps: RegistrationOptions.getDefaultSteps(),
-      afterRegistration: () {
-        context.go(AuthUserStoryRoutes.onboarding);
-      },
-    );
-
 class ExampleRegistrationRepository with RegistrationRepository {
   @override
   Future<String?> register(HashMap values) {
     debugPrint('register: $values');
     return Future.value(null);
   }
+}
+
+class AuthUser implements User, OnboardedUserMixin {
+  AuthUser({
+    this.firstName,
+    this.image,
+    this.imageUrl,
+    this.lastName,
+    this.onboarded,
+    this.profileData,
+  });
+
+  factory AuthUser.fromMap(Map<String, dynamic> data) => AuthUser(
+        firstName: data['first_name'],
+        lastName: data['last_name'],
+        image: data['image'],
+        imageUrl: data['image_url'],
+        profileData: data['profile_data'],
+        onboarded: data['onboarded'],
+      );
+  @override
+  String? firstName;
+
+  @override
+  Uint8List? image;
+
+  @override
+  String? imageUrl;
+
+  @override
+  String? lastName;
+
+  @override
+  bool? onboarded;
+
+  @override
+  ProfileData? profileData;
+
+  @override
+  String get displayName => '${firstName ?? ''} ${lastName ?? ''}';
+
+  @override
+  String get initials =>
+      '${(firstName?.isNotEmpty ?? false) ? firstName![0] : ''}'
+      '${(lastName?.isNotEmpty ?? false) ? lastName![0] : ''}';
+
+  @override
+  Map<String, dynamic> toMap() => {
+        'first_name': firstName,
+        'last_name': lastName,
+        'image': image,
+        'image_url': image,
+        'profile_data': profileData?.toMap(),
+        'onboarded': onboarded,
+      };
 }

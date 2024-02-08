@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_registration/flutter_registration.dart';
 import 'package:flutter_user/src/models/onboarding_configuration.dart';
 
@@ -14,8 +15,10 @@ export 'package:flutter_registration/flutter_registration.dart';
 @immutable
 class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
-    required this.onLogin,
+    required this.loginService,
     required this.loginOptionsBuilder,
+    this.afterLoginRoute,
+    this.onLogin,
     this.userBuilder,
     this.registrationOptionsBuilder,
     this.onRequestForgotPassword,
@@ -34,6 +37,7 @@ class AuthUserStoryConfiguration {
     this.onboardingConfiguration,
     this.onboardingScreen,
     this.useOnboarding = true,
+    this.afterLoginPage,
   });
 
   //Login
@@ -43,7 +47,7 @@ class AuthUserStoryConfiguration {
     String email,
     String password,
     BuildContext context,
-  ) onLogin;
+  )? onLogin;
 
   /// Called when the user registers.
   final FutureOr<void> Function(
@@ -51,6 +55,12 @@ class AuthUserStoryConfiguration {
     String password,
     BuildContext context,
   )? onRegister;
+
+  /// The login service to use.
+  final LoginService loginService;
+
+  /// The route to go to after the user logs in.
+  final String? afterLoginRoute;
 
   /// Called when the user forgot their password.
   final void Function(String, BuildContext context)? onForgotPassword;
@@ -91,7 +101,9 @@ class AuthUserStoryConfiguration {
 
   /// Place your own onboarding here to override the default onboarding.
   final Widget? onboardingScreen;
-  final bool? useOnboarding;
+
+  /// Whether to use the onboarding screen.
+  final bool useOnboarding;
 
   /// Configuration for the onboarding screen.
   final OnboardingConfiguration? onboardingConfiguration;
@@ -118,4 +130,7 @@ class AuthUserStoryConfiguration {
 
   // pagebuilder for afterRegistrationPage
   final WidgetBuilder? afterRegistrationPage;
+
+  // pagebuilder for afterLoginPAge
+  final WidgetBuilder? afterLoginPage;
 }

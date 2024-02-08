@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter_profile/flutter_profile.dart';
 
-mixin OnboardingMixin on User {
-  bool onboarded = false;
+import 'package:flutter_user/flutter_user.dart';
+
+mixin OnboardedUserMixin on User {
+  bool? onboarded;
 }
