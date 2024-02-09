@@ -143,10 +143,11 @@ List<GoRoute> getStartStoryRoutes(
                     configuration.forgotPasswordDescription?.call(context) ??
                         const Center(child: Text('description')),
                 onRequestForgotPassword: (email) async {
-                  configuration.onRequestForgotPassword?.call(
-                    email,
-                    context,
-                  );
+                  if (configuration.onRequestForgotPassword != null) {
+                    await configuration.onRequestForgotPassword
+                        ?.call(email, context);
+                    return;
+                  }
                   await configuration.loginService.requestChangePassword(email);
                 },
                 title: configuration.forgotPasswordTitle?.call(context),
