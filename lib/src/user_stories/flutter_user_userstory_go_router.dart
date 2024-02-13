@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';
@@ -6,6 +7,21 @@ import 'package:flutter_user/src/go_router.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
 import 'package:go_router/go_router.dart';
+
+Future<String> getFirstRoute(
+  AuthUserStoryConfiguration configuration,
+  BuildContext context,
+) async {
+  var user = await configuration.onGetLoggedInUser?.call(context);
+  if (user == null) {
+    return AuthUserStoryRoutes.loginScreen;
+  }
+  if (configuration.useOnboarding && !user.onboarded) {
+    return AuthUserStoryRoutes.onboarding;
+  } else {
+    return configuration.afterLoginRoute ?? '';
+  }
+}
 
 List<GoRoute> getStartStoryRoutes(
   AuthUserStoryConfiguration configuration,
@@ -22,29 +38,49 @@ List<GoRoute> getStartStoryRoutes(
                     configuration.onLogin?.call(email, password, context);
                     return;
                   }
-                  var result = await configuration.loginService
-                      .loginWithEmailAndPassword(email, password);
-                  if (result && context.mounted) {
+                  var service =
+                      configuration.loginServiceBuilder?.call(context) ??
+                          LocalLoginService();
+                  var theme = Theme.of(context);
+                  var result = await service.loginWithEmailAndPassword(
+                    email,
+                    password,
+                    context,
+                  );
+                  if (result.loginSuccessful && context.mounted) {
                     var user =
-                        await configuration.loginService.getLoggedInUser();
+                        await configuration.onGetLoggedInUser?.call(context);
+
                     if (context.mounted)
                       return context.go(
-                        !(user is User &&
-                                    user is OnboardedUserMixin &&
-                                    (user.onboarded ?? false)) &&
+                        user != null &&
+                                !user.onboarded &&
                                 configuration.useOnboarding
                             ? AuthUserStoryRoutes.onboarding
                             : configuration.afterLoginRoute!,
                       );
                   } else {
-                    if (context.mounted) {
+                    if (context.mounted && result.loginError != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                            "Login ${result ? 'successful' : 'failed'}",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                result.loginError!.title,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  color: theme.colorScheme.onBackground,
+                                ),
+                              ),
+                              Text(
+                                result.loginError!.message,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onBackground,
+                                  height: 1.3,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -134,6 +170,9 @@ List<GoRoute> getStartStoryRoutes(
       GoRoute(
         path: AuthUserStoryRoutes.forgotPasswordScreen,
         pageBuilder: (context, state) {
+          var theme = Theme.of(context);
+          var service = configuration.loginServiceBuilder?.call(context) ??
+              LocalLoginService();
           var forgotPasswordScreen = Stack(
             children: [
               ForgotPasswordForm(
@@ -148,7 +187,38 @@ List<GoRoute> getStartStoryRoutes(
                         ?.call(email, context);
                     return;
                   }
-                  await configuration.loginService.requestChangePassword(email);
+                  var result =
+                      await service.requestChangePassword(email, context);
+                  if (result.requestSuccesfull && context.mounted) {
+                    context.go(AuthUserStoryRoutes.loginScreen);
+                  } else {
+                    if (context.mounted &&
+                        result.requestPasswordError != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                result.requestPasswordError!.title,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  color: theme.colorScheme.onBackground,
+                                ),
+                              ),
+                              Text(
+                                result.requestPasswordError!.message,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onBackground,
+                                  height: 1.3,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 title: configuration.forgotPasswordTitle?.call(context),
               ),

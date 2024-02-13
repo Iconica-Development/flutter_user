@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';
@@ -19,34 +20,36 @@ Widget _loginScreen(
     children: [
       EmailPasswordLoginForm(
         onLogin: (email, password) async {
+          var service = configuration.loginServiceBuilder?.call(context) ??
+              LocalLoginService();
           configuration.onLogin?.call(email, password, context);
-          var result = await configuration.loginService
-              .loginWithEmailAndPassword(email, password);
-          if (result && context.mounted) {
-            var user = await configuration.loginService.getLoggedInUser();
-            if (context.mounted)
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => (user is User &&
-                              user is OnboardedUserMixin &&
-                              (user.onboarded ?? false)) &&
-                          configuration.useOnboarding
-                      ? _onboardingScreen(configuration, context)
-                      : configuration.afterLoginPage!(context),
-                ),
-              );
+          var result =
+              await service.loginWithEmailAndPassword(email, password, context);
+          if (result.loginSuccessful && context.mounted) {
+            var user = await service.getLoggedInUser();
+            // if (context.mounted)
+            //   await Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(
+            //       builder: (context) => (user is User &&
+            //                   user is OnboardedUserMixin &&
+            //                   (user.onboarded ?? false)) &&
+            //               configuration.useOnboarding
+            //           ? _onboardingScreen(configuration, context)
+            //           : configuration.afterLoginPage!(context),
+            //     ),
+            //   );
           } else {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "Login ${result ? 'successful' : 'failed'}",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       "Login ${result ? 'successful' : 'failed'}",
+              //       style: TextStyle(
+              //         color: Theme.of(context).colorScheme.error,
+              //       ),
+              //     ),
+              //   ),
+              // );
             }
           }
         },
@@ -141,6 +144,8 @@ Widget _forgotPasswordScreen(
   AuthUserStoryConfiguration configuration,
   BuildContext context,
 ) {
+  var service =
+      configuration.loginServiceBuilder?.call(context) ?? LocalLoginService();
   var forgotPasswordScreen = Stack(
     children: [
       ForgotPasswordForm(
@@ -153,7 +158,7 @@ Widget _forgotPasswordScreen(
             email,
             context,
           );
-          await configuration.loginService.requestChangePassword(email);
+          await service.requestChangePassword(email, context);
         },
         title: configuration.forgotPasswordTitle?.call(context),
       ),

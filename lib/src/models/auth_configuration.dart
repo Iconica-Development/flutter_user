@@ -7,18 +7,19 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_registration/flutter_registration.dart';
 import 'package:flutter_user/src/models/onboarding_configuration.dart';
+import 'package:flutter_user/src/models/user.dart';
 
 export 'package:flutter_login/flutter_login.dart';
-export 'package:flutter_login_interface/flutter_login_interface.dart';
-export 'package:flutter_login_service/flutter_login_service.dart';
 export 'package:flutter_profile/flutter_profile.dart';
 export 'package:flutter_registration/flutter_registration.dart';
 
 @immutable
 class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
-    required this.loginService,
     required this.loginOptionsBuilder,
+    this.loginServiceBuilder,
+    this.loginErrorSnackbarTitleStyle,
+    this.loginErrorSnackbarMessageStyle,
     this.afterLoginRoute,
     this.onLogin,
     this.userBuilder,
@@ -40,9 +41,8 @@ class AuthUserStoryConfiguration {
     this.onboardingScreen,
     this.useOnboarding = true,
     this.afterLoginPage,
+    this.onGetLoggedInUser,
   });
-
-  //Login
 
   /// Called when the user logs in.
   final FutureOr<void> Function(
@@ -58,8 +58,11 @@ class AuthUserStoryConfiguration {
     BuildContext context,
   )? onRegister;
 
+  final Future<OnboardedUserMixin?> Function(BuildContext context)?
+      onGetLoggedInUser;
+
   /// The login service to use.
-  final LoginService loginService;
+  final LoginService Function(BuildContext)? loginServiceBuilder;
 
   /// The route to go to after the user logs in.
   final String? afterLoginRoute;
@@ -135,4 +138,6 @@ class AuthUserStoryConfiguration {
 
   // pagebuilder for afterLoginPAge
   final WidgetBuilder? afterLoginPage;
+  final TextStyle? loginErrorSnackbarTitleStyle;
+  final TextStyle? loginErrorSnackbarMessageStyle;
 }

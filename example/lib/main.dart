@@ -68,8 +68,6 @@ GoRouter _router(BuildContext context) => GoRouter(
     );
 
 class ExampleLoginService implements LoginService {
-  @override
-  late LoginInterface dataSource;
   AuthUser user = AuthUser();
   @override
   Future getLoggedInUser() {
@@ -79,19 +77,23 @@ class ExampleLoginService implements LoginService {
   }
 
   @override
-  Future loginWithEmailAndPassword(String email, String password,
-      {Function(dynamic resolver)? onMFA}) {
+  Future<LoginResponse<dynamic>> loginWithEmailAndPassword(
+      String email, String password, BuildContext context,
+      {Function(dynamic resolver)? onMFA}) async {
+    return LoginResponse<dynamic>(loginSuccessful: true, userObject: null);
+  }
+
+  @override
+  Future<bool> logout(BuildContext context) {
     return Future.value(true);
   }
 
   @override
-  Future<bool> logout() {
-    return Future.value(true);
-  }
-
-  @override
-  Future<bool> requestChangePassword(String email) {
-    return Future.value(true);
+  Future<RequestPasswordResponse> requestChangePassword(
+      String email, BuildContext context) {
+    return Future.value(RequestPasswordResponse(
+      requestSuccesfull: true,
+    ));
   }
 }
 
@@ -101,7 +103,7 @@ AuthUserStoryConfiguration configuration(BuildContext context) =>
       afterLoginPage: (context) =>
           const Scaffold(body: Center(child: Text('After login'))),
       useOnboarding: true,
-      loginService: ExampleLoginService(),
+      loginServiceBuilder: (context) => ExampleLoginService(),
       onLogin: (password, email, context) {
         debugPrint('on<L<GoRou> ()>: $password, $email');
       },
@@ -162,8 +164,8 @@ class AuthUser implements User, OnboardedUserMixin {
     this.image,
     this.imageUrl,
     this.lastName,
-    this.onboarded,
     this.profileData,
+    this.onboarded = false,
   });
 
   factory AuthUser.fromMap(Map<String, dynamic> data) => AuthUser(
@@ -187,9 +189,6 @@ class AuthUser implements User, OnboardedUserMixin {
   String? lastName;
 
   @override
-  bool? onboarded;
-
-  @override
   ProfileData? profileData;
 
   @override
@@ -209,4 +208,7 @@ class AuthUser implements User, OnboardedUserMixin {
         'profile_data': profileData?.toMap(),
         'onboarded': onboarded,
       };
+
+  @override
+  bool onboarded;
 }
