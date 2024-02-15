@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';
@@ -20,36 +19,57 @@ Widget _loginScreen(
     children: [
       EmailPasswordLoginForm(
         onLogin: (email, password) async {
+          if (configuration.onLogin != null) {
+            configuration.onLogin?.call(email, password, context);
+            return;
+          }
           var service = configuration.loginServiceBuilder?.call(context) ??
               LocalLoginService();
-          configuration.onLogin?.call(email, password, context);
-          var result =
-              await service.loginWithEmailAndPassword(email, password, context);
+          var theme = Theme.of(context);
+          var result = await service.loginWithEmailAndPassword(
+            email,
+            password,
+            context,
+          );
           if (result.loginSuccessful && context.mounted) {
-            var user = await service.getLoggedInUser();
-            // if (context.mounted)
-            //   await Navigator.of(context).pushReplacement(
-            //     MaterialPageRoute(
-            //       builder: (context) => (user is User &&
-            //                   user is OnboardedUserMixin &&
-            //                   (user.onboarded ?? false)) &&
-            //               configuration.useOnboarding
-            //           ? _onboardingScreen(configuration, context)
-            //           : configuration.afterLoginPage!(context),
-            //     ),
-            //   );
-          } else {
+            var user = await configuration.onGetLoggedInUser?.call(context);
+
             if (context.mounted) {
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(
-              //     content: Text(
-              //       "Login ${result ? 'successful' : 'failed'}",
-              //       style: TextStyle(
-              //         color: Theme.of(context).colorScheme.error,
-              //       ),
-              //     ),
-              //   ),
-              // );
+              await Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => user != null &&
+                          !user.onboarded &&
+                          configuration.useOnboarding
+                      ? _onboardingScreen(configuration, context)
+                      : configuration.afterLoginPage!.call(context),
+                ),
+              );
+            }
+          } else {
+            if (context.mounted && result.loginError != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        result.loginError!.title,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: theme.colorScheme.onBackground,
+                        ),
+                      ),
+                      Text(
+                        result.loginError!.message,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onBackground,
+                          height: 1.3,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
           }
         },
@@ -144,6 +164,7 @@ Widget _forgotPasswordScreen(
   AuthUserStoryConfiguration configuration,
   BuildContext context,
 ) {
+  var theme = Theme.of(context);
   var service =
       configuration.loginServiceBuilder?.call(context) ?? LocalLoginService();
   var forgotPasswordScreen = Stack(
@@ -154,11 +175,44 @@ Widget _forgotPasswordScreen(
         description: configuration.forgotPasswordDescription?.call(context) ??
             const Center(child: Text('description')),
         onRequestForgotPassword: (email) async {
-          configuration.onRequestForgotPassword?.call(
-            email,
-            context,
-          );
-          await service.requestChangePassword(email, context);
+          if (configuration.onRequestForgotPassword != null) {
+            await configuration.onRequestForgotPassword?.call(email, context);
+            return;
+          }
+          var result = await service.requestChangePassword(email, context);
+          if (result.requestSuccesfull && context.mounted) {
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => _loginScreen(configuration, context),
+              ),
+            );
+          } else {
+            if (context.mounted && result.requestPasswordError != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        result.requestPasswordError!.title,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: theme.colorScheme.onBackground,
+                        ),
+                      ),
+                      Text(
+                        result.requestPasswordError!.message,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onBackground,
+                          height: 1.3,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          }
         },
         title: configuration.forgotPasswordTitle?.call(context),
       ),

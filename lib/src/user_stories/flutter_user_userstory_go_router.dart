@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_service/flutter_login_service.dart';
 import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';

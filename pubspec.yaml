@@ -1,7 +1,7 @@
 name: flutter_user
 description: "Flutter Userstory for onboarding, login, and registration."
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.0
 
 environment:
   sdk: ">=3.2.5 <4.0.0"
@@ -13,32 +13,33 @@ dependencies:
   flutter_login:
     git:
       url: https://github.com/Iconica-Development/flutter_login_widget
-      ref: 5.0.0
+      ref: 5.1.2
   flutter_login_service:
     git:
       url: https://github.com/Iconica-Development/flutter_login_service
-      ref: 2.0.0
       path: packages/flutter_login_service
+      ref: 2.0.0
   flutter_registration:
     git:
       url: https://github.com/Iconica-Development/flutter_registration
-      ref: feat/buttons_and_fields
+      ref: 2.0.0
   flutter_form_wizard:
     git:
       url: https://github.com/Iconica-Development/flutter_form_wizard
-      ref: 6.2.4
+      ref: 6.2.5
   flutter_stepper:
     git:
       url: https://github.com/Iconica-Development/stepper
-      ref: 2.0.0
+      ref: 2.1.1
   flutter_profile:
     git:
       url: https://github.com/Iconica-Development/flutter_profile
-      ref: 1.1.5
+      ref: 1.3.0
   flutter_image_picker:
     git:
       url: https://github.com/Iconica-Development/flutter_image_picker
-      ref: 1.0.4
+      ref: 1.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

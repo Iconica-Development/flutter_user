@@ -80,7 +80,8 @@ class ExampleLoginService implements LoginService {
   Future<LoginResponse<dynamic>> loginWithEmailAndPassword(
       String email, String password, BuildContext context,
       {Function(dynamic resolver)? onMFA}) async {
-    return LoginResponse<dynamic>(loginSuccessful: true, userObject: null);
+    return const LoginResponse<dynamic>(
+        loginSuccessful: true, userObject: null);
   }
 
   @override
@@ -91,7 +92,7 @@ class ExampleLoginService implements LoginService {
   @override
   Future<RequestPasswordResponse> requestChangePassword(
       String email, BuildContext context) {
-    return Future.value(RequestPasswordResponse(
+    return Future.value(const RequestPasswordResponse(
       requestSuccesfull: true,
     ));
   }
