@@ -4,6 +4,7 @@ import 'package:flutter_user/src/default_configs/image_picker_configuration.dart
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';
 import 'package:flutter_user/src/go_router.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
+import 'package:flutter_user/src/utils/is_keyboard_closed.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +38,7 @@ List<GoRoute> getStartStoryRoutes(
                     configuration.onLogin?.call(email, password, context);
                     return;
                   }
+
                   var service =
                       configuration.loginServiceBuilder?.call(context) ??
                           LocalLoginService();
@@ -46,6 +48,7 @@ List<GoRoute> getStartStoryRoutes(
                     password,
                     context,
                   );
+
                   if (result.loginSuccessful && context.mounted) {
                     var user =
                         await configuration.onGetLoggedInUser?.call(context);
@@ -87,28 +90,51 @@ List<GoRoute> getStartStoryRoutes(
                   }
                 },
                 onRegister: configuration.useRegistration
-                    ? (email, password) async {
+                    ? (email, password, ctx) async {
                         configuration.onRegister
                             ?.call(email, password, context);
+                        var currentFocus = FocusScope.of(ctx);
+                        var focused = currentFocus.children
+                            .where((element) => element.hasFocus);
 
-                        if (configuration.beforeRegistrationPage != null) {
+                        for (var node in focused) {
+                          node.unfocus();
+                        }
+
+                        var isReopened = await isKeyboardClosed(context);
+                        if (!isReopened) {
+                          return;
+                        }
+                        if (configuration.beforeRegistrationPage != null &&
+                            context.mounted) {
                           await context
                               .push(AuthUserStoryRoutes.beforeRegistration);
                         } else {
-                          await context
-                              .push(AuthUserStoryRoutes.registrationScreen);
+                          if (context.mounted)
+                            await context
+                                .push(AuthUserStoryRoutes.registrationScreen);
                         }
                       }
                     : null,
                 onForgotPassword: configuration.showForgotPassword
-                    ? (email) async {
+                    ? (email, ctx) async {
                         configuration.onForgotPassword?.call(
                           email,
                           context,
                         );
-
-                        await context
-                            .push(AuthUserStoryRoutes.forgotPasswordScreen);
+                        var currentFocus = FocusScope.of(ctx);
+                        var focused = currentFocus.children
+                            .where((element) => element.hasFocus);
+                        for (var node in focused) {
+                          node.unfocus();
+                        }
+                        var isReopened = await isKeyboardClosed(context);
+                        if (!isReopened) {
+                          return;
+                        }
+                        if (context.mounted)
+                          await context
+                              .push(AuthUserStoryRoutes.forgotPasswordScreen);
                       }
                     : null,
                 options: configuration.loginOptionsBuilder?.call(context) ??

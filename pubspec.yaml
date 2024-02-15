@@ -13,7 +13,7 @@ dependencies:
   flutter_login:
     git:
       url: https://github.com/Iconica-Development/flutter_login_widget
-      ref: 5.1.2
+      ref: 5.1.4
   flutter_login_service:
     git:
       url: https://github.com/Iconica-Development/flutter_login_service

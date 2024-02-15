@@ -3,6 +3,7 @@ import 'package:flutter_user/flutter_user.dart';
 import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
 import 'package:flutter_user/src/default_configs/stepper_theme.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
+import 'package:flutter_user/src/utils/is_keyboard_closed.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
 
 Widget userNavigatorUserstory(
@@ -74,10 +75,22 @@ Widget _loginScreen(
           }
         },
         onRegister: configuration.useRegistration
-            ? (email, password) async {
+            ? (email, password, ctx) async {
                 configuration.onRegister?.call(email, password, context);
+                var currentFocus = FocusScope.of(ctx);
+                var focused =
+                    currentFocus.children.where((element) => element.hasFocus);
 
-                if (configuration.beforeRegistrationPage != null) {
+                for (var node in focused) {
+                  node.unfocus();
+                }
+
+                var isReopened = await isKeyboardClosed(context);
+                if (!isReopened) {
+                  return;
+                }
+                if (configuration.beforeRegistrationPage != null &&
+                    context.mounted) {
                   await Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) =>
@@ -85,27 +98,41 @@ Widget _loginScreen(
                     ),
                   );
                 } else {
-                  await Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          _registrationScreen(configuration, context),
-                    ),
-                  );
+                  if (context.mounted)
+                    await Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            _registrationScreen(configuration, context),
+                      ),
+                    );
                 }
               }
             : null,
         onForgotPassword: configuration.showForgotPassword
-            ? (email) async {
+            ? (email, ctx) async {
                 configuration.onForgotPassword?.call(
                   email,
                   context,
                 );
-                await Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        _forgotPasswordScreen(configuration, context),
-                  ),
-                );
+                var currentFocus = FocusScope.of(ctx);
+                var focused =
+                    currentFocus.children.where((element) => element.hasFocus);
+
+                for (var node in focused) {
+                  node.unfocus();
+                }
+
+                var isReopened = await isKeyboardClosed(context);
+                if (!isReopened) {
+                  return;
+                }
+                if (context.mounted)
+                  await Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          _forgotPasswordScreen(configuration, context),
+                    ),
+                  );
               }
             : null,
         options: configuration.loginOptionsBuilder?.call(context) ??
