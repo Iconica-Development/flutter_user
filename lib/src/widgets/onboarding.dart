@@ -22,6 +22,7 @@ class Onboarding extends StatefulWidget {
     this.accessInputs,
     this.nextButton,
     this.backButton,
+    this.canPopOnboarding = true,
     super.key,
   });
   final Function(Map<int, Map<String, dynamic>> results) onboardingFinished;
@@ -33,6 +34,7 @@ class Onboarding extends StatefulWidget {
   final List<Widget>? accessInputs;
   final Widget Function(int, FlutterFormController, bool)? nextButton;
   final Widget Function(int, bool, int, FlutterFormController)? backButton;
+  final bool canPopOnboarding;
 
   @override
   State<Onboarding> createState() => _OnboardingState();
@@ -56,103 +58,107 @@ class _OnboardingState extends State<Onboarding> {
       ),
     };
 
-    return Scaffold(
-      body: SafeArea(
-        child: FlutterForm(
-          formController: formController,
-          options: FlutterFormOptions(
-            scrollDirection: Axis.vertical,
-            onFinished: (results) {
-              widget.onboardingFinished.call(results);
-            },
-            onNext: (pageNumber, results) async {
-              widget.onboardingOnNext.call(pageNumber, results);
-            },
-            pages: [
-              FlutterFormPage(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 14),
-                  child: PersonInfoPage(
-                    inputController: personAbout,
-                    title: widget.configuration.personalInfoTitle,
-                    description: widget.configuration.personalInfoDescription,
-                    textfieldHint:
-                        widget.configuration.personalInfoTextfieldHint,
-                    stepperTheme: widget.stepperTheme,
-                    inputs: widget.personalInputs,
-                  ),
-                ),
-              ),
-              FlutterFormPage(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 14),
-                  child: PhotoPage(
-                    imageController: imageController,
-                    title: widget.configuration.photoTitle,
-                    description: widget.configuration.photoDescription,
-                    stepperTheme: widget.stepperTheme,
-                    imagePickerConfig: widget.imagePickerConfig,
-                  ),
-                ),
-              ),
-              FlutterFormPage(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 14),
-                  child: AccessPage(
-                    inputControllers: accessPageControllers,
-                    title: widget.configuration.accessPageTitle,
-                    description: widget.configuration.accessPageDescription,
-                    stepperTheme: widget.stepperTheme,
-                    inputs: widget.accessInputs,
-                  ),
-                ),
-              ),
-              FlutterFormPage(
-                child: CompletionPage(
-                  title: widget.configuration.completionTitle,
-                  description: widget.configuration.completionDescription,
-                  stepperTheme: widget.stepperTheme,
-                ),
-              ),
-            ],
-            backButton: (pageNumber, checkingPages, pageAmount) =>
-                widget.backButton != null
-                    ? widget.backButton!.call(
-                        pageNumber,
-                        checkingPages,
-                        pageAmount,
-                        formController,
-                      )
-                    : const SizedBox.shrink(),
-            nextButton: (pageNumber, checkingPages) => widget.nextButton != null
-                ? widget.nextButton!.call(
-                    pageNumber,
-                    formController,
-                    checkingPages,
-                  )
-                : Align(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 15,
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () async {
-                        await formController.autoNextStep();
-                      },
-                      child: const Text(
-                        'Next',
-                        style: TextStyle(color: Colors.white),
-                      ),
+    return PopScope(
+      canPop: widget.canPopOnboarding,
+      child: Scaffold(
+        body: SafeArea(
+          child: FlutterForm(
+            formController: formController,
+            options: FlutterFormOptions(
+              scrollDirection: Axis.vertical,
+              onFinished: (results) {
+                widget.onboardingFinished.call(results);
+              },
+              onNext: (pageNumber, results) async {
+                widget.onboardingOnNext.call(pageNumber, results);
+              },
+              pages: [
+                FlutterFormPage(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 14),
+                    child: PersonInfoPage(
+                      inputController: personAbout,
+                      title: widget.configuration.personalInfoTitle,
+                      description: widget.configuration.personalInfoDescription,
+                      textfieldHint:
+                          widget.configuration.personalInfoTextfieldHint,
+                      stepperTheme: widget.stepperTheme,
+                      inputs: widget.personalInputs,
                     ),
                   ),
+                ),
+                FlutterFormPage(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 14),
+                    child: PhotoPage(
+                      imageController: imageController,
+                      title: widget.configuration.photoTitle,
+                      description: widget.configuration.photoDescription,
+                      stepperTheme: widget.stepperTheme,
+                      imagePickerConfig: widget.imagePickerConfig,
+                    ),
+                  ),
+                ),
+                FlutterFormPage(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 14),
+                    child: AccessPage(
+                      inputControllers: accessPageControllers,
+                      title: widget.configuration.accessPageTitle,
+                      description: widget.configuration.accessPageDescription,
+                      stepperTheme: widget.stepperTheme,
+                      inputs: widget.accessInputs,
+                    ),
+                  ),
+                ),
+                FlutterFormPage(
+                  child: CompletionPage(
+                    title: widget.configuration.completionTitle,
+                    description: widget.configuration.completionDescription,
+                    stepperTheme: widget.stepperTheme,
+                  ),
+                ),
+              ],
+              backButton: (pageNumber, checkingPages, pageAmount) =>
+                  widget.backButton != null
+                      ? widget.backButton!.call(
+                          pageNumber,
+                          checkingPages,
+                          pageAmount,
+                          formController,
+                        )
+                      : const SizedBox.shrink(),
+              nextButton: (pageNumber, checkingPages) =>
+                  widget.nextButton != null
+                      ? widget.nextButton!.call(
+                          pageNumber,
+                          formController,
+                          checkingPages,
+                        )
+                      : Align(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 15,
+                              ),
+                              textStyle: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () async {
+                              await formController.autoNextStep();
+                            },
+                            child: const Text(
+                              'Next',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+            ),
           ),
         ),
       ),

@@ -168,7 +168,7 @@ List<GoRoute> getStartStoryRoutes(
                     RegistrationOptions(
                       registrationRepository: ExampleRegistrationRepository(),
                       registrationSteps: RegistrationOptions.getDefaultSteps(),
-                      afterRegistration: () => context.go(
+                      afterRegistration: () async => context.push(
                         configuration.afterRegistrationPage != null
                             ? AuthUserStoryRoutes.afterRegistration
                             : AuthUserStoryRoutes.loginScreen,
@@ -293,6 +293,7 @@ List<GoRoute> getStartStoryRoutes(
                 onboardingOnNext: (pageNumber, results) => configuration
                     .onboardingConfiguration?.onboardingOnNext
                     ?.call(pageNumber, results, context),
+                canPopOnboarding: configuration.canPopOnboarding,
               );
           return buildScreenWithoutTransition(
             context: context,

@@ -283,6 +283,7 @@ Widget _onboardingScreen(
         onboardingOnNext: (pageNumber, results) => configuration
             .onboardingConfiguration?.onboardingOnNext
             ?.call(pageNumber, results, context),
+        canPopOnboarding: configuration.canPopOnboarding,
       );
   return Scaffold(
     body: onboarding,

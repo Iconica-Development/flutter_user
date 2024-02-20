@@ -42,6 +42,7 @@ class AuthUserStoryConfiguration {
     this.useOnboarding = true,
     this.afterLoginPage,
     this.onGetLoggedInUser,
+    this.canPopOnboarding = true,
   });
 
   /// Called when the user logs in.
@@ -140,4 +141,7 @@ class AuthUserStoryConfiguration {
   final WidgetBuilder? afterLoginPage;
   final TextStyle? loginErrorSnackbarTitleStyle;
   final TextStyle? loginErrorSnackbarMessageStyle;
+
+  // boolean for enabling or disabling popping from onboarding
+  final bool canPopOnboarding;
 }
