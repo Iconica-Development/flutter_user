@@ -65,21 +65,29 @@ List<GoRoute> getStartStoryRoutes(
                     if (context.mounted && result.loginError != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
+                          backgroundColor:
+                              configuration.loginErrorSnackbarBackgroundColor ??
+                                  theme.colorScheme.onBackground,
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 result.loginError!.title,
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  color: theme.colorScheme.onBackground,
-                                ),
+                                style: configuration
+                                        .loginErrorSnackbarTitleTextStyle ??
+                                    theme.textTheme.titleSmall?.copyWith(
+                                      color: theme.colorScheme.background,
+                                    ),
                               ),
+                              const SizedBox(height: 8),
                               Text(
                                 result.loginError!.message,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onBackground,
-                                  height: 1.3,
-                                ),
+                                style: configuration
+                                        .loginErrorSnackbarMessageTextStyle ??
+                                    theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.background,
+                                      height: 1.3,
+                                    ),
                                 textAlign: TextAlign.center,
                               ),
                             ],

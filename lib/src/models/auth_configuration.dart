@@ -18,8 +18,6 @@ class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
     required this.loginOptionsBuilder,
     this.loginServiceBuilder,
-    this.loginErrorSnackbarTitleStyle,
-    this.loginErrorSnackbarMessageStyle,
     this.afterLoginRoute,
     this.onLogin,
     this.userBuilder,
@@ -43,6 +41,9 @@ class AuthUserStoryConfiguration {
     this.afterLoginPage,
     this.onGetLoggedInUser,
     this.canPopOnboarding = true,
+    this.loginErrorSnackbarBackgroundColor,
+    this.loginErrorSnackbarTitleTextStyle,
+    this.loginErrorSnackbarMessageTextStyle,
   });
 
   /// Called when the user logs in.
@@ -139,9 +140,16 @@ class AuthUserStoryConfiguration {
 
   // pagebuilder for afterLoginPAge
   final WidgetBuilder? afterLoginPage;
-  final TextStyle? loginErrorSnackbarTitleStyle;
-  final TextStyle? loginErrorSnackbarMessageStyle;
 
   // boolean for enabling or disabling popping from onboarding
   final bool canPopOnboarding;
+
+  // login error snackbar background color
+  final Color? loginErrorSnackbarBackgroundColor;
+
+  // login error snackbar title text style
+  final TextStyle? loginErrorSnackbarTitleTextStyle;
+
+  // login error snackbar message text style
+  final TextStyle? loginErrorSnackbarMessageTextStyle;
 }
