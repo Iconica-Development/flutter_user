@@ -1,16 +1,114 @@
-# flutter_auth
+# flutter_user
 
-A new Flutter project.
+Flutter_user is a package that provides screens for login, registration, forgotPassword and onboarding.
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
+To use this package, add flutter_user as a dependency in your pubspec.yaml file:
 
-A few resources to get you started if this is your first Flutter project:
+```
+  flutter_user:
+    git:
+      url: https://github.com/Iconica-Development/flutter_user
+      ref: <Version>
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To use the module within your Flutter-application with predefined `Go_router` routes you should add the following:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Add go_router as dependency to your project.
+Add the following configuration to your flutter_application:
+
+```
+AuthUserStoryConfiguration authUserStoryConfiguration = const AuthUserStoryConfiguration();
+```
+
+and set the values as you wish.
+
+Next add the `AuthUserStoryConfiguration` to `getAuthStoryRoutes` Like so:
+
+```
+List<GoRoute> getUserRoutes() => getAuthStoryRoutes(
+      authUserStoryConfiguration,
+    );
+```
+
+Finally add the `getUserRoutes` to your `Go_router` routes like so:
+
+```
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    ...getUserRoutes()
+  ],
+);
+```
+
+The routes that can be used to navigate are:
+
+For routing to the `LoginScreen`:
+
+```
+  static const String loginScreen = '/loginScreen';
+```
+
+For routing to the `RegistrationScreen`:
+
+```
+  static const String registrationScreen = '/registrationScreen';
+```
+
+For routing to the `ForgotPasswordScreen`:
+
+```
+  static const String forgotPasswordScreen = '/forgotPasswordScreen';
+```
+
+For routing to the `Onboarding`:
+
+```
+  static const String onboarding = '/onboarding';
+```
+
+The `AuthUserStoryConfiguration` has its own parameters, as specified below:
+| Parameter | Explanation |
+|-----------|-------------|
+| loginPageBuilder | The builder for the loginPage. |
+| registrationPageBuilder | The builder for the registrationPage. |
+| forgotPasswordBuilder | The builder for the forgotPasswordPage. |
+| beforeRegistrationPage | The builder for the beforeRegistrationPage. |
+| afterRegistrationPage | The builder for the afterRegistrationPage. |
+| afterLoginPage | The builder for the afterLoginPage. |
+| pageOverlayBuilder | This can be used to show something above the other pages. For instance to indicate that there is no internet. |
+| loginServiceBuilder | The login service to use. |
+| afterLoginRoute | The route to go to after the user logs in. |
+| loginOptionsBuilder | Options for the login screen. |
+| registrationOptionsBuilder | Options for the registration screen. |
+| useRegistration | Whether to use the registration screen. |
+| useOnboarding | Whether to use the onboarding screen. |
+| showForgotPassword | Whether to show the forgot password button. |
+
+The `OnboardingConfiguration` has its own parameters, as specified below:
+| Parameter | Explanation |
+|-----------|-------------|
+| onboardingOptions               | Options for the onboarding screens.                     |
+| onboardingController            | Controller for the onboarding screens.                    |
+| onboardingFinished              | Called when the user finishes the onboarding.             |
+| onboardingOnNext                | Called when the user goes to the next page in the onboarding.|
+| onboardingConfiguration         | Configuration for the onboarding screens.                 |
+| stepperTheme                    | Theme for the onboarding screens.                         |
+| imagePickerConfig               | Configuration for the image picker.                      |
+| personalInputs                  | Extra inputs for the personal info page.                 |
+| accessInputs                    | Extra inputs for the access page.                        |
+| nextButton                      | Function to generate the next button widget.             |
+| backButton                      | Function to generate the back button widget.             |
+
+## Issues
+
+Please file any issues, bugs or feature request as an issue on our [GitHub](https://github.com/Iconica-Development/flutter_user) page. Commercial support is available if you need help with integration with your app or services. You can contact us at [support@iconica.nl](mailto:support@iconica.nl).
+
+## Want to contribute
+[text](about:blank#blocked)
+If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](./CONTRIBUTING.md) and send us your [pull request](https://github.com/Iconica-Development/flutter_user/pulls).
+
+## Author
+
+This flutter_user for Flutter is developed by [Iconica](https://iconica.nl). You can contact us at <support@iconica.nl>
