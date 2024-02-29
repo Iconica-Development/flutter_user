@@ -23,7 +23,7 @@ Future<String> getFirstRoute(
   }
 }
 
-List<GoRoute> getStartStoryRoutes(
+List<GoRoute> getAuthStoryRoutes(
   AuthUserStoryConfiguration configuration,
 ) =>
     <GoRoute>[
