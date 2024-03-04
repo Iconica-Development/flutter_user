@@ -13,7 +13,7 @@ dependencies:
   flutter_login:
     git:
       url: https://github.com/Iconica-Development/flutter_login_widget
-      ref: 5.1.4
+      ref: 5.2.0
   flutter_login_service:
     git:
       url: https://github.com/Iconica-Development/flutter_login_service
@@ -30,7 +30,7 @@ dependencies:
   flutter_stepper:
     git:
       url: https://github.com/Iconica-Development/stepper
-      ref: 2.1.1
+      ref: 2.2.0
   flutter_profile:
     git:
       url: https://github.com/Iconica-Development/flutter_profile

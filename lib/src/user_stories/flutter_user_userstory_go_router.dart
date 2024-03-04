@@ -213,7 +213,7 @@ List<GoRoute> getAuthStoryRoutes(
                     const LoginOptions(),
                 description:
                     configuration.forgotPasswordDescription?.call(context) ??
-                        const Center(child: Text('description')),
+                        const SizedBox.shrink(),
                 onRequestForgotPassword: (email) async {
                   if (configuration.onRequestForgotPassword != null) {
                     await configuration.onRequestForgotPassword

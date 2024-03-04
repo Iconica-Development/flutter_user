@@ -58,7 +58,7 @@ GoRouter _router(BuildContext context) => GoRouter(
             return const Home();
           },
         ),
-        ...getStartStoryRoutes(configuration(context)),
+        ...getAuthStoryRoutes(configuration(context)),
         GoRoute(
             path: '/afterlogin',
             builder: (context, state) {

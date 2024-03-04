@@ -6,7 +6,7 @@ import 'package:flutter_user/src/services/example_registration_service.dart';
 import 'package:flutter_user/src/utils/is_keyboard_closed.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
 
-Widget userNavigatorUserstory(
+Widget authNavigatorUserstory(
   AuthUserStoryConfiguration configuration,
   BuildContext context,
 ) =>
@@ -207,7 +207,7 @@ Widget _forgotPasswordScreen(
         options: configuration.loginOptionsBuilder?.call(context) ??
             const LoginOptions(),
         description: configuration.forgotPasswordDescription?.call(context) ??
-            const Center(child: Text('description')),
+            const SizedBox.shrink(),
         onRequestForgotPassword: (email) async {
           if (configuration.onRequestForgotPassword != null) {
             await configuration.onRequestForgotPassword?.call(email, context);
