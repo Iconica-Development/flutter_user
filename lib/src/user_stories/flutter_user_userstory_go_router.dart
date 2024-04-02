@@ -146,7 +146,7 @@ List<GoRoute> getAuthStoryRoutes(
                       }
                     : null,
                 options: configuration.loginOptionsBuilder?.call(context) ??
-                    const LoginOptions(),
+                    LoginOptions.defaults(),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -210,7 +210,7 @@ List<GoRoute> getAuthStoryRoutes(
             children: [
               ForgotPasswordForm(
                 options: configuration.loginOptionsBuilder?.call(context) ??
-                    const LoginOptions(),
+                    LoginOptions.defaults(),
                 description:
                     configuration.forgotPasswordDescription?.call(context) ??
                         const SizedBox.shrink(),

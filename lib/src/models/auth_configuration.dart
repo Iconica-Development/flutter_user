@@ -16,7 +16,7 @@ export 'package:flutter_registration/flutter_registration.dart';
 @immutable
 class AuthUserStoryConfiguration {
   const AuthUserStoryConfiguration({
-    required this.loginOptionsBuilder,
+    this.loginOptionsBuilder,
     this.loginServiceBuilder,
     this.afterLoginRoute,
     this.onLogin,
