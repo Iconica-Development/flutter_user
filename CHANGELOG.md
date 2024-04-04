@@ -1,3 +1,9 @@
+## 2.0.0
+- Added default loginOptions
+- changed pushReplacement to push
+- updated flutter_registration version
+
+
 ## 1.0.0
 
 - Renamed flutter_auth to flutter_user

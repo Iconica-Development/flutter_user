@@ -106,7 +106,7 @@ Widget _loginScreen(
                   );
                 } else {
                   if (context.mounted)
-                    await Navigator.of(context).pushReplacement(
+                    await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) =>
                             _registrationScreen(configuration, context),
@@ -134,7 +134,7 @@ Widget _loginScreen(
                   return;
                 }
                 if (context.mounted)
-                  await Navigator.of(context).pushReplacement(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
                           _forgotPasswordScreen(configuration, context),
@@ -143,7 +143,7 @@ Widget _loginScreen(
               }
             : null,
         options: configuration.loginOptionsBuilder?.call(context) ??
-            const LoginOptions(),
+            LoginOptions.defaults(),
       ),
       configuration.pageOverlayBuilder?.call(context) ??
           const SizedBox.shrink(),
@@ -205,7 +205,7 @@ Widget _forgotPasswordScreen(
     children: [
       ForgotPasswordForm(
         options: configuration.loginOptionsBuilder?.call(context) ??
-            const LoginOptions(),
+            LoginOptions.defaults(),
         description: configuration.forgotPasswordDescription?.call(context) ??
             const SizedBox.shrink(),
         onRequestForgotPassword: (email) async {
