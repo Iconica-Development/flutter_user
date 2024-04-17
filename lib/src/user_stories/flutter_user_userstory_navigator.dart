@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_user/flutter_user.dart';
-import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
-import 'package:flutter_user/src/default_configs/stepper_theme.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
 import 'package:flutter_user/src/utils/is_keyboard_closed.dart';
 import 'package:flutter_user/src/widgets/onboarding.dart';
@@ -154,6 +152,7 @@ Widget _loginScreen(
         loginScreen,
       ) ??
       Scaffold(
+        backgroundColor: const Color(0xffFAF9F6),
         body: loginScreen,
       );
 }
@@ -167,14 +166,14 @@ Widget _registrationScreen(
       RegistrationScreen(
         registrationOptions:
             configuration.registrationOptionsBuilder?.call(context) ??
-                RegistrationOptions(
-                  registrationRepository: ExampleRegistrationRepository(),
-                  registrationSteps: RegistrationOptions.getDefaultSteps(),
-                  afterRegistration: () async =>
-                      Navigator.of(context).pushReplacement(
+                RegistrationOptions.defaults(
+                  context,
+                  configuration.registrationRepository ??
+                      ExampleRegistrationRepository(),
+                  () async => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) =>
-                          configuration.afterRegistrationPage != null
+                          configuration.useAfterRegistrationPage
                               ? _afterRegistrationScreen(configuration, context)
                               : _loginScreen(configuration, context),
                     ),
@@ -190,7 +189,13 @@ Widget _registrationScreen(
         registrationScreen,
       ) ??
       Scaffold(
-        body: registrationScreen,
+        appBar: AppBar(
+          backgroundColor: const Color(0xffFAF9F6),
+        ),
+        backgroundColor: const Color(0xffFAF9F6),
+        body: SafeArea(
+          child: registrationScreen,
+        ),
       );
 }
 
@@ -207,7 +212,12 @@ Widget _forgotPasswordScreen(
         options: configuration.loginOptionsBuilder?.call(context) ??
             LoginOptions.defaults(),
         description: configuration.forgotPasswordDescription?.call(context) ??
-            const SizedBox.shrink(),
+            const Text(
+              'No worries. Enter your email address below so we can'
+              ' send you a link to reset your password.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+            ),
         onRequestForgotPassword: (email) async {
           if (configuration.onRequestForgotPassword != null) {
             await configuration.onRequestForgotPassword?.call(email, context);
@@ -248,7 +258,15 @@ Widget _forgotPasswordScreen(
             }
           }
         },
-        title: configuration.forgotPasswordTitle?.call(context),
+        title: configuration.forgotPasswordTitle?.call(context) ??
+            const Text(
+              'Forgot Password',
+              style: TextStyle(
+                color: Color(0xff71C6D1),
+                fontWeight: FontWeight.w800,
+                fontSize: 24,
+              ),
+            ),
       ),
       configuration.pageOverlayBuilder?.call(context) ??
           const SizedBox.shrink(),
@@ -259,9 +277,13 @@ Widget _forgotPasswordScreen(
         forgotPasswordScreen,
       ) ??
       Scaffold(
+        appBar: AppBar(),
         body: SafeArea(
           child: Center(
-            child: forgotPasswordScreen,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 60),
+              child: forgotPasswordScreen,
+            ),
           ),
         ),
       );
@@ -273,24 +295,12 @@ Widget _onboardingScreen(
 ) {
   var onboarding = configuration.onboardingScreen ??
       Onboarding(
-        backButton: configuration.onboardingConfiguration?.backButton,
-        nextButton: configuration.onboardingConfiguration?.nextButton,
-        accessInputs: configuration.onboardingConfiguration?.accessInputs,
-        personalInputs: configuration.onboardingConfiguration?.personalInputs,
-        imagePickerConfig:
-            configuration.onboardingConfiguration?.imagePickerConfig ??
-                getImagePickerConfig(),
-        stepperTheme: configuration.onboardingConfiguration?.stepperTheme ??
-            getStepperTheme(context),
-        configuration:
-            configuration.onboardingConfiguration ?? OnboardingConfiguration(),
         onboardingFinished: (result) => configuration
             .onboardingConfiguration?.onboardingFinished
             ?.call(result, context),
         onboardingOnNext: (pageNumber, results) => configuration
             .onboardingConfiguration?.onboardingOnNext
             ?.call(pageNumber, results, context),
-        canPopOnboarding: configuration.canPopOnboarding,
       );
   return Scaffold(
     body: onboarding,
@@ -307,4 +317,57 @@ Widget _afterRegistrationScreen(
   AuthUserStoryConfiguration configuration,
   BuildContext context,
 ) =>
-    configuration.afterRegistrationPage!.call(context);
+    configuration.afterRegistrationPage?.call(context) ??
+    Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Spacer(),
+                const Text(
+                  'Your registration was successful',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 24,
+                    color: Color(0xff71C6D1),
+                  ),
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: () async {
+                    await Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            _loginScreen(configuration, context),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 44,
+                    width: 254,
+                    decoration: const BoxDecoration(
+                      color: Color(0xff71C6D1),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Finish',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );

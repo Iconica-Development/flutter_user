@@ -89,17 +89,8 @@ The `AuthUserStoryConfiguration` has its own parameters, as specified below:
 The `OnboardingConfiguration` has its own parameters, as specified below:
 | Parameter | Explanation |
 |-----------|-------------|
-| onboardingOptions               | Options for the onboarding screens.                     |
-| onboardingController            | Controller for the onboarding screens.                    |
 | onboardingFinished              | Called when the user finishes the onboarding.             |
 | onboardingOnNext                | Called when the user goes to the next page in the onboarding.|
-| onboardingConfiguration         | Configuration for the onboarding screens.                 |
-| stepperTheme                    | Theme for the onboarding screens.                         |
-| imagePickerConfig               | Configuration for the image picker.                      |
-| personalInputs                  | Extra inputs for the personal info page.                 |
-| accessInputs                    | Extra inputs for the access page.                        |
-| nextButton                      | Function to generate the next button widget.             |
-| backButton                      | Function to generate the back button widget.             |
 
 ## Issues
 

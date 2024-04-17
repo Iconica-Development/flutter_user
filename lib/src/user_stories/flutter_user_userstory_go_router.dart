@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_user/flutter_user.dart';
-import 'package:flutter_user/src/default_configs/image_picker_configuration.dart';
-import 'package:flutter_user/src/default_configs/stepper_theme.dart';
 import 'package:flutter_user/src/go_router.dart';
 import 'package:flutter_user/src/services/example_registration_service.dart';
 import 'package:flutter_user/src/utils/is_keyboard_closed.dart';
@@ -160,6 +158,7 @@ List<GoRoute> getAuthStoryRoutes(
                   loginScreen,
                 ) ??
                 Scaffold(
+                  backgroundColor: const Color(0xffFAF9F6),
                   body: loginScreen,
                 ),
           );
@@ -171,17 +170,18 @@ List<GoRoute> getAuthStoryRoutes(
           var registrationScreen = Stack(
             children: [
               RegistrationScreen(
-                registrationOptions: configuration.registrationOptionsBuilder
-                        ?.call(context) ??
-                    RegistrationOptions(
-                      registrationRepository: ExampleRegistrationRepository(),
-                      registrationSteps: RegistrationOptions.getDefaultSteps(),
-                      afterRegistration: () async => context.push(
-                        configuration.afterRegistrationPage != null
-                            ? AuthUserStoryRoutes.afterRegistration
-                            : AuthUserStoryRoutes.loginScreen,
-                      ),
-                    ),
+                registrationOptions:
+                    configuration.registrationOptionsBuilder?.call(context) ??
+                        RegistrationOptions.defaults(
+                          context,
+                          configuration.registrationRepository ??
+                              ExampleRegistrationRepository(),
+                          () async => context.push(
+                            configuration.useAfterRegistrationPage
+                                ? AuthUserStoryRoutes.afterRegistration
+                                : AuthUserStoryRoutes.loginScreen,
+                          ),
+                        ),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -195,7 +195,13 @@ List<GoRoute> getAuthStoryRoutes(
                   registrationScreen,
                 ) ??
                 Scaffold(
-                  body: registrationScreen,
+                  appBar: AppBar(
+                    backgroundColor: const Color(0xffFAF9F6),
+                  ),
+                  backgroundColor: const Color(0xffFAF9F6),
+                  body: SafeArea(
+                    child: registrationScreen,
+                  ),
                 ),
           );
         },
@@ -211,9 +217,15 @@ List<GoRoute> getAuthStoryRoutes(
               ForgotPasswordForm(
                 options: configuration.loginOptionsBuilder?.call(context) ??
                     LoginOptions.defaults(),
-                description:
-                    configuration.forgotPasswordDescription?.call(context) ??
-                        const SizedBox.shrink(),
+                description: configuration.forgotPasswordDescription
+                        ?.call(context) ??
+                    const Text(
+                      'No worries. Enter your email address below so we can'
+                      ' send you a link to reset your password.',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                    ),
                 onRequestForgotPassword: (email) async {
                   if (configuration.onRequestForgotPassword != null) {
                     await configuration.onRequestForgotPassword
@@ -253,7 +265,15 @@ List<GoRoute> getAuthStoryRoutes(
                     }
                   }
                 },
-                title: configuration.forgotPasswordTitle?.call(context),
+                title: configuration.forgotPasswordTitle?.call(context) ??
+                    const Text(
+                      'Forgot Password',
+                      style: TextStyle(
+                        color: Color(0xff71C6D1),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 24,
+                      ),
+                    ),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -267,9 +287,13 @@ List<GoRoute> getAuthStoryRoutes(
                   forgotPasswordScreen,
                 ) ??
                 Scaffold(
+                  appBar: AppBar(),
                   body: SafeArea(
                     child: Center(
-                      child: forgotPasswordScreen,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 60),
+                        child: forgotPasswordScreen,
+                      ),
                     ),
                   ),
                 ),
@@ -281,27 +305,12 @@ List<GoRoute> getAuthStoryRoutes(
         pageBuilder: (context, state) {
           var onboarding = configuration.onboardingScreen ??
               Onboarding(
-                backButton: configuration.onboardingConfiguration?.backButton,
-                nextButton: configuration.onboardingConfiguration?.nextButton,
-                accessInputs:
-                    configuration.onboardingConfiguration?.accessInputs,
-                personalInputs:
-                    configuration.onboardingConfiguration?.personalInputs,
-                imagePickerConfig:
-                    configuration.onboardingConfiguration?.imagePickerConfig ??
-                        getImagePickerConfig(),
-                stepperTheme:
-                    configuration.onboardingConfiguration?.stepperTheme ??
-                        getStepperTheme(context),
-                configuration: configuration.onboardingConfiguration ??
-                    OnboardingConfiguration(),
                 onboardingFinished: (result) => configuration
                     .onboardingConfiguration?.onboardingFinished
                     ?.call(result, context),
                 onboardingOnNext: (pageNumber, results) => configuration
                     .onboardingConfiguration?.onboardingOnNext
                     ?.call(pageNumber, results, context),
-                canPopOnboarding: configuration.canPopOnboarding,
               );
           return buildScreenWithoutTransition(
             context: context,
@@ -312,24 +321,69 @@ List<GoRoute> getAuthStoryRoutes(
           );
         },
       ),
-      if (configuration.beforeRegistrationPage != null) ...[
-        GoRoute(
-          path: AuthUserStoryRoutes.beforeRegistration,
-          pageBuilder: (context, state) => buildScreenWithoutTransition(
-            context: context,
-            state: state,
-            child: configuration.beforeRegistrationPage!.call(context),
-          ),
+      GoRoute(
+        path: AuthUserStoryRoutes.beforeRegistration,
+        pageBuilder: (context, state) => buildScreenWithoutTransition(
+          context: context,
+          state: state,
+          child: configuration.beforeRegistrationPage!.call(context),
         ),
-      ],
-      if (configuration.afterRegistrationPage != null) ...[
-        GoRoute(
-          path: AuthUserStoryRoutes.afterRegistration,
-          pageBuilder: (context, state) => buildScreenWithoutTransition(
-            context: context,
-            state: state,
-            child: configuration.afterRegistrationPage!.call(context),
-          ),
+      ),
+      GoRoute(
+        path: AuthUserStoryRoutes.afterRegistration,
+        pageBuilder: (context, state) => buildScreenWithoutTransition(
+          context: context,
+          state: state,
+          child: configuration.afterRegistrationPage?.call(context) ??
+              Scaffold(
+                body: SafeArea(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 60),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Spacer(),
+                          const Text(
+                            'Your registration was successful',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 24,
+                              color: Color(0xff71C6D1),
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () async {
+                              context.go(AuthUserStoryRoutes.loginScreen);
+                            },
+                            child: Container(
+                              height: 44,
+                              width: 254,
+                              decoration: const BoxDecoration(
+                                color: Color(0xff71C6D1),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Finish',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
         ),
-      ],
+      ),
     ];
