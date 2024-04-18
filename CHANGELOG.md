@@ -1,3 +1,8 @@
+## 3.0.0
+- Changed the default onboarding to a new version
+- Changed default login, registration and forgot password.
+
+
 ## 2.0.0
 - Added default loginOptions
 - changed pushReplacement to push

@@ -44,6 +44,8 @@ class AuthUserStoryConfiguration {
     this.loginErrorSnackbarBackgroundColor,
     this.loginErrorSnackbarTitleTextStyle,
     this.loginErrorSnackbarMessageTextStyle,
+    this.useAfterRegistrationPage = true,
+    this.registrationRepository,
   });
 
   /// Called when the user logs in.
@@ -152,4 +154,11 @@ class AuthUserStoryConfiguration {
 
   // login error snackbar message text style
   final TextStyle? loginErrorSnackbarMessageTextStyle;
+
+  // boolean for enabling or disabling after registration page
+  final bool useAfterRegistrationPage;
+
+  /// override the default registrationRepository of the default
+  /// registrationOptions.
+  final RegistrationRepository? registrationRepository;
 }
