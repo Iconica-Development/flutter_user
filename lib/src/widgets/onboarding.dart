@@ -55,15 +55,19 @@ class _OnboardingState extends State<Onboarding> {
                   padding: const EdgeInsets.symmetric(horizontal: 60),
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 160,
+                      ),
                       const Text(
-                        'Onboarding',
+                        'create your profile',
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
-                          fontSize: 18,
+                          fontSize: 24,
+                          color: Color(0xff71C6D1),
                         ),
                       ),
                       const SizedBox(
-                        height: 60,
+                        height: 20,
                       ),
                       FlutterFormInputImage(
                         firstName: 'mike',
@@ -105,27 +109,30 @@ class _OnboardingState extends State<Onboarding> {
                 ),
               ),
             ],
-            nextButton: (pageNumber, checkingPages) => Align(
-              alignment: AlignmentDirectional.bottomCenter,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(260, 0),
-                  backgroundColor: const Color(0xff71C6D1),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
+            nextButton: (pageNumber, checkingPages) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Align(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(260, 0),
+                    backgroundColor: const Color(0xff71C6D1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  onPressed: () async {
+                    await formController.autoNextStep();
+                  },
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white),
                   ),
-                ),
-                onPressed: () async {
-                  await formController.autoNextStep();
-                },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

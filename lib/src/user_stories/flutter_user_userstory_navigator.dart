@@ -141,7 +141,7 @@ Widget _loginScreen(
               }
             : null,
         options: configuration.loginOptionsBuilder?.call(context) ??
-            LoginOptions.defaults(),
+            const LoginOptions(),
       ),
       configuration.pageOverlayBuilder?.call(context) ??
           const SizedBox.shrink(),
@@ -151,10 +151,7 @@ Widget _loginScreen(
         context,
         loginScreen,
       ) ??
-      Scaffold(
-        backgroundColor: const Color(0xffFAF9F6),
-        body: loginScreen,
-      );
+      loginScreen;
 }
 
 Widget _registrationScreen(
@@ -164,21 +161,21 @@ Widget _registrationScreen(
   var registrationScreen = Stack(
     children: [
       RegistrationScreen(
-        registrationOptions:
-            configuration.registrationOptionsBuilder?.call(context) ??
-                RegistrationOptions.defaults(
-                  context,
-                  configuration.registrationRepository ??
-                      ExampleRegistrationRepository(),
-                  () async => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          configuration.useAfterRegistrationPage
-                              ? _afterRegistrationScreen(configuration, context)
-                              : _loginScreen(configuration, context),
-                    ),
+        registrationOptions: configuration.registrationOptionsBuilder
+                ?.call(context) ??
+            RegistrationOptions(
+              registrationRepository: ExampleRegistrationRepository(),
+              registrationSteps: RegistrationOptions.getDefaultSteps(),
+              afterRegistration: () async {
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => configuration.useAfterRegistrationPage
+                        ? _afterRegistrationScreen(configuration, context)
+                        : _loginScreen(configuration, context),
                   ),
-                ),
+                );
+              },
+            ),
       ),
       configuration.pageOverlayBuilder?.call(context) ??
           const SizedBox.shrink(),
@@ -188,15 +185,7 @@ Widget _registrationScreen(
         context,
         registrationScreen,
       ) ??
-      Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xffFAF9F6),
-        ),
-        backgroundColor: const Color(0xffFAF9F6),
-        body: SafeArea(
-          child: registrationScreen,
-        ),
-      );
+      registrationScreen;
 }
 
 Widget _forgotPasswordScreen(
@@ -210,14 +199,8 @@ Widget _forgotPasswordScreen(
     children: [
       ForgotPasswordForm(
         options: configuration.loginOptionsBuilder?.call(context) ??
-            LoginOptions.defaults(),
-        description: configuration.forgotPasswordDescription?.call(context) ??
-            const Text(
-              'No worries. Enter your email address below so we can'
-              ' send you a link to reset your password.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-            ),
+            const LoginOptions(),
+        description: configuration.forgotPasswordDescription?.call(context),
         onRequestForgotPassword: (email) async {
           if (configuration.onRequestForgotPassword != null) {
             await configuration.onRequestForgotPassword?.call(email, context);
@@ -258,15 +241,7 @@ Widget _forgotPasswordScreen(
             }
           }
         },
-        title: configuration.forgotPasswordTitle?.call(context) ??
-            const Text(
-              'Forgot Password',
-              style: TextStyle(
-                color: Color(0xff71C6D1),
-                fontWeight: FontWeight.w800,
-                fontSize: 24,
-              ),
-            ),
+        title: configuration.forgotPasswordTitle?.call(context),
       ),
       configuration.pageOverlayBuilder?.call(context) ??
           const SizedBox.shrink(),
@@ -276,17 +251,7 @@ Widget _forgotPasswordScreen(
         context,
         forgotPasswordScreen,
       ) ??
-      Scaffold(
-        appBar: AppBar(),
-        body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60),
-              child: forgotPasswordScreen,
-            ),
-          ),
-        ),
-      );
+      forgotPasswordScreen;
 }
 
 Widget _onboardingScreen(
