@@ -144,7 +144,7 @@ List<GoRoute> getAuthStoryRoutes(
                       }
                     : null,
                 options: configuration.loginOptionsBuilder?.call(context) ??
-                    LoginOptions.defaults(),
+                    const LoginOptions(),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -157,10 +157,7 @@ List<GoRoute> getAuthStoryRoutes(
                   context,
                   loginScreen,
                 ) ??
-                Scaffold(
-                  backgroundColor: const Color(0xffFAF9F6),
-                  body: loginScreen,
-                ),
+                loginScreen,
           );
         },
       ),
@@ -170,18 +167,17 @@ List<GoRoute> getAuthStoryRoutes(
           var registrationScreen = Stack(
             children: [
               RegistrationScreen(
-                registrationOptions:
-                    configuration.registrationOptionsBuilder?.call(context) ??
-                        RegistrationOptions.defaults(
-                          context,
-                          configuration.registrationRepository ??
-                              ExampleRegistrationRepository(),
-                          () async => context.push(
-                            configuration.useAfterRegistrationPage
-                                ? AuthUserStoryRoutes.afterRegistration
-                                : AuthUserStoryRoutes.loginScreen,
-                          ),
-                        ),
+                registrationOptions: configuration.registrationOptionsBuilder
+                        ?.call(context) ??
+                    RegistrationOptions(
+                      registrationRepository: ExampleRegistrationRepository(),
+                      registrationSteps: RegistrationOptions.getDefaultSteps(),
+                      afterRegistration: () async => context.push(
+                        configuration.useAfterRegistrationPage
+                            ? AuthUserStoryRoutes.afterRegistration
+                            : AuthUserStoryRoutes.loginScreen,
+                      ),
+                    ),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -194,15 +190,7 @@ List<GoRoute> getAuthStoryRoutes(
                   context,
                   registrationScreen,
                 ) ??
-                Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: const Color(0xffFAF9F6),
-                  ),
-                  backgroundColor: const Color(0xffFAF9F6),
-                  body: SafeArea(
-                    child: registrationScreen,
-                  ),
-                ),
+                registrationScreen,
           );
         },
       ),
@@ -216,16 +204,9 @@ List<GoRoute> getAuthStoryRoutes(
             children: [
               ForgotPasswordForm(
                 options: configuration.loginOptionsBuilder?.call(context) ??
-                    LoginOptions.defaults(),
-                description: configuration.forgotPasswordDescription
-                        ?.call(context) ??
-                    const Text(
-                      'No worries. Enter your email address below so we can'
-                      ' send you a link to reset your password.',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-                    ),
+                    const LoginOptions(),
+                description:
+                    configuration.forgotPasswordDescription?.call(context),
                 onRequestForgotPassword: (email) async {
                   if (configuration.onRequestForgotPassword != null) {
                     await configuration.onRequestForgotPassword
@@ -265,15 +246,7 @@ List<GoRoute> getAuthStoryRoutes(
                     }
                   }
                 },
-                title: configuration.forgotPasswordTitle?.call(context) ??
-                    const Text(
-                      'Forgot Password',
-                      style: TextStyle(
-                        color: Color(0xff71C6D1),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 24,
-                      ),
-                    ),
+                title: configuration.forgotPasswordTitle?.call(context),
               ),
               configuration.pageOverlayBuilder?.call(context) ??
                   const SizedBox.shrink(),
@@ -286,17 +259,7 @@ List<GoRoute> getAuthStoryRoutes(
                   context,
                   forgotPasswordScreen,
                 ) ??
-                Scaffold(
-                  appBar: AppBar(),
-                  body: SafeArea(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 60),
-                        child: forgotPasswordScreen,
-                      ),
-                    ),
-                  ),
-                ),
+                forgotPasswordScreen,
           );
         },
       ),
