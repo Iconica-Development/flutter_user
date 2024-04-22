@@ -26,7 +26,7 @@ class AuthUserStoryConfiguration {
     this.onRegister,
     this.onForgotPassword,
     this.useRegistration = true,
-    this.showForgotPassword = true,
+    this.useForgotPassword = true,
     this.forgotPasswordDescription,
     this.loginPageBuilder,
     this.registrationPageBuilder,
@@ -66,13 +66,14 @@ class AuthUserStoryConfiguration {
       onGetLoggedInUser;
 
   /// The login service to use.
-  final LoginService Function(BuildContext)? loginServiceBuilder;
+  final LoginServiceInterface Function(BuildContext context)?
+      loginServiceBuilder;
 
   /// The route to go to after the user logs in.
   final String? afterLoginRoute;
 
   /// Called when the user forgot their password.
-  final void Function(String, BuildContext context)? onForgotPassword;
+  final void Function(String email, BuildContext context)? onForgotPassword;
 
   /// Options for the login screen.
   final LoginOptions Function(BuildContext context)? loginOptionsBuilder;
@@ -84,7 +85,7 @@ class AuthUserStoryConfiguration {
   )? userBuilder;
 
   /// Whether to show the forgot password button.
-  final bool showForgotPassword;
+  final bool useForgotPassword;
 
   //Registration
 
@@ -92,7 +93,7 @@ class AuthUserStoryConfiguration {
   final RegistrationOptions Function(BuildContext context)?
       registrationOptionsBuilder;
 
-  /// Whether to use the registration screen.
+  /// Whether to show the registration button.
   final bool useRegistration;
 
   //forgot-password

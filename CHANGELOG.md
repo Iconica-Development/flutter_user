@@ -1,3 +1,12 @@
+## 4.0.0
+
+- Updated the flutter_login_service.
+- Added documentation on how to use the `OnboardedUserMixin`.
+- Added missing names to parameters.
+- Changed name of `showForgotPassword` to `useForgotPassword`.
+- updated readme.
+
+
 ## 3.0.0
 - Changed the default onboarding to a new version
 - Changed default login, registration and forgot password.

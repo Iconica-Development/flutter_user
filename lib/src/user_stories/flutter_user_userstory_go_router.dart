@@ -122,7 +122,7 @@ List<GoRoute> getAuthStoryRoutes(
                         }
                       }
                     : null,
-                onForgotPassword: configuration.showForgotPassword
+                onForgotPassword: configuration.useForgotPassword
                     ? (email, ctx) async {
                         configuration.onForgotPassword?.call(
                           email,
@@ -341,6 +341,7 @@ List<GoRoute> getAuthStoryRoutes(
                               ),
                             ),
                           ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
