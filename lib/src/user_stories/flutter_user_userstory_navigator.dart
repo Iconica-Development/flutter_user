@@ -113,7 +113,7 @@ Widget _loginScreen(
                 }
               }
             : null,
-        onForgotPassword: configuration.showForgotPassword
+        onForgotPassword: configuration.useForgotPassword
             ? (email, ctx) async {
                 configuration.onForgotPassword?.call(
                   email,
@@ -330,6 +330,7 @@ Widget _afterRegistrationScreen(
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

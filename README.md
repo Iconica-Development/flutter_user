@@ -47,25 +47,47 @@ The routes that can be used to navigate are:
 For routing to the `LoginScreen`:
 
 ```
-  static const String loginScreen = '/loginScreen';
+  static const String loginScreen = '/login';
 ```
 
 For routing to the `RegistrationScreen`:
 
 ```
-  static const String registrationScreen = '/registrationScreen';
+  static const String registrationScreen = '/register';
 ```
 
 For routing to the `ForgotPasswordScreen`:
 
 ```
-  static const String forgotPasswordScreen = '/forgotPasswordScreen';
+  static const String forgotPasswordScreen = '/forgot-password';
 ```
 
 For routing to the `Onboarding`:
 
 ```
   static const String onboarding = '/onboarding';
+```
+
+For routing to the `afterRegistration`:
+
+```
+  static const String afterRegistration = '/after-registration';
+```
+
+For routing to the `beforeRegistration`:
+
+```
+  static const String beforeRegistration = '/before-registration';
+```
+
+Some functions return a `OnboardedUserMixin` which can be used to check if the user has finished the onboarding.
+To use this mixin you should add the following to your user class:
+
+```
+class YourUSer implements OnboardedUserMixin {
+  @override
+  bool onboarded;
+}
 ```
 
 The `AuthUserStoryConfiguration` has its own parameters, as specified below:
@@ -84,13 +106,15 @@ The `AuthUserStoryConfiguration` has its own parameters, as specified below:
 | registrationOptionsBuilder | Options for the registration screen. |
 | useRegistration | Whether to use the registration screen. |
 | useOnboarding | Whether to use the onboarding screen. |
-| showForgotPassword | Whether to show the forgot password button. |
+| useForgotPassword | Whether to show the forgot password button. |
 
 The `OnboardingConfiguration` has its own parameters, as specified below:
 | Parameter | Explanation |
 |-----------|-------------|
 | onboardingFinished              | Called when the user finishes the onboarding.             |
 | onboardingOnNext                | Called when the user goes to the next page in the onboarding.|
+
+
 
 ## Issues
 

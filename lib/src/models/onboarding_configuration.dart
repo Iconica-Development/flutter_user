@@ -9,10 +9,13 @@ class OnboardingConfiguration {
   });
 
   /// Called when the user finishes the onboarding.
-  final Function(Map<int, Map<String, dynamic>> results, BuildContext)?
+  final Function(Map<int, Map<String, dynamic>> results, BuildContext context)?
       onboardingFinished;
 
   /// Called when the user goes to the next page in the onboarding.
-  final Function(int pageNumber, Map<String, dynamic> results, BuildContext)?
-      onboardingOnNext;
+  final Function(
+    int pageNumber,
+    Map<String, dynamic> results,
+    BuildContext context,
+  )? onboardingOnNext;
 }
