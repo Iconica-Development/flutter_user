@@ -164,7 +164,8 @@ Widget _registrationScreen(
         registrationOptions: configuration.registrationOptionsBuilder
                 ?.call(context) ??
             RegistrationOptions(
-              registrationRepository: ExampleRegistrationRepository(),
+              registrationRepository: configuration.registrationRepository ??
+                  ExampleRegistrationRepository(),
               registrationSteps: RegistrationOptions.getDefaultSteps(),
               afterRegistration: () async {
                 await Navigator.of(context).pushReplacement(

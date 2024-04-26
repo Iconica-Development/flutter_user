@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Fix registrationRepository not being passed to the registration screen.
+
 ## 4.0.0
 
 - Updated the flutter_login_service.
