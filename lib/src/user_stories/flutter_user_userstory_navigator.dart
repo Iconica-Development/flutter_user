@@ -261,12 +261,28 @@ Widget _onboardingScreen(
 ) {
   var onboarding = configuration.onboardingScreen ??
       Onboarding(
-        onboardingFinished: (result) => configuration
-            .onboardingConfiguration?.onboardingFinished
-            ?.call(result, context),
-        onboardingOnNext: (pageNumber, results) => configuration
-            .onboardingConfiguration?.onboardingOnNext
-            ?.call(pageNumber, results, context),
+        onboardingFinished: (result) async {
+          await configuration.onboardingConfiguration?.onboardingFinished
+              ?.call(result, context);
+          if (context.mounted)
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) =>
+                    configuration.afterLoginPage!.call(context),
+              ),
+            );
+        },
+        onboardingOnNext: (pageNumber, results) async {
+          await configuration.onboardingConfiguration?.onboardingOnNext
+              ?.call(pageNumber, results, context);
+          if (context.mounted)
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) =>
+                    configuration.afterLoginPage!.call(context),
+              ),
+            );
+        },
       );
   return Scaffold(
     body: onboarding,

@@ -67,7 +67,7 @@ GoRouter _router(BuildContext context) => GoRouter(
       ],
     );
 
-class ExampleLoginService implements LoginService {
+class ExampleLoginService implements LoginServiceInterface {
   AuthUser user = AuthUser();
   @override
   Future getLoggedInUser() {
