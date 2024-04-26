@@ -170,7 +170,9 @@ List<GoRoute> getAuthStoryRoutes(
                 registrationOptions: configuration.registrationOptionsBuilder
                         ?.call(context) ??
                     RegistrationOptions(
-                      registrationRepository: ExampleRegistrationRepository(),
+                      registrationRepository:
+                          configuration.registrationRepository ??
+                              ExampleRegistrationRepository(),
                       registrationSteps: RegistrationOptions.getDefaultSteps(),
                       afterRegistration: () async => context.push(
                         configuration.useAfterRegistrationPage
