@@ -270,12 +270,19 @@ List<GoRoute> getAuthStoryRoutes(
         pageBuilder: (context, state) {
           var onboarding = configuration.onboardingScreen ??
               Onboarding(
-                onboardingFinished: (result) => configuration
-                    .onboardingConfiguration?.onboardingFinished
-                    ?.call(result, context),
-                onboardingOnNext: (pageNumber, results) => configuration
-                    .onboardingConfiguration?.onboardingOnNext
-                    ?.call(pageNumber, results, context),
+                onboardingFinished: (result) async {
+                  await configuration
+                      .onboardingConfiguration?.onboardingFinished
+                      ?.call(result, context);
+                  if (context.mounted)
+                    context.go(configuration.afterLoginRoute!);
+                },
+                onboardingOnNext: (pageNumber, results) async {
+                  await configuration.onboardingConfiguration?.onboardingOnNext
+                      ?.call(pageNumber, results, context);
+                  if (context.mounted)
+                    context.go(configuration.afterLoginRoute!);
+                },
               );
           return buildScreenWithoutTransition(
             context: context,
