@@ -8,6 +8,7 @@ class FlutterFormInputImage extends FlutterFormInputWidget<Uint8List> {
   const FlutterFormInputImage({
     required super.controller,
     required this.imagePickerConfig,
+    required this.validationMessage,
     super.key,
     super.label,
     this.firstName,
@@ -16,16 +17,16 @@ class FlutterFormInputImage extends FlutterFormInputWidget<Uint8List> {
 
   final String? firstName;
   final String? lastName;
+  final String validationMessage;
   final ImagePickerConfig imagePickerConfig;
 
   @override
   Widget build(BuildContext context) {
     super.registerController(context);
 
-    var _ = getTranslator(context);
     return ImageFormField(
       onSaved: controller.onSaved,
-      validator: (value) => controller.onValidate(value, _),
+      validator: (value) => controller.onValidate(value, validationMessage),
       initialValue: controller.value,
       imagePickerConfig: imagePickerConfig,
     );
@@ -168,12 +169,16 @@ class FlutterFormInputImageController
   }
 
   @override
-  String? onValidate(
-    Uint8List? value,
-    String Function(String, {List<String>? params}) translator,
-  ) =>
-      null;
+  void Function(Uint8List? value)? onSubmit;
 
   @override
-  void Function(Uint8List? value)? onSubmit;
+  String? onValidate(Uint8List? value, String validationMessage) {
+    if (mandatory) {
+      if (value == null || value.isEmpty) {
+        return validationMessage;
+      }
+    }
+
+    return null;
+  }
 }

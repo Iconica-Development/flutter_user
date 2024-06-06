@@ -50,7 +50,7 @@ Widget _loginScreen(
                 SnackBar(
                   backgroundColor:
                       configuration.loginErrorSnackbarBackgroundColor ??
-                          theme.colorScheme.onBackground,
+                          theme.colorScheme.onSurface,
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -58,7 +58,7 @@ Widget _loginScreen(
                         result.loginError!.title,
                         style: configuration.loginErrorSnackbarTitleTextStyle ??
                             theme.textTheme.titleSmall?.copyWith(
-                              color: theme.colorScheme.background,
+                              color: theme.colorScheme.surface,
                             ),
                       ),
                       const SizedBox(height: 8),
@@ -67,7 +67,7 @@ Widget _loginScreen(
                         style:
                             configuration.loginErrorSnackbarMessageTextStyle ??
                                 theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.background,
+                                  color: theme.colorScheme.surface,
                                   height: 1.3,
                                 ),
                         textAlign: TextAlign.center,
@@ -224,13 +224,13 @@ Widget _forgotPasswordScreen(
                       Text(
                         result.requestPasswordError!.title,
                         style: theme.textTheme.titleSmall?.copyWith(
-                          color: theme.colorScheme.onBackground,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       Text(
                         result.requestPasswordError!.message,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onBackground,
+                          color: theme.colorScheme.onSurface,
                           height: 1.3,
                         ),
                         textAlign: TextAlign.center,
