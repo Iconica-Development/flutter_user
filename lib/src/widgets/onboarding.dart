@@ -72,6 +72,7 @@ class _OnboardingState extends State<Onboarding> {
                       FlutterFormInputImage(
                         firstName: 'mike',
                         lastName: 'van der velden',
+                        validationMessage: 'Please select an image',
                         controller: imageController,
                         imagePickerConfig: getImagePickerConfig(),
                       ),
@@ -85,6 +86,7 @@ class _OnboardingState extends State<Onboarding> {
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(horizontal: 8),
                         ),
+                        validationMessage: 'Please enter your first name',
                       ),
                       const SizedBox(
                         height: 20,
@@ -102,6 +104,7 @@ class _OnboardingState extends State<Onboarding> {
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.symmetric(horizontal: 8),
                           ),
+                          validationMessage: 'Please enter your bio',
                         ),
                       ),
                     ],

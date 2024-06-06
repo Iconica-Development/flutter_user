@@ -1,3 +1,9 @@
+## 4.1.0
+
+- Update to flutter_registration 2.1.0
+- Update flutter_form_wizard to 6.3.2
+- Update flutter_profile to 1.5.0
+
 ## 4.0.1
 
 - Fix registrationRepository not being passed to the registration screen.
