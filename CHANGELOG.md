@@ -1,3 +1,11 @@
+## 5.0.0
+
+- Updated most of the packages
+- Updated default design
+- Fixed bugs
+- fixed flow
+
+
 ## 4.1.0
 
 - Update to flutter_registration 2.1.0
