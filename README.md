@@ -11,109 +11,67 @@ To use this package, add flutter_user as a dependency in your pubspec.yaml file:
     git:
       url: https://github.com/Iconica-Development/flutter_user
       ref: <Version>
+      path: packages/flutter_user
 ```
 
-To use the module within your Flutter-application with predefined `Go_router` routes you should add the following:
+## Usage
 
-Add go_router as dependency to your project.
-Add the following configuration to your flutter_application:
+To use this package, import the library and add the `FlutterUserNavigatorUserstory` widget to your app like so:
 
-```
-AuthUserStoryConfiguration authUserStoryConfiguration = const AuthUserStoryConfiguration();
-```
+```dart
+import 'package:flutter_user/flutter_user.dart';
 
-and set the values as you wish.
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-Next add the `AuthUserStoryConfiguration` to `getAuthStoryRoutes` Like so:
-
-```
-List<GoRoute> getUserRoutes() => getAuthStoryRoutes(
-      authUserStoryConfiguration,
-    );
-```
-
-Finally add the `getUserRoutes` to your `Go_router` routes like so:
-
-```
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    ...getUserRoutes()
-  ],
-);
-```
-
-The routes that can be used to navigate are:
-
-For routing to the `LoginScreen`:
-
-```
-  static const String loginScreen = '/login';
-```
-
-For routing to the `RegistrationScreen`:
-
-```
-  static const String registrationScreen = '/register';
-```
-
-For routing to the `ForgotPasswordScreen`:
-
-```
-  static const String forgotPasswordScreen = '/forgot-password';
-```
-
-For routing to the `Onboarding`:
-
-```
-  static const String onboarding = '/onboarding';
-```
-
-For routing to the `afterRegistration`:
-
-```
-  static const String afterRegistration = '/after-registration';
-```
-
-For routing to the `beforeRegistration`:
-
-```
-  static const String beforeRegistration = '/before-registration';
-```
-
-Some functions return a `OnboardedUserMixin` which can be used to check if the user has finished the onboarding.
-To use this mixin you should add the following to your user class:
-
-```
-class YourUSer implements OnboardedUserMixin {
   @override
-  bool onboarded;
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "flutter_user Example",
+      theme: theme,
+      home: const FlutterUserNavigatorUserstory(
+        afterLoginScreen: Home(),
+      ),
+    );
+  }
 }
 ```
 
-The `AuthUserStoryConfiguration` has its own parameters, as specified below:
-| Parameter | Explanation |
-|-----------|-------------|
-| loginPageBuilder | The builder for the loginPage. |
-| registrationPageBuilder | The builder for the registrationPage. |
-| forgotPasswordBuilder | The builder for the forgotPasswordPage. |
-| beforeRegistrationPage | The builder for the beforeRegistrationPage. |
-| afterRegistrationPage | The builder for the afterRegistrationPage. |
-| afterLoginPage | The builder for the afterLoginPage. |
-| pageOverlayBuilder | This can be used to show something above the other pages. For instance to indicate that there is no internet. |
-| loginServiceBuilder | The login service to use. |
-| afterLoginRoute | The route to go to after the user logs in. |
-| loginOptionsBuilder | Options for the login screen. |
-| registrationOptionsBuilder | Options for the registration screen. |
-| useRegistration | Whether to use the registration screen. |
-| useOnboarding | Whether to use the onboarding screen. |
-| useForgotPassword | Whether to show the forgot password button. |
+The userstory has a few properties that you can set to customize the user experience:
 
-The `OnboardingConfiguration` has its own parameters, as specified below:
-| Parameter | Explanation |
-|-----------|-------------|
-| onboardingFinished              | Called when the user finishes the onboarding.             |
-| onboardingOnNext                | Called when the user goes to the next page in the onboarding.|
+| Property | Description | Default |
+| --- | --- | --- |
+| `afterLoginScreen` | The screen that is shown after a successful login | `null` |
+| `afterRegistration` | The screen that is shown after a successful registration | `null` |
+| `userRepository` | The repository that is used to store the user data | `LocalUserRepository` |
+| `options` | The options that are used to customize the user experience | `FlutterUserOptions` |
+| `forgotPasswordTranslations` | The translations that are used for the forgot password screen | `ForgotPasswordTranslations` |
+| `registrationOptions` | The options that are used to customize the registration experience | `RegistrationOptions` |
 
+The `UserRepository` is an abstract class that you can implement to handle user requests. The `LocalUserRepository` is a simple implementation that handles the requests locally.
+
+## FlutterUserOptions
+
+| Property | Description | Default |
+| --- | --- | --- |
+| `loginOptions` | The options that are used to customize the login experience | `LoginOptions` |
+| `loginTranslations` | The translations that are used for the login screen | `LoginTranslations` |
+| `forgotPasswordTranslations` | The translations that are used for the forgot password screen | `ForgotPasswordTranslations` |
+| `registrationOptions` | The options that are used to customize the registration experience | `RegistrationOptions` |
+| `beforeLogin` | A callback that is called before the login attempt is made | `null` |
+| `afterLogin` | A callback that is called after a successful login | `null` |
+| `onBoardedUser` | expects a `OnboardedUser` mixin to be returned when you want to have onboarding | `null` |
+| `useOnboarding` | A boolean that is used to determine if onboarding is used | `false` |
+| `onOnboardingComplete` | A callback that is called after the onboarding is completed | `null` |
+| `onRegister` | A callback that is called after the registration is completed | `null` |
+| `onForgotPassword` | A callback that is called after the forgot password is completed | `null` |
+| `onRequestForgotPassword` | A callback that is called after the forgot password request is completed | `null` |
+| `onForgotPasswordSuccess` | A callback that is called after the forgot password is successful | `null` |
+| `onForgotPasswordUnsuccessful` | A callback that is called after the forgot password is unsuccessful | `null` |
+| `onRegistrationError` | A callback that is called after the registration is unsuccessful | `null` |
+| `afterRegistration` | A callback that is called after the registration is completed | `null` |
+| `afterRegistrationSuccess` | A callback that is called after the registration is successful | `null` |
+| `afterRegistrationUnsuccessful` | A callback that is called after the registration is unsuccessful | `null` |
 
 
 ## Issues
