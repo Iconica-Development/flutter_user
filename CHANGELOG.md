@@ -1,3 +1,7 @@
+## 6.0.0
+
+- Refactor with the new component structure
+
 ## 5.1.0
 
 - Update packages
