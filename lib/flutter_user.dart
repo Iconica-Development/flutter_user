@@ -1,6 +1,7 @@
 /// Flutter User Navigator
 library flutter_user_navigator;
 
+export "package:flutter_login/flutter_login.dart";
 export "package:flutter_profile/flutter_profile.dart";
 export "package:flutter_registration/flutter_registration.dart";
 
