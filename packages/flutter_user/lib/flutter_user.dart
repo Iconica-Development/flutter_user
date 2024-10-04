@@ -1,5 +1,6 @@
-/// Flutter User
-library flutter_user;
+// ignore: depend_on_referenced_packages
+export "package:flutter_profile/flutter_profile.dart";
+export "package:user_repository_interface/user_repository_interface.dart";
 
 /// Make the user_repository_interface available for the apps that use the
 /// flutter_user userstory.
