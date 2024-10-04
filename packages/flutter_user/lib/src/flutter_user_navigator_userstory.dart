@@ -101,10 +101,10 @@ class _FlutterUserNavigatorUserstoryState
         );
 
         if (!loginResponse.loginSuccessful) {
-          if (context.mounted) {
-            // ignore: use_build_context_synchronously
-            await errorScaffoldMessenger(context, loginResponse);
-          }
+          if (!mounted) return;
+          Navigator.of(context).pop();
+          await errorScaffoldMessenger(context, loginResponse);
+
           return;
         }
         await options!.afterLogin?.call();
@@ -221,7 +221,7 @@ class _FlutterUserNavigatorUserstoryState
             return 1;
           }
           if (isEmailError) {
-            return 2;
+            return 0;
           }
 
           return null;

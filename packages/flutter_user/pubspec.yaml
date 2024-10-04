@@ -1,6 +1,6 @@
 name: flutter_user
 description: "Flutter Userstory for onboarding, login, and registration."
-version: 6.0.3
+version: 6.1.0
 repository: https://github.com/Iconica-Development/flutter_user
 
 publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
@@ -20,7 +20,7 @@ dependencies:
     version: ^4.1.0
   user_repository_interface:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub/
-    version: ^6.0.3
+    version: ^6.1.0
 
 dependency_overrides:
   intl: ^0.19.0
