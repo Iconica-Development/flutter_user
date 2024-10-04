@@ -102,6 +102,7 @@ class _FlutterUserNavigatorUserstoryState
 
         if (!loginResponse.loginSuccessful) {
           if (context.mounted) {
+            Navigator.of(context).pop();
             // ignore: use_build_context_synchronously
             await errorScaffoldMessenger(context, loginResponse);
           }
@@ -221,7 +222,7 @@ class _FlutterUserNavigatorUserstoryState
             return 1;
           }
           if (isEmailError) {
-            return 2;
+            return 0;
           }
 
           return null;
