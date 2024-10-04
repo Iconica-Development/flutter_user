@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_user/flutter_user.dart";
-import "package:user_repository_interface/user_repository_interface.dart";
 
 class FlutterUserNavigatorUserstory extends StatefulWidget {
   const FlutterUserNavigatorUserstory({
@@ -103,6 +102,7 @@ class _FlutterUserNavigatorUserstoryState
 
         if (!loginResponse.loginSuccessful) {
           if (context.mounted) {
+            Navigator.of(context).pop();
             // ignore: use_build_context_synchronously
             await errorScaffoldMessenger(context, loginResponse);
           }
@@ -222,7 +222,7 @@ class _FlutterUserNavigatorUserstoryState
             return 1;
           }
           if (isEmailError) {
-            return 2;
+            return 0;
           }
 
           return null;
