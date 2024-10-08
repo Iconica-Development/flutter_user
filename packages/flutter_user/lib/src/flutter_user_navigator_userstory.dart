@@ -11,6 +11,7 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
     this.options,
     this.forgotPasswordTranslations,
     this.registrationOptions,
+    this.forgotPasswordOptions = const ForgotPasswordOptions(),
     super.key,
   });
 
@@ -22,6 +23,7 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
   final VoidCallback? afterRegistration;
   final ForgotPasswordTranslations? forgotPasswordTranslations;
   final RegistrationOptions? registrationOptions;
+  final ForgotPasswordOptions forgotPasswordOptions;
 
   @override
   State<FlutterUserNavigatorUserstory> createState() =>
@@ -130,6 +132,7 @@ class _FlutterUserNavigatorUserstoryState
       title: title,
       description: description,
       loginOptions: options!.loginOptions,
+      forgotPasswordOptions: widget.forgotPasswordOptions,
       onRequestForgotPassword: (email) async {
         if (options!.onRequestForgotPassword != null) {
           await options!.onRequestForgotPassword!(email);
