@@ -32,7 +32,7 @@ export "src/screens/registration_screen.dart";
 export "src/screens/registration_success.dart";
 export "src/screens/registration_unsuccessfull.dart";
 export "src/services/login_validation.dart";
-export "src/services/validation_Service.dart";
+export "src/services/validation_service.dart";
 export "src/widgets/error_scaffold_messenger.dart";
 export "src/widgets/form_image_picker.dart";
 export "src/widgets/loading_indicator.dart";
