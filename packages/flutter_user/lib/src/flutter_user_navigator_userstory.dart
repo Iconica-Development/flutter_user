@@ -89,50 +89,54 @@ class _FlutterUserNavigatorUserstoryState
       style: theme.textTheme.headlineLarge,
     );
     var subtitle = Text(options!.loginTranslations.loginSubtitle ?? "");
+
+    FutureOr<void> onLogin(String email, String password) async {
+      await options!.beforeLogin?.call(email, password);
+      if (!mounted) return;
+      unawaited(showLoadingIndicator(context));
+      var loginResponse = await userService!.loginWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (!loginResponse.loginSuccessful) {
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        if (!context.mounted) return;
+        await errorScaffoldMessenger(context, loginResponse);
+        return;
+      }
+      await options!.afterLogin?.call();
+
+      if (loginResponse.loginSuccessful) {
+        var onboardingUser = await options!.onBoardedUser?.call();
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        if (options!.useOnboarding && onboardingUser?.onboarded == false) {
+          await push(
+            Onboarding(
+              onboardingFinished: (results) async {
+                await options!.onOnboardingComplete?.call(results);
+                if (!mounted || !context.mounted) return;
+                Navigator.of(context).pop();
+                await pushReplacement(widget.afterLoginScreen);
+              },
+            ),
+          );
+        } else {
+          if (!context.mounted) {
+            return;
+          }
+          await pushReplacement(widget.afterLoginScreen);
+        }
+      }
+    }
+
     return EmailPasswordLoginForm(
       title: title,
       subtitle: subtitle,
       options: options!.loginOptions,
-      onLogin: (email, password) async {
-        await options!.beforeLogin?.call(email, password);
-        // ignore: use_build_context_synchronously
-        unawaited(showLoadingIndicator(context));
-        var loginResponse = await userService!.loginWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        if (!loginResponse.loginSuccessful) {
-          if (!mounted) return;
-          Navigator.of(context).pop();
-          if (!context.mounted) return;
-          await errorScaffoldMessenger(context, loginResponse);
-          return;
-        }
-        await options!.afterLogin?.call();
-
-        if (loginResponse.loginSuccessful) {
-          var onboardingUser = await options!.onBoardedUser?.call();
-          if (context.mounted) {
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).pop();
-            if (options!.useOnboarding && onboardingUser?.onboarded == false) {
-              await push(
-                Onboarding(
-                  onboardingFinished: (results) async {
-                    await options!.onOnboardingComplete?.call(results);
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
-                    await pushReplacement(widget.afterLoginScreen);
-                  },
-                ),
-              );
-            } else {
-              await pushReplacement(widget.afterLoginScreen);
-            }
-          }
-        }
-      },
+      onLogin: onLogin,
       onForgotPassword: (email, ctx) async {
         await options!.onForgotPassword?.call(email, ctx) ??
             await push(_forgotPasswordScreen());
@@ -159,31 +163,33 @@ class _FlutterUserNavigatorUserstoryState
       ),
     );
 
+    FutureOr<void> onRequestForgotPassword(String email) async {
+      if (options!.onRequestForgotPassword != null) {
+        await options!.onRequestForgotPassword!(email);
+        return;
+      }
+      unawaited(showLoadingIndicator(context));
+
+      var requestPasswordReponse =
+          await userService!.requestChangePassword(email: email);
+
+      if (requestPasswordReponse.requestSuccesfull) {
+        if (context.mounted) {
+          await pushReplacement(_forgotPasswordSuccessScreen());
+        }
+      } else {
+        if (context.mounted) {
+          await push(_forgotPasswordUnsuccessfullScreen());
+        }
+      }
+    }
+
     return ForgotPasswordForm(
       title: title,
       description: description,
       loginOptions: options!.loginOptions,
       forgotPasswordOptions: widget.forgotPasswordOptions,
-      onRequestForgotPassword: (email) async {
-        if (options!.onRequestForgotPassword != null) {
-          await options!.onRequestForgotPassword!(email);
-          return;
-        }
-        unawaited(showLoadingIndicator(context));
-
-        var requestPasswordReponse =
-            await userService!.requestChangePassword(email: email);
-
-        if (requestPasswordReponse.requestSuccesfull) {
-          if (context.mounted) {
-            await pushReplacement(_forgotPasswordSuccessScreen());
-          }
-        } else {
-          if (context.mounted) {
-            await push(_forgotPasswordUnsuccessfullScreen());
-          }
-        }
-      },
+      onRequestForgotPassword: onRequestForgotPassword,
     );
   }
 
@@ -256,6 +262,7 @@ class _FlutterUserNavigatorUserstoryState
       );
 
   Future<void> push(Widget screen) async {
+    if (!context.mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => screen,
@@ -264,7 +271,8 @@ class _FlutterUserNavigatorUserstoryState
   }
 
   Future<void> pushReplacement(Widget screen) async {
-    await Navigator.of(context).pushReplacement(
+    if (!context.mounted) return;
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => screen,
       ),
