@@ -1,3 +1,8 @@
+## 6.1.0
+
+- Fix registration bug with title
+- Add forgotPasswordOptions for customizing the forgot password screen
+
 ## 6.0.3
 
 - export the user_repository_interface package to improve the usability of the package
