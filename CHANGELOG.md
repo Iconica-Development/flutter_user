@@ -1,3 +1,7 @@
+## 6.0.1
+
+- Decrease default text size in the login and registration buttons
+
 ## 6.0.0
 
 - Refactor with the new component structure
