@@ -137,7 +137,7 @@ Widget _createLoginButton(
                   padding: const EdgeInsets.all(8),
                   child: Text(
                     options.translations.loginButton,
-                    style: Theme.of(context).textTheme.displayLarge,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -160,7 +160,7 @@ Widget _createRegisterButton(
         onPressed: !disabled ? onPressed : onDisabledPress,
         child: Text(
           options.translations.registrationButton,
-          style: Theme.of(context).textTheme.displayMedium!.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 decoration: TextDecoration.underline,
               ),
         ),
