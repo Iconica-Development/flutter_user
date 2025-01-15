@@ -46,3 +46,6 @@ pubspec.lock
 .metadata
 ios
 
+# FVM Version Cache
+.fvm/
+.fvmrc
