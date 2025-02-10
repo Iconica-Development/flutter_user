@@ -4,8 +4,7 @@ import "package:flutter_user/flutter_user.dart";
 class FlutterUserOptions {
   FlutterUserOptions({
     this.loginOptions = const LoginOptions(),
-    this.loginTranslations = const LoginTranslations(),
-    this.forgotPasswordTranslations = const ForgotPasswordTranslations(),
+    this.forgotPasswordOptions = const ForgotPasswordOptions(),
     this.beforeLogin,
     this.afterLogin,
     this.onBoardedUser,
@@ -24,9 +23,9 @@ class FlutterUserOptions {
   }) : registrationOptions = registrationOptions ?? RegistrationOptions();
 
   final LoginOptions loginOptions;
-  final LoginTranslations loginTranslations;
+  final ForgotPasswordOptions forgotPasswordOptions;
   final RegistrationOptions? registrationOptions;
-  final ForgotPasswordTranslations forgotPasswordTranslations;
+  
   final Future Function(String email, String password)? beforeLogin;
   final Future Function()? afterLogin;
   final Future<OnboardedUserMixin?> Function()? onBoardedUser;

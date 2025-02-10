@@ -9,7 +9,6 @@ Future<void> errorScaffoldMessenger(
   var theme = Theme.of(context);
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      backgroundColor: theme.colorScheme.primary,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
