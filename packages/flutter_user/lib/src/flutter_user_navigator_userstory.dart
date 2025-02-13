@@ -46,6 +46,38 @@ class _FlutterUserNavigatorUserstoryState
   }
 
   @override
+  void didUpdateWidget(covariant FlutterUserNavigatorUserstory oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.options != oldWidget.options) {
+      setState(() {
+        options = widget.options ?? FlutterUserOptions();
+      });
+    }
+
+    if (widget.userService != oldWidget.userService) {
+      setState(() {
+        userService = widget.userService ?? UserService();
+      });
+    }
+
+    if (widget.forgotPasswordTranslations !=
+        oldWidget.forgotPasswordTranslations) {
+      setState(() {
+        forgotPasswordTranslations = widget.forgotPasswordTranslations ??
+            const ForgotPasswordTranslations();
+      });
+    }
+
+    if (widget.registrationOptions != oldWidget.registrationOptions) {
+      setState(() {
+        registrationOptions =
+            widget.registrationOptions ?? RegistrationOptions();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => _loginScreen();
 
   Widget _loginScreen() {

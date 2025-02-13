@@ -1,3 +1,7 @@
+## 6.0.2
+
+- Fix hot reloading not working
+
 ## 6.0.1
 
 - Decrease default text size in the login and registration buttons
