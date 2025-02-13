@@ -215,11 +215,17 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            options.emailInputContainerBuilder(
-                              emailTextFormField,
+                            Container(
+                              key: ValueKey("email_${options.hashCode}"),
+                              child: options.emailInputContainerBuilder(
+                                emailTextFormField,
+                              ),
                             ),
-                            options.passwordInputContainerBuilder(
-                              passwordTextFormField,
+                            Container(
+                              key: ValueKey("password_${options.hashCode}"),
+                              child: options.passwordInputContainerBuilder(
+                                passwordTextFormField,
+                              ),
                             ),
                             forgotPasswordButton,
                             if (options.spacers.spacerAfterForm != null) ...[
