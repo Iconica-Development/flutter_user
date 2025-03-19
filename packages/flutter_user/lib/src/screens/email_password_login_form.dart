@@ -15,8 +15,6 @@ class EmailPasswordLoginForm extends StatefulWidget {
   /// [options]: The options for configuring the login form.
   const EmailPasswordLoginForm({
     required this.onLogin,
-    this.title,
-    this.subtitle,
     this.onForgotPassword,
     this.onRegister,
     this.options = const LoginOptions(),
@@ -24,9 +22,6 @@ class EmailPasswordLoginForm extends StatefulWidget {
   });
 
   final LoginOptions options;
-
-  final Widget? title;
-  final Widget? subtitle;
 
   final void Function(String email, BuildContext ctx)? onForgotPassword;
   final FutureOr<void> Function(
@@ -185,122 +180,31 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
       options,
     );
 
-    return Scaffold(
-      backgroundColor: options.loginBackgroundColor,
-      body: CustomScrollView(
-        physics: const ScrollPhysics(),
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            fillOverscroll: true,
-            child: Column(
-              children: [
-                Expanded(
-                  flex: options.spacers.titleSpacer,
-                  child: LoginTitle(
-                    options: options,
-                    title: widget.title,
-                    subtitle: widget.subtitle,
-                  ),
-                ),
-                Expanded(
-                  flex: options.spacers.formFlexValue,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: options.maxFormWidth,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: AutofillGroup(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            options.emailInputContainerBuilder(
-                              emailTextFormField,
-                            ),
-                            options.passwordInputContainerBuilder(
-                              passwordTextFormField,
-                            ),
-                            forgotPasswordButton,
-                            if (options.spacers.spacerAfterForm != null) ...[
-                              Spacer(flex: options.spacers.spacerAfterForm!),
-                            ],
-                            loginButton,
-                            if (widget.onRegister != null) ...[
-                              registerButton,
-                            ],
-                            if (options.spacers.spacerAfterButton != null) ...[
-                              Spacer(flex: options.spacers.spacerAfterButton!),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: options.maxFormWidth,
       ),
-    );
-  }
-}
-
-class LoginTitle extends StatelessWidget {
-  const LoginTitle({
-    required this.options,
-    this.title,
-    this.subtitle,
-    super.key,
-  });
-
-  final LoginOptions options;
-  final Widget? title;
-  final Widget? subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return Column(
-      children: [
-        if (options.spacers.spacerBeforeTitle != null) ...[
-          Spacer(flex: options.spacers.spacerBeforeTitle!),
-        ],
-        if (title != null) ...[
-          Align(
-            alignment: Alignment.topCenter,
-            child: wrapWithDefaultStyle(
-              title,
-              theme.textTheme.headlineSmall,
-            ),
+      child: Form(
+        key: _formKey,
+        child: AutofillGroup(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              options.emailInputContainerBuilder(
+                emailTextFormField,
+              ),
+              options.passwordInputContainerBuilder(
+                passwordTextFormField,
+              ),
+              forgotPasswordButton,
+              loginButton,
+              if (widget.onRegister != null) ...[
+                registerButton,
+              ],
+            ],
           ),
-        ],
-        if (options.spacers.spacerAfterTitle != null) ...[
-          Spacer(flex: options.spacers.spacerAfterTitle!),
-        ],
-        if (subtitle != null) ...[
-          Align(
-            alignment: Alignment.topCenter,
-            child: wrapWithDefaultStyle(
-              subtitle,
-              theme.textTheme.titleSmall,
-            ),
-          ),
-        ],
-        if (options.spacers.spacerAfterSubtitle != null) ...[
-          Spacer(flex: options.spacers.spacerAfterSubtitle!),
-        ],
-        if (options.image != null) ...[
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: options.image,
-          ),
-        ],
-        if (options.spacers.spacerAfterImage != null) ...[
-          Spacer(flex: options.spacers.spacerAfterImage!),
-        ],
-      ],
+        ),
+      ),
     );
   }
 }

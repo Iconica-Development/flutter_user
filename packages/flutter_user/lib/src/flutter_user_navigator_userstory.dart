@@ -36,68 +36,58 @@ class _FlutterUserNavigatorUserstoryState
   @override
   Widget build(BuildContext context) => _loginScreen();
 
-  Widget _loginScreen() {
-    var theme = Theme.of(context);
+  Widget _loginScreen() => EmailPasswordLoginForm(
+        options: options!.loginOptions,
+        onLogin: (email, password) async {
+          await options!.beforeLogin?.call(email, password);
+          // ignore: use_build_context_synchronously
+          unawaited(showLoadingIndicator(context));
+          var loginResponse = await userService!.loginWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
 
-    var title = Text(
-      options!.loginOptions.translations.loginTitle,
-      style: theme.textTheme.headlineLarge,
-    );
-    var subtitle = Text(options!.loginOptions.translations.loginSubtitle ?? "");
-    return EmailPasswordLoginForm(
-      title: title,
-      subtitle: subtitle,
-      options: options!.loginOptions,
-      onLogin: (email, password) async {
-        await options!.beforeLogin?.call(email, password);
-        // ignore: use_build_context_synchronously
-        unawaited(showLoadingIndicator(context));
-        var loginResponse = await userService!.loginWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        if (!loginResponse.loginSuccessful) {
-          if (context.mounted) {
-            // ignore: use_build_context_synchronously
-            await errorScaffoldMessenger(context, loginResponse);
+          if (!loginResponse.loginSuccessful) {
+            if (context.mounted) {
+              // ignore: use_build_context_synchronously
+              await errorScaffoldMessenger(context, loginResponse);
+            }
+            return;
           }
-          return;
-        }
-        await options!.afterLogin?.call();
+          await options!.afterLogin?.call();
 
-        if (loginResponse.loginSuccessful) {
-          var onboardingUser = await options!.onBoardedUser?.call();
-          if (context.mounted) {
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).pop();
-            if (options!.useOnboarding && onboardingUser?.onboarded == false) {
-              await push(
-                Onboarding(
-                  onboardingFinished: (results) async {
-                    await options!.onOnboardingComplete?.call(results);
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
-                    await pushReplacement(widget.afterLoginScreen);
-                  },
-                ),
-              );
-            } else {
-              await pushReplacement(widget.afterLoginScreen);
+          if (loginResponse.loginSuccessful) {
+            var onboardingUser = await options!.onBoardedUser?.call();
+            if (context.mounted) {
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pop();
+              if (options!.useOnboarding &&
+                  onboardingUser?.onboarded == false) {
+                await push(
+                  Onboarding(
+                    onboardingFinished: (results) async {
+                      await options!.onOnboardingComplete?.call(results);
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                      await pushReplacement(widget.afterLoginScreen);
+                    },
+                  ),
+                );
+              } else {
+                await pushReplacement(widget.afterLoginScreen);
+              }
             }
           }
-        }
-      },
-      onForgotPassword: (email, ctx) async {
-        await options!.onForgotPassword?.call(email, ctx) ??
-            await push(_forgotPasswordScreen());
-      },
-      onRegister: (email, password, context) async {
-        await options!.onRegister?.call(email, password, context) ??
-            await push(_registrationScreen());
-      },
-    );
-  }
+        },
+        onForgotPassword: (email, ctx) async {
+          await options!.onForgotPassword?.call(email, ctx) ??
+              await push(_forgotPasswordScreen());
+        },
+        onRegister: (email, password, context) async {
+          await options!.onRegister?.call(email, password, context) ??
+              await push(_registrationScreen());
+        },
+      );
 
   Widget _forgotPasswordScreen() {
     var theme = Theme.of(context);

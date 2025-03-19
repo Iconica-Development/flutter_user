@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "flutter_user Example",
       theme: theme,
-      home: const FlutterUserNavigatorUserstory(
-        afterLoginScreen: Home(),
-      ),
+      home: const Login(),
     );
   }
 }
@@ -34,14 +32,28 @@ class Home extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () async {
             await Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FlutterUserNavigatorUserstory(
-                    afterLoginScreen: Home(),
-                  ),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Login(),
+              ),
+            );
           },
           child: const Text("Logout"),
+        ),
+      ),
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  const Login({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: FlutterUserNavigatorUserstory(
+          afterLoginScreen: Home(),
         ),
       ),
     );

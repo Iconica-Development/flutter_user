@@ -1,15 +1,12 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:flutter_user/src/models/login/login_spacer_options.dart";
 import "package:flutter_user/src/models/login/login_translations.dart";
 import "package:flutter_user/src/services/login_validation.dart";
 import "package:flutter_user/src/services/validation_service.dart";
 
 class LoginOptions {
   const LoginOptions({
-    this.image,
-    this.spacers = const LoginSpacerOptions(),
     this.translations = const LoginTranslations(),
     this.validationService,
     this.maxFormWidth = 300,
@@ -22,7 +19,6 @@ class LoginOptions {
     this.showObscurePassword = true,
     this.suffixIconSize,
     this.suffixIconPadding,
-    this.loginBackgroundColor = const Color(0xffFAF9F6),
     this.forgotPasswordButtonBuilder = _createForgotPasswordButton,
     this.loginButtonBuilder = _createLoginButton,
     this.registrationButtonBuilder = _createRegisterButton,
@@ -60,8 +56,6 @@ class LoginOptions {
     ),
   });
 
-  final Widget? image;
-  final LoginSpacerOptions spacers;
   final LoginTranslations translations;
   final ValidationService? validationService;
   final double maxFormWidth;
@@ -79,7 +73,6 @@ class LoginOptions {
   final LoginButtonBuilder forgotPasswordButtonBuilder;
   final LoginButtonBuilder loginButtonBuilder;
   final LoginButtonBuilder registrationButtonBuilder;
-  final Color loginBackgroundColor;
   final InputContainerBuilder emailInputContainerBuilder;
   final InputContainerBuilder passwordInputContainerBuilder;
 

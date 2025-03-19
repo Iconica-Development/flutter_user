@@ -9,7 +9,6 @@ export "src/models/forgot_password/forgot_password_translations.dart";
 export "src/models/image_picker_configuration.dart";
 export "src/models/image_picker_theme.dart";
 export "src/models/login/login_options.dart";
-export "src/models/login/login_spacer_options.dart";
 export "src/models/login/login_translations.dart";
 export "src/models/registration/auth_action.dart";
 export "src/models/registration/auth_bool_field.dart";
