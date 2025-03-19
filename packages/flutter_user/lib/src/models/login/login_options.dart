@@ -22,7 +22,7 @@ class LoginOptions {
     this.showObscurePassword = true,
     this.suffixIconSize,
     this.suffixIconPadding,
-    this.loginBackgroundColor = const Color(0xffFAF9F6),
+    this.loginBackgroundColor,
     this.forgotPasswordButtonBuilder = _createForgotPasswordButton,
     this.loginButtonBuilder = _createLoginButton,
     this.registrationButtonBuilder = _createRegisterButton,
@@ -79,7 +79,7 @@ class LoginOptions {
   final LoginButtonBuilder forgotPasswordButtonBuilder;
   final LoginButtonBuilder loginButtonBuilder;
   final LoginButtonBuilder registrationButtonBuilder;
-  final Color loginBackgroundColor;
+  final Color? loginBackgroundColor;
   final InputContainerBuilder emailInputContainerBuilder;
   final InputContainerBuilder passwordInputContainerBuilder;
 

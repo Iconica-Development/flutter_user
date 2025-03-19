@@ -3,4 +3,4 @@ name: flutter_user_workspace
 environment:
   sdk: ">=3.2.5 <4.0.0"
 dev_dependencies:
-  melos: ^6.1.0
+  melos: ^6.1.1

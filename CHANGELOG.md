@@ -1,3 +1,7 @@
+## 6.1.1
+
+- Background colors are, by standard, determined by the theme,
+
 ## 6.1.0
 
 - Fix registration bug with title

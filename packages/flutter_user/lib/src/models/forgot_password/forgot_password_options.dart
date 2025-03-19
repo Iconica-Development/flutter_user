@@ -8,7 +8,7 @@ import "package:flutter_user/src/widgets/primary_button.dart";
 class ForgotPasswordOptions {
   const ForgotPasswordOptions({
     this.forgotPasswordCustomAppBar,
-    this.forgotPasswordBackgroundColor = const Color(0xffFAF9F6),
+    this.forgotPasswordBackgroundColor,
     this.forgotPasswordScreenPadding = const Padding(
       padding: EdgeInsets.symmetric(horizontal: 60),
     ),

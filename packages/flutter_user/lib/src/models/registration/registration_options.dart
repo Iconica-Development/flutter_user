@@ -8,7 +8,7 @@ import "package:flutter_user/src/models/registration/registration_translations.d
 class RegistrationOptions {
   RegistrationOptions({
     this.translations = const RegistrationTranslations.empty(),
-    this.registrationBackgroundColor = const Color(0xffFAF9F6),
+    this.registrationBackgroundColor,
     this.maxFormWidth = 300,
     this.customAppbarBuilder = _createCustomAppBar,
     this.steps = const [],
@@ -24,7 +24,7 @@ class RegistrationOptions {
   }
 
   final RegistrationTranslations translations;
-  final Color registrationBackgroundColor;
+  final Color? registrationBackgroundColor;
   final double maxFormWidth;
   final AppBar Function(String title) customAppbarBuilder;
   List<AuthStep> steps;

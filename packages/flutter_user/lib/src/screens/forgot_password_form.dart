@@ -78,7 +78,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       backgroundColor: forgotPasswordOptions.forgotPasswordBackgroundColor,
       appBar: forgotPasswordOptions.forgotPasswordCustomAppBar ??
           AppBar(
-            backgroundColor: const Color(0xffFAF9F6),
+            backgroundColor:
+                forgotPasswordOptions.forgotPasswordBackgroundColor,
           ),
       body: Padding(
         padding: forgotPasswordOptions.forgotPasswordScreenPadding.padding,
