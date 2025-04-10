@@ -1,6 +1,10 @@
 /// Flutter User
 library flutter_user;
 
+/// Make the user_repository_interface available for the apps that use the
+/// flutter_user userstory.
+export "package:user_repository_interface/user_repository_interface.dart";
+
 export "src/flutter_user_navigator_userstory.dart";
 export "src/models/flutter_user_options.dart";
 export "src/models/forgot_password/forgot_password_options.dart";

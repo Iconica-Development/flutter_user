@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_user/flutter_user.dart";
-import "package:user_repository_interface/user_repository_interface.dart";
 
 class FlutterUserNavigatorUserstory extends StatefulWidget {
   const FlutterUserNavigatorUserstory({

@@ -1,3 +1,7 @@
+## 6.0.3
+
+- export the user_repository_interface package to improve the usability of the package
+
 ## 6.0.2
 
 - Fix hot reloading not working
