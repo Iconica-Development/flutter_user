@@ -14,8 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "flutter_user Example",
       theme: theme,
-      home: const FlutterUserNavigatorUserstory(
-        afterLoginScreen: Home(),
+      home: FlutterUserNavigatorUserstory(
+        afterLoginScreen: const Home(),
+        options: FlutterUserOptions(
+          loginOptions: const LoginOptions(
+            biometricsOptions: LoginBiometricsOptions(
+              loginWithBiometrics: true,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ class LoginOptions {
     this.spacers = const LoginSpacerOptions(),
     this.translations = const LoginTranslations(),
     this.validationService,
+    this.biometricsOptions = const LoginBiometricsOptions(),
     this.maxFormWidth = 300,
     this.initialEmail = "",
     this.initialPassword = "",
@@ -83,8 +84,43 @@ class LoginOptions {
   final InputContainerBuilder emailInputContainerBuilder;
   final InputContainerBuilder passwordInputContainerBuilder;
 
+  /// Configuration class for the biometrics login options.
+  final LoginBiometricsOptions biometricsOptions;
+
   ValidationService get validations =>
       validationService ?? LoginValidationService(this);
+}
+
+class LoginBiometricsOptions {
+  const LoginBiometricsOptions({
+    this.loginWithBiometrics = false,
+    this.triggerBiometricsAutomatically = false,
+    this.allowBiometricsAlternative = true,
+    this.onBiometricsSuccess,
+    this.onBiometricsError,
+    this.onBiometricsFail,
+  });
+
+  /// Ask the user to login with biometrics instead of email and password.
+  final bool loginWithBiometrics;
+
+  /// Allow the user to login with biometrics even if they have no biometrics
+  /// set up on their device. This will use their device native login methods.
+  final bool allowBiometricsAlternative;
+
+  /// Automatically open the native biometrics UI instead of waiting for the
+  /// user to press the biometrics button
+  final bool triggerBiometricsAutomatically;
+
+  /// The callback function to be called when the biometrics login is
+  /// successful.
+  final LoginOptionalAsyncCallback? onBiometricsSuccess;
+
+  /// The callback function to be called when the biometrics login fails.
+  final LoginOptionalAsyncCallback? onBiometricsFail;
+
+  /// The callback function to be called when the biometrics login errors.
+  final LoginOptionalAsyncCallback? onBiometricsError;
 }
 
 Widget _createForgotPasswordButton(
@@ -120,30 +156,22 @@ Widget _createLoginButton(
 ) =>
     Opacity(
       opacity: disabled ? 0.5 : 1.0,
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: 8,
-              ),
-              child: FilledButton(
-                onPressed: () async =>
-                    !disabled ? await onPressed() : await onDisabledPress(),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    options.translations.loginButton,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 8,
+        ),
+        child: FilledButton(
+          onPressed: () async =>
+              !disabled ? await onPressed() : await onDisabledPress(),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              options.translations.loginButton,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
-        ],
+        ),
       ),
     );
 
