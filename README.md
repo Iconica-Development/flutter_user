@@ -22,6 +22,7 @@ This package prioritizes flexibility and ease of integration, allowing developer
    - ForgotPasswordOptions
    - RegistrationOptions
    - Translations
+   - LoginBiometricsOptions
 5. Callbacks and Error Handling
 6. Example Usage
 7. Advanced Customization
@@ -36,10 +37,8 @@ To use flutter_user in your Flutter project, add it as a dependency in your `pub
 ```yaml
 dependencies:
   flutter_user:
-    git:
-      url: https://github.com/Iconica-Development/flutter_user
-      ref: <Version>
-      path: packages/flutter_user
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: <Version>
 ```
 
 Replace `<Version>` with the specific version or commit hash you want to use.
@@ -168,6 +167,46 @@ Customize the login screen's appearance and behavior.
 - `registrationButtonBuilder`: Custom builder for the registration button. (Widget Function(BuildContext context, VoidCallback onPressed))
 - `image`: Widget to display an image or logo on the login screen. (Widget)
 - `spacers`: `LoginSpacerOptions` to adjust spacing between elements. (LoginSpacerOptions)
+- `biometricsOptions`: `LoginBiometricsOptions` to configure biometric login options. (LoginBiometricsOptions)
+
+### LoginBiometricsOptions
+
+Customize biometric login options.
+
+You can use faceID or fingerprint by adding:
+```dart
+  loginWithBiometrics: true,
+  triggerBiometricsAutomatically: true,
+```
+to the `LoginOptions` object. This will trigger the biometrics authentication immediately when the EmailPasswordLoginForm is shown.
+
+For the full biometrics setup you can follow the instructions in the [local_auth](https://pub.dev/packages/local_auth) package. 
+
+You need to add the following permissions to your AndroidManifest.xml file:
+
+```xml
+  <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+```
+
+```java
+import io.flutter.embedding.android.FlutterFragmentActivity;
+
+public class MainActivity extends FlutterFragmentActivity {
+    // ...
+}
+```
+
+or MainActivity.kt:
+
+```kotlin
+import io.flutter.embedding.android.FlutterFragmentActivity
+
+class MainActivity: FlutterFragmentActivity() {
+    // ...
+}
+```
+
+to inherit from `FlutterFragmentActivity`.
 
 ### ForgotPasswordOptions
 
