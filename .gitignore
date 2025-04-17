@@ -44,10 +44,14 @@ app.*.map.json
 /android/app/release
 pubspec.lock
 .metadata
-ios
 
 # FVM Version Cache
 .fvm/
 .fvmrc
 
 android/
+macos/
+ios/
+linux/
+web/
+windows/

@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 const Color primaryColor = Color(0xFF71C6D1);
 
 ThemeData theme = ThemeData(
   actionIconTheme: ActionIconThemeData(
-    backButtonIconBuilder: (context) {
-      return const Icon(Icons.arrow_back_ios_new_rounded);
-    },
+    backButtonIconBuilder: (context) =>
+        const Icon(Icons.arrow_back_ios_new_rounded),
   ),
   scaffoldBackgroundColor: const Color(0xFFFAF9F6),
   primaryColor: primaryColor,
@@ -37,20 +36,21 @@ ThemeData theme = ThemeData(
     ),
   ),
   appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      iconTheme: IconThemeData(
-        color: Colors.white,
-        size: 16,
-      ),
-      elevation: 0,
-      backgroundColor: Color(0xFF212121),
-      titleTextStyle: TextStyle(
-        fontWeight: FontWeight.w900,
-        fontSize: 24,
-        color: Color(0xFF71C6D1),
-        fontFamily: "Merriweather",
-      ),
-      actionsIconTheme: IconThemeData()),
+    centerTitle: true,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+      size: 16,
+    ),
+    elevation: 0,
+    backgroundColor: Color(0xFF212121),
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.w900,
+      fontSize: 24,
+      color: Color(0xFF71C6D1),
+      fontFamily: "Merriweather",
+    ),
+    actionsIconTheme: IconThemeData(),
+  ),
   fontFamily: "Merriweather",
   useMaterial3: false,
   textTheme: const TextTheme(
