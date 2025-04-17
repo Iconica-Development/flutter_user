@@ -1,11 +1,15 @@
+## 6.2.0
+
+- Added biometrics options for login that can be configured with biometricsOptions in the LoginOptions.
+
 ## 6.1.0
 
-- Fix registration bug with title
-- Add forgotPasswordOptions for customizing the forgot password screen
+- Fixed registration bug with title
+- Added forgotPasswordOptions for customizing the forgot password screen
 
 ## 6.0.3
 
-- export the user_repository_interface package to improve the usability of the package
+- exported the user_repository_interface package to improve the usability of the package
 
 ## 6.0.2
 

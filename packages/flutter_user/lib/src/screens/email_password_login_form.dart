@@ -2,6 +2,8 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
+import "package:flutter_user/src/services/local_auth.dart";
+import "package:flutter_user/src/widgets/biometrics_button.dart";
 
 class EmailPasswordLoginForm extends StatefulWidget {
   /// Constructs an [EmailPasswordLoginForm] widget.
@@ -48,6 +50,8 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
   String _currentEmail = "";
   String _currentPassword = "";
 
+  final LocalAuthService _localAuthService = LocalAuthService();
+
   void _updateCurrentEmail(String email) {
     _currentEmail = email;
     _validate();
@@ -86,6 +90,13 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
     _currentEmail = widget.options.initialEmail;
     _currentPassword = widget.options.initialPassword;
     _validate();
+
+    if (widget.options.biometricsOptions.loginWithBiometrics &&
+        widget.options.biometricsOptions.triggerBiometricsAutomatically) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _localAuthService.authenticate(widget.options);
+      });
+    }
   }
 
   @override
@@ -185,6 +196,10 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
       options,
     );
 
+    var biometricsButton = BiometricsButton(
+      onPressed: () async => LocalAuthService().authenticate(options),
+    );
+
     return Scaffold(
       backgroundColor: options.loginBackgroundColor,
       body: CustomScrollView(
@@ -197,7 +212,7 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
               children: [
                 Expanded(
                   flex: options.spacers.titleSpacer,
-                  child: LoginTitle(
+                  child: _LoginTitle(
                     options: options,
                     title: widget.title,
                     subtitle: widget.subtitle,
@@ -231,7 +246,27 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                             if (options.spacers.spacerAfterForm != null) ...[
                               Spacer(flex: options.spacers.spacerAfterForm!),
                             ],
-                            loginButton,
+                            if (options
+                                .biometricsOptions.loginWithBiometrics) ...[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: BiometricsButton.buttonSize.width,
+                                    height: BiometricsButton.buttonSize.height,
+                                  ),
+                                  Expanded(child: loginButton),
+                                  biometricsButton,
+                                ],
+                              ),
+                            ] else ...[
+                              SizedBox(
+                                width: double.infinity,
+                                child: loginButton,
+                              ),
+                            ],
                             if (widget.onRegister != null) ...[
                               registerButton,
                             ],
@@ -253,12 +288,11 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
   }
 }
 
-class LoginTitle extends StatelessWidget {
-  const LoginTitle({
+class _LoginTitle extends StatelessWidget {
+  const _LoginTitle({
     required this.options,
     this.title,
     this.subtitle,
-    super.key,
   });
 
   final LoginOptions options;

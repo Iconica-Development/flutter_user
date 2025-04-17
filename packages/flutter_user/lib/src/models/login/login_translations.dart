@@ -8,6 +8,7 @@ class LoginTranslations {
     this.loginButton = "Log in",
     this.forgotPasswordButton = "Forgot password?",
     this.registrationButton = "Create account",
+    this.biometricsLoginMessage = "Log in with biometrics",
   });
 
   /// Login title
@@ -23,4 +24,5 @@ class LoginTranslations {
   final String forgotPasswordButton;
 
   final String registrationButton;
+  final String biometricsLoginMessage;
 }
