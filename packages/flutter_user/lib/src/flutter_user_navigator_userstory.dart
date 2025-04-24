@@ -101,7 +101,7 @@ class _FlutterUserNavigatorUserstoryState
 
       if (!loginResponse.loginSuccessful) {
         if (!mounted) return;
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
         if (!context.mounted) return;
         await errorScaffoldMessenger(context, loginResponse);
         return;
@@ -111,7 +111,7 @@ class _FlutterUserNavigatorUserstoryState
       if (loginResponse.loginSuccessful) {
         var onboardingUser = await options!.onBoardedUser?.call();
         if (!mounted) return;
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
         if (options!.useOnboarding && onboardingUser?.onboarded == false) {
           await push(
             Onboarding(

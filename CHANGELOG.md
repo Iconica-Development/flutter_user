@@ -1,3 +1,7 @@
+## 6.2.1
+
+- Changed selected navigator for proper popping of the loading dialog when logging in.
+
 ## 6.2.0
 
 - Added biometrics options for login that can be configured with biometricsOptions in the LoginOptions.
