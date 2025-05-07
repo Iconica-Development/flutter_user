@@ -1,3 +1,7 @@
+## 6.3.0
+
+- Added CustomSemantics widget that is used to wrap all the inputfields and buttons to make the component accessible for e2e testing.
+
 ## 6.2.1
 
 - Changed selected navigator for proper popping of the loading dialog when logging in.

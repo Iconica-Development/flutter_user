@@ -13,6 +13,7 @@ class LoginOptions {
     this.translations = const LoginTranslations(),
     this.validationService,
     this.biometricsOptions = const LoginBiometricsOptions(),
+    this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
     this.maxFormWidth = 300,
     this.initialEmail = "",
     this.initialPassword = "",
@@ -87,6 +88,12 @@ class LoginOptions {
   /// Configuration class for the biometrics login options.
   final LoginBiometricsOptions biometricsOptions;
 
+  /// Accessibility identifiers for the login elements of the userstory.
+  /// The inputfields and buttons have accessibility identifiers and their own
+  /// container so they are visible in the accessibility tree.
+  /// This is used for testing purposes.
+  final LoginAccessibilityIdentifiers accessibilityIdentifiers;
+
   ValidationService get validations =>
       validationService ?? LoginValidationService(this);
 }
@@ -121,6 +128,57 @@ class LoginBiometricsOptions {
 
   /// The callback function to be called when the biometrics login errors.
   final LoginOptionalAsyncCallback? onBiometricsError;
+}
+
+/// Accessibility identifiers for the login widgets of the userstory.
+class LoginAccessibilityIdentifiers {
+  /// Default [LoginAccessibilityIdentifiers] constructor where all the
+  /// identifiers are required. This is to ensure that apps automatically break
+  /// when new identifiers are added.
+  const LoginAccessibilityIdentifiers({
+    required this.emailTextFieldIdentifier,
+    required this.passwordTextFieldIdentifier,
+    required this.loginButtonIdentifier,
+    required this.forgotPasswordButtonIdentifier,
+    required this.requestForgotPasswordButtonIdentifier,
+    required this.registrationButtonIdentifier,
+    required this.biometricsButtonIdentifier,
+  });
+
+  /// Empty [LoginAccessibilityIdentifiers] constructor where all the
+  /// identifiers are already set to their default values. You can override all
+  /// or some of the default values.
+  const LoginAccessibilityIdentifiers.empty({
+    this.emailTextFieldIdentifier = "email_text_field",
+    this.passwordTextFieldIdentifier = "password_text_field",
+    this.loginButtonIdentifier = "login_button",
+    this.forgotPasswordButtonIdentifier = "forgot_password_button",
+    this.requestForgotPasswordButtonIdentifier =
+        "request_forgot_password_button",
+    this.registrationButtonIdentifier = "registration_button",
+    this.biometricsButtonIdentifier = "biometrics_button",
+  });
+
+  /// Identifier for the email text field.
+  final String emailTextFieldIdentifier;
+
+  /// Identifier for the password text field.
+  final String passwordTextFieldIdentifier;
+
+  /// Identifier for the login button.
+  final String loginButtonIdentifier;
+
+  /// Identifier for the forgot password button.
+  final String forgotPasswordButtonIdentifier;
+
+  /// Identifier for the request forgot password button.
+  final String requestForgotPasswordButtonIdentifier;
+
+  /// Identifier for the registration button.
+  final String registrationButtonIdentifier;
+
+  /// Identifier for the biometrics button.
+  final String biometricsButtonIdentifier;
 }
 
 Widget _createForgotPasswordButton(
