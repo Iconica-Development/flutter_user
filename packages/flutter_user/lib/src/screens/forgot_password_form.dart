@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
+import "package:flutter_accessibility/flutter_accessibility.dart";
 import "package:flutter_user/src/models/forgot_password/forgot_password_options.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
 import "package:flutter_user/src/screens/email_password_login_form.dart";
@@ -143,18 +144,23 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                           child: Align(
                             alignment: Alignment.center,
                             child: loginoptions.emailInputContainerBuilder(
-                              TextFormField(
-                                autofillHints: const [AutofillHints.email],
-                                textAlign: loginoptions.emailTextAlign,
-                                focusNode: _focusNode,
-                                onChanged: _updateCurrentEmail,
-                                validator:
-                                    loginoptions.validations.validateEmail,
-                                initialValue: loginoptions.initialEmail,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: loginoptions.emailTextStyle,
-                                decoration: loginoptions.emailDecoration,
+                              CustomSemantics(
+                                identifier: forgotPasswordOptions
+                                    .accessibilityIdentifiers
+                                    .emailTextFieldIdentifier,
+                                child: TextFormField(
+                                  autofillHints: const [AutofillHints.email],
+                                  textAlign: loginoptions.emailTextAlign,
+                                  focusNode: _focusNode,
+                                  onChanged: _updateCurrentEmail,
+                                  validator:
+                                      loginoptions.validations.validateEmail,
+                                  initialValue: loginoptions.initialEmail,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  style: loginoptions.emailTextStyle,
+                                  decoration: loginoptions.emailDecoration,
+                                ),
                               ),
                             ),
                           ),
@@ -173,20 +179,25 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   AnimatedBuilder(
                     animation: _formValid,
                     builder: (context, snapshot) => Align(
-                      child: forgotPasswordOptions
-                          .requestForgotPasswordButtonBuilder(
-                        context,
-                        () async {
-                          _formKey.currentState?.validate();
-                          if (_formValid.value) {
-                            widget.onRequestForgotPassword(_currentEmail);
-                          }
-                        },
-                        !_formValid.value,
-                        () {
-                          _formKey.currentState?.validate();
-                        },
-                        forgotPasswordOptions,
+                      child: CustomSemantics(
+                        identifier: forgotPasswordOptions
+                            .accessibilityIdentifiers
+                            .requestForgotPasswordButtonIdentifier,
+                        child: forgotPasswordOptions
+                            .requestForgotPasswordButtonBuilder(
+                          context,
+                          () async {
+                            _formKey.currentState?.validate();
+                            if (_formValid.value) {
+                              widget.onRequestForgotPassword(_currentEmail);
+                            }
+                          },
+                          !_formValid.value,
+                          () {
+                            _formKey.currentState?.validate();
+                          },
+                          forgotPasswordOptions,
+                        ),
                       ),
                     ),
                   ),

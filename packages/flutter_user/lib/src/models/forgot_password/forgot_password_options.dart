@@ -3,6 +3,7 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter_user/src/models/forgot_password/forgot_password_spacer_options.dart";
 import "package:flutter_user/src/models/forgot_password/forgot_password_translations.dart";
+import "package:flutter_user/src/models/login/login_options.dart";
 import "package:flutter_user/src/widgets/primary_button.dart";
 
 class ForgotPasswordOptions {
@@ -15,6 +16,7 @@ class ForgotPasswordOptions {
     this.forgotPasswordSpacerOptions = const ForgotPasswordSpacerOptions(),
     this.maxFormWidth = 300,
     this.translations = const ForgotPasswordTranslations(),
+    this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
     this.requestForgotPasswordButtonBuilder =
         _createRequestForgotPasswordButton,
   });
@@ -26,6 +28,12 @@ class ForgotPasswordOptions {
   final double maxFormWidth;
   final ForgotPasswordTranslations translations;
   final ButtonBuilder requestForgotPasswordButtonBuilder;
+
+  /// Accessibility identifiers for the login elements of the userstory.
+  /// The inputfields and buttons have accessibility identifiers and their own
+  /// container so they are visible in the accessibility tree.
+  /// This is used for testing purposes.
+  final LoginAccessibilityIdentifiers accessibilityIdentifiers;
 }
 
 Widget _createRequestForgotPasswordButton(

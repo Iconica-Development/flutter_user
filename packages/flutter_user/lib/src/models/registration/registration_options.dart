@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_user/src/models/login/login_options.dart";
 import "package:flutter_user/src/models/registration/auth_pass_field.dart";
 import "package:flutter_user/src/models/registration/auth_step.dart";
 import "package:flutter_user/src/models/registration/auth_text_field.dart";
@@ -8,6 +9,7 @@ import "package:flutter_user/src/models/registration/registration_translations.d
 class RegistrationOptions {
   RegistrationOptions({
     this.translations = const RegistrationTranslations.empty(),
+    this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
     this.registrationBackgroundColor = const Color(0xffFAF9F6),
     this.maxFormWidth = 300,
     this.customAppbarBuilder = _createCustomAppBar,
@@ -24,6 +26,13 @@ class RegistrationOptions {
   }
 
   final RegistrationTranslations translations;
+
+  /// Accessibility identifiers for the login elements of the userstory.
+  /// The inputfields and buttons have accessibility identifiers and their own
+  /// container so they are visible in the accessibility tree.
+  /// This is used for testing purposes.
+  final LoginAccessibilityIdentifiers accessibilityIdentifiers;
+
   final Color registrationBackgroundColor;
   final double maxFormWidth;
   final AppBar Function(String title) customAppbarBuilder;
