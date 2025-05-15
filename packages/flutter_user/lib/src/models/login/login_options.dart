@@ -1,12 +1,14 @@
 import "dart:async";
 
+import "package:equatable/equatable.dart";
 import "package:flutter/material.dart";
 import "package:flutter_user/src/models/login/login_spacer_options.dart";
 import "package:flutter_user/src/models/login/login_translations.dart";
 import "package:flutter_user/src/services/login_validation.dart";
 import "package:flutter_user/src/services/validation_service.dart";
 
-class LoginOptions {
+@immutable
+class LoginOptions extends Equatable {
   const LoginOptions({
     this.image,
     this.spacers = const LoginSpacerOptions(),
@@ -96,9 +98,33 @@ class LoginOptions {
 
   ValidationService get validations =>
       validationService ?? LoginValidationService(this);
+
+  @override
+  List<Object?> get props => [
+        // image is not added because it is a widget without Equatable
+        spacers,
+        translations,
+        validationService,
+        maxFormWidth,
+        initialEmail,
+        initialPassword,
+        emailTextAlign,
+        emailTextStyle,
+        passwordTextAlign,
+        passwordTextStyle,
+        showObscurePassword,
+        suffixIconSize,
+        suffixIconPadding,
+        loginBackgroundColor,
+        forgotPasswordButtonBuilder.runtimeType,
+        loginButtonBuilder.runtimeType,
+        registrationButtonBuilder.runtimeType,
+        emailInputContainerBuilder.runtimeType,
+        passwordInputContainerBuilder.runtimeType,
+      ];
 }
 
-class LoginBiometricsOptions {
+class LoginBiometricsOptions extends Equatable {
   const LoginBiometricsOptions({
     this.loginWithBiometrics = false,
     this.triggerBiometricsAutomatically = false,
@@ -128,10 +154,20 @@ class LoginBiometricsOptions {
 
   /// The callback function to be called when the biometrics login errors.
   final LoginOptionalAsyncCallback? onBiometricsError;
+
+  @override
+  List<Object?> get props => [
+        loginWithBiometrics,
+        triggerBiometricsAutomatically,
+        allowBiometricsAlternative,
+        onBiometricsSuccess,
+        onBiometricsFail,
+        onBiometricsError,
+      ];
 }
 
 /// Accessibility identifiers for the login widgets of the userstory.
-class LoginAccessibilityIdentifiers {
+class LoginAccessibilityIdentifiers extends Equatable {
   /// Default [LoginAccessibilityIdentifiers] constructor where all the
   /// identifiers are required. This is to ensure that apps automatically break
   /// when new identifiers are added.
@@ -179,6 +215,17 @@ class LoginAccessibilityIdentifiers {
 
   /// Identifier for the biometrics button.
   final String biometricsButtonIdentifier;
+
+  @override
+  List<Object?> get props => [
+        emailTextFieldIdentifier,
+        passwordTextFieldIdentifier,
+        loginButtonIdentifier,
+        forgotPasswordButtonIdentifier,
+        requestForgotPasswordButtonIdentifier,
+        registrationButtonIdentifier,
+        biometricsButtonIdentifier,
+      ];
 }
 
 Widget _createForgotPasswordButton(

@@ -1,3 +1,7 @@
+## 6.3.1
+
+- Fixed a bug where the keyboard for the login username and password fields was closing because of a different LoginOptions.hashCode with the same LoginOptions values.
+
 ## 6.3.0
 
 - Added CustomSemantics widget that is used to wrap all the inputfields and buttons to make the component accessible for e2e testing.
