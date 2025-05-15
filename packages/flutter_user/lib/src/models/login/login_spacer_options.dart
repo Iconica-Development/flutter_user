@@ -1,7 +1,8 @@
+import "package:equatable/equatable.dart";
 import "package:flutter/material.dart";
 
 @immutable
-class LoginSpacerOptions {
+class LoginSpacerOptions extends Equatable {
   const LoginSpacerOptions({
     this.spacerAfterSubtitle,
     this.spacerAfterImage,
@@ -36,4 +37,16 @@ class LoginSpacerOptions {
   final int formFlexValue;
 
   final int titleSpacer;
+
+  @override
+  List<Object?> get props => [
+        spacerBeforeTitle,
+        spacerAfterTitle,
+        spacerAfterSubtitle,
+        spacerAfterImage,
+        spacerAfterForm,
+        spacerAfterButton,
+        formFlexValue,
+        titleSpacer,
+      ];
 }

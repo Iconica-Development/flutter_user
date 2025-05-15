@@ -1,4 +1,6 @@
-class LoginTranslations {
+import "package:equatable/equatable.dart";
+
+class LoginTranslations extends Equatable {
   const LoginTranslations({
     this.loginTitle = "log in",
     this.loginSubtitle,
@@ -25,4 +27,17 @@ class LoginTranslations {
 
   final String registrationButton;
   final String biometricsLoginMessage;
+
+  @override
+  List<Object?> get props => [
+        loginTitle,
+        loginSubtitle,
+        emailEmpty,
+        passwordEmpty,
+        emailInvalid,
+        loginButton,
+        forgotPasswordButton,
+        registrationButton,
+        biometricsLoginMessage,
+      ];
 }
