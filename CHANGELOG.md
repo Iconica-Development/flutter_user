@@ -1,3 +1,7 @@
+## 6.3.2
+
+- Fixed infinite loading when closing the forgotPasswordSucces screen and ForgotPasswordUnsuccessfull screen.
+
 ## 6.3.1
 
 - Fixed a bug where the keyboard for the login username and password fields was closing because of a different LoginOptions.hashCode with the same LoginOptions values.
