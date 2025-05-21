@@ -173,15 +173,15 @@ class _FlutterUserNavigatorUserstoryState
       var requestPasswordReponse =
           await userService!.requestChangePassword(email: email);
 
-      if (requestPasswordReponse.requestSuccesfull) {
-        if (context.mounted) {
-          await pushReplacement(_forgotPasswordSuccessScreen());
-        }
-      } else {
-        if (context.mounted) {
-          await push(_forgotPasswordUnsuccessfullScreen());
-        }
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      if (!requestPasswordReponse.requestSuccesfull) {
+        await push(_forgotPasswordUnsuccessfullScreen());
+        return;
       }
+
+      await pushReplacement(_forgotPasswordSuccessScreen());
     }
 
     return ForgotPasswordForm(
@@ -272,7 +272,7 @@ class _FlutterUserNavigatorUserstoryState
 
   Future<void> pushReplacement(Widget screen) async {
     if (!context.mounted) return;
-    await Navigator.of(context).push(
+    await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => screen,
       ),
