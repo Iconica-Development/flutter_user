@@ -7,11 +7,10 @@ class LocalUserRepository implements UserRepositoryInterface {
   dynamic userObject;
 
   @override
-  Future<RegistrationResponse> register({
+  Future<AuthResponse> register({
     required Map<String, dynamic> values,
   }) async =>
-      RegistrationResponse(
-        registrationSuccessful: true,
+      AuthResponse(
         userObject: userObject,
       );
 
@@ -24,7 +23,7 @@ class LocalUserRepository implements UserRepositoryInterface {
       );
 
   @override
-  Future<LoginResponse> loginWithEmailAndPassword({
+  Future<AuthResponse> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -34,8 +33,7 @@ class LocalUserRepository implements UserRepositoryInterface {
       "email": email,
       "password": password,
     };
-    return LoginResponse(
-      loginSuccessful: true,
+    return AuthResponse(
       userObject: userObject,
     );
   }

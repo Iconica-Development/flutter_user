@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_user/flutter_user.dart";
+import "package:flutter_user/src/models/auth_error_details.dart";
 
 class FlutterUserOptions {
   FlutterUserOptions({
     this.loginOptions = const LoginOptions(),
     this.loginTranslations = const LoginTranslations(),
     this.forgotPasswordTranslations = const ForgotPasswordTranslations(),
+    this.authExceptionFormatter = const AuthExceptionFormatter(),
     this.beforeLogin,
     this.afterLogin,
     this.onBoardedUser,
@@ -27,6 +29,7 @@ class FlutterUserOptions {
   final LoginTranslations loginTranslations;
   final RegistrationOptions? registrationOptions;
   final ForgotPasswordTranslations forgotPasswordTranslations;
+  final AuthExceptionFormatter authExceptionFormatter;
   final Future Function(String email, String password)? beforeLogin;
   final Future Function()? afterLogin;
   final Future<OnboardedUserMixin?> Function()? onBoardedUser;
@@ -39,7 +42,10 @@ class FlutterUserOptions {
   final Future Function(String email)? onRequestForgotPassword;
   final Future Function()? onForgotPasswordSuccess;
   final Future Function()? onForgotPasswordUnsuccessful;
-  final Future<int?> Function(String error)? onRegistrationError;
+  final Future<int?> Function(
+    AuthException exception,
+    AuthErrorDetails formattedErrorDetails,
+  )? onRegistrationError;
   final Future Function()? afterRegistration;
   final Future Function()? afterRegistrationSuccess;
   final Future Function()? afterRegistrationUnsuccessful;

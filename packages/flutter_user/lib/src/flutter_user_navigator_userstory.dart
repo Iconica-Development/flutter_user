@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_user/flutter_user.dart";
+import "package:flutter_user/src/models/auth_error_details.dart";
 
 class FlutterUserNavigatorUserstory extends StatefulWidget {
   const FlutterUserNavigatorUserstory({
@@ -88,47 +89,45 @@ class _FlutterUserNavigatorUserstoryState
       options!.loginTranslations.loginTitle,
       style: theme.textTheme.headlineLarge,
     );
-    var subtitle = Text(options!.loginTranslations.loginSubtitle ?? "");
+    var subtitle = Text(options?.loginTranslations.loginSubtitle ?? "");
 
     FutureOr<void> onLogin(String email, String password) async {
-      await options!.beforeLogin?.call(email, password);
+      await options?.beforeLogin?.call(email, password);
       if (!mounted) return;
       unawaited(showLoadingIndicator(context));
-      var loginResponse = await userService!.loginWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (!loginResponse.loginSuccessful) {
+      try {
+        await userService?.loginWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      } on AuthException catch (e) {
         if (!mounted) return;
         Navigator.of(context, rootNavigator: true).pop();
         if (!context.mounted) return;
-        await errorScaffoldMessenger(context, loginResponse);
+        var authErrorDetails = options!.authExceptionFormatter.format(e);
+        await errorScaffoldMessenger(context, authErrorDetails);
         return;
       }
-      await options!.afterLogin?.call();
 
-      if (loginResponse.loginSuccessful) {
-        var onboardingUser = await options!.onBoardedUser?.call();
-        if (!mounted) return;
-        Navigator.of(context, rootNavigator: true).pop();
-        if (options!.useOnboarding && onboardingUser?.onboarded == false) {
-          await push(
-            Onboarding(
-              onboardingFinished: (results) async {
-                await options!.onOnboardingComplete?.call(results);
-                if (!mounted || !context.mounted) return;
-                Navigator.of(context).pop();
-                await pushReplacement(widget.afterLoginScreen);
-              },
-            ),
-          );
-        } else {
-          if (!context.mounted) {
-            return;
-          }
-          await pushReplacement(widget.afterLoginScreen);
-        }
+      await options?.afterLogin?.call();
+
+      var onboardingUser = await options?.onBoardedUser?.call();
+      if (!mounted) return;
+      Navigator.of(context, rootNavigator: true).pop();
+      if (options!.useOnboarding && onboardingUser?.onboarded == false) {
+        await push(
+          Onboarding(
+            onboardingFinished: (results) async {
+              await options?.onOnboardingComplete?.call(results);
+              if (!mounted || !context.mounted) return;
+              Navigator.of(context).pop();
+              await pushReplacement(widget.afterLoginScreen);
+            },
+          ),
+        );
+      } else {
+        if (!context.mounted) return;
+        await pushReplacement(widget.afterLoginScreen);
       }
     }
 
@@ -138,11 +137,11 @@ class _FlutterUserNavigatorUserstoryState
       options: options!.loginOptions,
       onLogin: onLogin,
       onForgotPassword: (email, ctx) async {
-        await options!.onForgotPassword?.call(email, ctx) ??
+        await options?.onForgotPassword?.call(email, ctx) ??
             await push(_forgotPasswordScreen());
       },
       onRegister: (email, password, context) async {
-        await options!.onRegister?.call(email, password, context) ??
+        await options?.onRegister?.call(email, password, context) ??
             await push(_registrationScreen());
       },
     );
@@ -164,24 +163,27 @@ class _FlutterUserNavigatorUserstoryState
     );
 
     FutureOr<void> onRequestForgotPassword(String email) async {
-      if (options!.onRequestForgotPassword != null) {
+      if (options?.onRequestForgotPassword != null) {
         await options!.onRequestForgotPassword!(email);
         return;
       }
       unawaited(showLoadingIndicator(context));
 
-      var requestPasswordReponse =
-          await userService!.requestChangePassword(email: email);
-
-      if (!mounted) return;
-      Navigator.of(context).pop();
-
-      if (!requestPasswordReponse.requestSuccesfull) {
+      try {
+        var response = await userService!.requestChangePassword(email: email);
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        if (response.requestSuccesfull) {
+          await pushReplacement(_forgotPasswordSuccessScreen());
+        } else {
+          await push(_forgotPasswordUnsuccessfullScreen());
+        }
+      } on AuthException catch (_) {
+        if (!mounted) return;
+        Navigator.of(context).pop();
         await push(_forgotPasswordUnsuccessfullScreen());
         return;
       }
-
-      await pushReplacement(_forgotPasswordSuccessScreen());
     }
 
     return ForgotPasswordForm(
@@ -196,7 +198,7 @@ class _FlutterUserNavigatorUserstoryState
   Widget _forgotPasswordSuccessScreen() => ForgotPasswordSuccess(
         translations: options!.forgotPasswordTranslations,
         onRequestForgotPassword: () async {
-          await options!.onForgotPasswordSuccess?.call() ??
+          await options?.onForgotPasswordSuccess?.call() ??
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
         },
@@ -205,7 +207,7 @@ class _FlutterUserNavigatorUserstoryState
   Widget _forgotPasswordUnsuccessfullScreen() => ForgotPasswordUnsuccessfull(
         translations: forgotPasswordTranslations!,
         onPressed: () async {
-          await options!.onForgotPasswordUnsuccessful?.call() ??
+          await options?.onForgotPasswordUnsuccessful?.call() ??
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
         },
@@ -215,28 +217,25 @@ class _FlutterUserNavigatorUserstoryState
         registrationOptions: registrationOptions!,
         userService: userService!,
         onError: (error) async {
-          if (options!.onRegistrationError != null) {
-            return options!
-                .onRegistrationError!(error ?? "Something went wrong");
+          var errorDetails = options!.authExceptionFormatter.format(error);
+
+          if (options?.onRegistrationError != null) {
+            return options!.onRegistrationError!(error, errorDetails);
           }
           await push(
             _registrationUnsuccessfullScreen(
-              error ?? "Something went wrong",
+              errorDetails,
             ),
           );
-          var isPasswordError = error?.contains("weak-password") ?? false;
-          var isEmailError = error?.contains("email-already-in-use") ?? false;
-          if (isPasswordError) {
-            return 1;
-          }
-          if (isEmailError) {
-            return 0;
-          }
+
+          if (error is WeakPasswordError) return 1;
+
+          if (error is EmailAlreadyInUseError) return 0;
 
           return null;
         },
         afterRegistration: () async {
-          options!.afterRegistration?.call() ??
+          options?.afterRegistration?.call() ??
               await pushReplacement(_registrationSuccessScreen());
         },
       );
@@ -244,13 +243,13 @@ class _FlutterUserNavigatorUserstoryState
   Widget _registrationSuccessScreen() => RegistrationSuccess(
         registrationOptions: registrationOptions!,
         onPressed: () async {
-          await options!.afterRegistrationSuccess?.call() ??
+          await options?.afterRegistrationSuccess?.call() ??
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
         },
       );
 
-  Widget _registrationUnsuccessfullScreen(String error) =>
+  Widget _registrationUnsuccessfullScreen(AuthErrorDetails errorDetails) =>
       RegistrationUnsuccessfull(
         registrationOptions: registrationOptions!,
         onPressed: () async {
@@ -258,7 +257,7 @@ class _FlutterUserNavigatorUserstoryState
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
         },
-        error: error,
+        errorDetails: errorDetails,
       );
 
   Future<void> push(Widget screen) async {

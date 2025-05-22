@@ -1,3 +1,8 @@
+## 6.4.0
+
+- Added proper use of exceptions for all auth methods.
+- Added the ability to add translations for all auth exceptions including two standard provided languages (nl, en)
+
 ## 6.3.2
 
 - Fixed infinite loading when closing the forgotPasswordSucces screen and ForgotPasswordUnsuccessfull screen.
