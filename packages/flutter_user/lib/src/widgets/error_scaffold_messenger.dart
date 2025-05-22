@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
-import "package:user_repository_interface/user_repository_interface.dart";
+import "package:flutter_user/src/models/auth_error_details.dart";
 
 /// Show a [SnackBar] with the error message from the [LoginResponse].
 Future<void> errorScaffoldMessenger(
   BuildContext context,
-  LoginResponse result,
+  AuthErrorDetails errorDetails,
 ) async {
   var theme = Theme.of(context);
   ScaffoldMessenger.of(context).showSnackBar(
@@ -14,12 +14,12 @@ Future<void> errorScaffoldMessenger(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            result.loginError!.title,
+            errorDetails.title,
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           Text(
-            result.loginError!.message,
+            errorDetails.message,
             style: theme.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),

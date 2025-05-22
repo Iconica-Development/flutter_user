@@ -12,7 +12,7 @@ class FirebaseUserRepository implements UserRepositoryInterface {
   final String userCollecton;
 
   @override
-  Future<LoginResponse> loginWithEmailAndPassword({
+  Future<AuthResponse> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -22,24 +22,16 @@ class FirebaseUserRepository implements UserRepositoryInterface {
         password: password,
       );
 
-      return LoginResponse(
-        loginSuccessful: true,
+      return AuthResponse(
         userObject: userCredential.user,
       );
     } on FirebaseAuthException catch (e) {
-      return LoginResponse(
-        loginSuccessful: false,
-        userObject: null,
-        loginError: UserError(
-          title: e.code,
-          message: e.message ?? "An error occurred",
-        ),
-      );
+      throw _mapFirebaseAuthException(e);
     }
   }
 
   @override
-  Future<RegistrationResponse> register({
+  Future<AuthResponse> register({
     required Map<String, dynamic> values,
   }) async {
     try {
@@ -54,19 +46,11 @@ class FirebaseUserRepository implements UserRepositoryInterface {
           .doc(userCredential.user!.uid)
           .set(values);
 
-      return RegistrationResponse(
-        registrationSuccessful: true,
+      return AuthResponse(
         userObject: userCredential.user,
       );
     } on FirebaseAuthException catch (e) {
-      return RegistrationResponse(
-        registrationSuccessful: false,
-        userObject: null,
-        registrationError: UserError(
-          title: e.code,
-          message: e.message ?? "An error occurred",
-        ),
-      );
+      throw _mapFirebaseAuthException(e);
     }
   }
 
@@ -80,13 +64,7 @@ class FirebaseUserRepository implements UserRepositoryInterface {
         requestSuccesfull: true,
       );
     } on FirebaseAuthException catch (e) {
-      return RequestPasswordResponse(
-        requestSuccesfull: false,
-        requestPasswordError: UserError(
-          title: e.code,
-          message: e.message ?? "An error occurred",
-        ),
-      );
+      throw _mapFirebaseAuthException(e);
     }
   }
 
@@ -101,4 +79,42 @@ class FirebaseUserRepository implements UserRepositoryInterface {
 
   @override
   Future<bool> isLoggedIn() async => _firebaseAuth.currentUser != null;
+
+  AuthException _mapFirebaseAuthException(FirebaseAuthException e) {
+    switch (e.code) {
+      case "invalid-email":
+        return InvalidEmailError(code: e.code, message: e.message);
+      case "user-disabled":
+        return UserDisabledError(code: e.code, message: e.message);
+      case "user-not-found":
+        return UserNotFoundError(code: e.code, message: e.message);
+      case "wrong-password":
+        return WrongPasswordError(code: e.code, message: e.message);
+      case "email-already-in-use":
+        return EmailAlreadyInUseError(code: e.code, message: e.message);
+      case "operation-not-allowed":
+        return OperationNotAllowedError(code: e.code, message: e.message);
+      case "weak-password":
+        return WeakPasswordError(code: e.code, message: e.message);
+      case "too-many-requests":
+        return TooManyRequestsError(code: e.code, message: e.message);
+      case "network-request-failed":
+        return NetworkError(code: e.code, message: e.message);
+      case "invalid-credential":
+        return InvalidCredentialError(code: e.code, message: e.message);
+      case "account-exists-with-different-credential":
+        return AccountExistsWithDifferentCredentialError(
+          code: e.code,
+          message: e.message,
+        );
+      case "invalid-verification-code":
+        return InvalidVerificationCodeError(code: e.code, message: e.message);
+      case "invalid-verification-id":
+        return InvalidVerificationIdError(code: e.code, message: e.message);
+      case "requires-recent-login":
+        return RequiresRecentLoginError(code: e.code, message: e.message);
+      default:
+        return GenericAuthError(code: e.code, message: e.message);
+    }
+  }
 }
