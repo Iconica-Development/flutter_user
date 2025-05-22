@@ -1,9 +1,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:flutter_user/src/models/registration/auth_field.dart";
-import "package:flutter_user/src/models/registration/registration_options.dart";
-import "package:user_repository_interface/user_repository_interface.dart";
+import "package:flutter_user/flutter_user.dart";
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({
@@ -16,7 +14,7 @@ class RegistrationScreen extends StatefulWidget {
   final UserService userService;
 
   final RegistrationOptions registrationOptions;
-  final Future<int?> Function(String?) onError;
+  final Future<int?> Function(AuthException authException) onError;
   final Future<void> Function() afterRegistration;
 
   @override
@@ -89,12 +87,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         }
       }
 
-      var registrationReponse =
-          await widget.userService.register(values: values);
-
-      if (!registrationReponse.registrationSuccessful) {
-        var pageToReturn = await widget.onError
-            .call(registrationReponse.registrationError?.title);
+      try {
+        await widget.userService.register(values: values);
+      } on AuthException catch (e) {
+        var pageToReturn = await widget.onError.call(e);
 
         if (pageToReturn != null) {
           if (pageToReturn == _pageController.page!.toInt()) {
@@ -107,9 +103,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           );
           return true;
         }
-      } else {
-        await widget.afterRegistration.call();
       }
+
+      await widget.afterRegistration.call();
+
       return true;
     }
     return false;

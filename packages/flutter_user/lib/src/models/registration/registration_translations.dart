@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 Iconica
+// SPDX-FileCopyrightText: 2025 Iconica
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
@@ -24,7 +24,6 @@ class RegistrationTranslations {
     required this.defaultPasswordToShortValidatorMessage,
     required this.registrationSuccessTitle,
     required this.registrationSuccessButtonTitle,
-    required this.registrationUnsuccessfullTitle,
     required this.registrationEmailUnsuccessfullDescription,
     required this.registrationPasswordUnsuccessfullDescription,
     required this.registrationUnsuccessButtonTitle,
@@ -61,7 +60,6 @@ class RegistrationTranslations {
             "Password needs to be at least 6 characters long",
         registrationSuccessTitle = "your registration was successful",
         registrationSuccessButtonTitle = "Finish",
-        registrationUnsuccessfullTitle = "something went wrong",
         registrationEmailUnsuccessfullDescription =
             "This email address is already"
                 " associated with an account. Please try again.",
@@ -121,9 +119,6 @@ class RegistrationTranslations {
   /// The title for the registration success button.
   final String registrationSuccessButtonTitle;
 
-  /// The title for the registration unsuccessfull screen.
-  final String registrationUnsuccessfullTitle;
-
   /// The description for the registration email unsuccessfull screen.
   final String registrationEmailUnsuccessfullDescription;
 
@@ -152,7 +147,6 @@ class RegistrationTranslations {
     String? defaultPasswordToShortValidatorMessage,
     String? registrationSuccessTitle,
     String? registrationSuccessButtonTitle,
-    String? registrationUnsuccessfullTitle,
     String? registrationEmailUnsuccessfullDescription,
     String? registrationPasswordUnsuccessfullDescription,
     String? registrationUnsuccessButtonTitle,
@@ -181,8 +175,6 @@ class RegistrationTranslations {
             registrationSuccessTitle ?? this.registrationSuccessTitle,
         registrationSuccessButtonTitle: registrationSuccessButtonTitle ??
             this.registrationSuccessButtonTitle,
-        registrationUnsuccessfullTitle: registrationUnsuccessfullTitle ??
-            this.registrationUnsuccessfullTitle,
         registrationEmailUnsuccessfullDescription:
             registrationEmailUnsuccessfullDescription ??
                 this.registrationEmailUnsuccessfullDescription,
