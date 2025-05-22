@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:flutter_user/flutter_user.dart";
+import "package:flutter_user/src/models/auth_error_details.dart";
 
 class FlutterUserNavigatorUserstory extends StatefulWidget {
   const FlutterUserNavigatorUserstory({
@@ -94,41 +95,41 @@ class _FlutterUserNavigatorUserstoryState
       await options!.beforeLogin?.call(email, password);
       if (!mounted) return;
       unawaited(showLoadingIndicator(context));
-      var loginResponse = await userService!.loginWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (!loginResponse.loginSuccessful) {
+      try {
+        await userService!.loginWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      } on AuthException catch (e) {
         if (!mounted) return;
         Navigator.of(context, rootNavigator: true).pop();
         if (!context.mounted) return;
-        await errorScaffoldMessenger(context, loginResponse);
+        var authErrorDetails = options!.authExceptionFormatter.format(e);
+        await errorScaffoldMessenger(context, authErrorDetails);
         return;
       }
+
       await options!.afterLogin?.call();
 
-      if (loginResponse.loginSuccessful) {
-        var onboardingUser = await options!.onBoardedUser?.call();
-        if (!mounted) return;
-        Navigator.of(context, rootNavigator: true).pop();
-        if (options!.useOnboarding && onboardingUser?.onboarded == false) {
-          await push(
-            Onboarding(
-              onboardingFinished: (results) async {
-                await options!.onOnboardingComplete?.call(results);
-                if (!mounted || !context.mounted) return;
-                Navigator.of(context).pop();
-                await pushReplacement(widget.afterLoginScreen);
-              },
-            ),
-          );
-        } else {
-          if (!context.mounted) {
-            return;
-          }
-          await pushReplacement(widget.afterLoginScreen);
+      var onboardingUser = await options!.onBoardedUser?.call();
+      if (!mounted) return;
+      Navigator.of(context, rootNavigator: true).pop();
+      if (options!.useOnboarding && onboardingUser?.onboarded == false) {
+        await push(
+          Onboarding(
+            onboardingFinished: (results) async {
+              await options!.onOnboardingComplete?.call(results);
+              if (!mounted || !context.mounted) return;
+              Navigator.of(context).pop();
+              await pushReplacement(widget.afterLoginScreen);
+            },
+          ),
+        );
+      } else {
+        if (!context.mounted) {
+          return;
         }
+        await pushReplacement(widget.afterLoginScreen);
       }
     }
 
@@ -170,17 +171,17 @@ class _FlutterUserNavigatorUserstoryState
       }
       unawaited(showLoadingIndicator(context));
 
-      var requestPasswordReponse =
-          await userService!.requestChangePassword(email: email);
-
-      if (requestPasswordReponse.requestSuccesfull) {
-        if (context.mounted) {
-          await pushReplacement(_forgotPasswordSuccessScreen());
-        }
-      } else {
+      try {
+        await userService!.requestChangePassword(email: email);
+      } on AuthException catch (_) {
         if (context.mounted) {
           await push(_forgotPasswordUnsuccessfullScreen());
         }
+        return;
+      }
+
+      if (context.mounted) {
+        await pushReplacement(_forgotPasswordSuccessScreen());
       }
     }
 
@@ -215,23 +216,20 @@ class _FlutterUserNavigatorUserstoryState
         registrationOptions: registrationOptions!,
         userService: userService!,
         onError: (error) async {
+          var errorDetails = options!.authExceptionFormatter.format(error);
+
           if (options!.onRegistrationError != null) {
-            return options!
-                .onRegistrationError!(error ?? "Something went wrong");
+            return options!.onRegistrationError!(error, errorDetails);
           }
           await push(
             _registrationUnsuccessfullScreen(
-              error ?? "Something went wrong",
+              errorDetails,
             ),
           );
-          var isPasswordError = error?.contains("weak-password") ?? false;
-          var isEmailError = error?.contains("email-already-in-use") ?? false;
-          if (isPasswordError) {
-            return 1;
-          }
-          if (isEmailError) {
-            return 0;
-          }
+
+          if (error is WeakPasswordError) return 1;
+
+          if (error is EmailAlreadyInUseError) return 0;
 
           return null;
         },
@@ -250,7 +248,7 @@ class _FlutterUserNavigatorUserstoryState
         },
       );
 
-  Widget _registrationUnsuccessfullScreen(String error) =>
+  Widget _registrationUnsuccessfullScreen(AuthErrorDetails errorDetails) =>
       RegistrationUnsuccessfull(
         registrationOptions: registrationOptions!,
         onPressed: () async {
@@ -258,7 +256,7 @@ class _FlutterUserNavigatorUserstoryState
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
         },
-        error: error,
+        errorDetails: errorDetails,
       );
 
   Future<void> push(Widget screen) async {

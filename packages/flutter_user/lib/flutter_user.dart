@@ -6,6 +6,7 @@ library flutter_user;
 export "package:user_repository_interface/user_repository_interface.dart";
 
 export "src/flutter_user_navigator_userstory.dart";
+export "src/models/auth_exception_formatter.dart";
 export "src/models/flutter_user_options.dart";
 export "src/models/forgot_password/forgot_password_options.dart";
 export "src/models/forgot_password/forgot_password_spacer_options.dart";
@@ -18,7 +19,6 @@ export "src/models/login/login_translations.dart";
 export "src/models/registration/auth_action.dart";
 export "src/models/registration/auth_bool_field.dart";
 export "src/models/registration/auth_drop_down.dart";
-export "src/models/registration/auth_exception.dart";
 export "src/models/registration/auth_field.dart";
 export "src/models/registration/auth_pass_field.dart";
 export "src/models/registration/auth_step.dart";
