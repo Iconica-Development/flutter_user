@@ -1,4 +1,6 @@
 ## Unreleased
+
+- Added rest_user_repository package which is a REST implementation of the UserRepositoryInterface.
 - Changed afterLoginScreen to a nullable Widget so a screen isn't automatically pushed after login.
 - Moved the RegistrationOptions and ForgotPasswordOptions to the FlutterUserOptions.
 
