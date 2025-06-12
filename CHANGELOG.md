@@ -1,6 +1,6 @@
 ## Unreleased
-
 - Changed afterLoginScreen to a nullable Widget so a screen isn't automatically pushed after login.
+- Moved the RegistrationOptions and ForgotPasswordOptions to the FlutterUserOptions.
 
 ## 6.4.0
 

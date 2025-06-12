@@ -10,13 +10,15 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
     this.afterRegistration,
     this.userService,
     this.options,
-    this.forgotPasswordTranslations,
-    this.registrationOptions,
-    this.forgotPasswordOptions = const ForgotPasswordOptions(),
     super.key,
   });
 
+  /// The options for the user story.
+  /// This includes the login options, registration options and forgot password
+  /// options.
   final FlutterUserOptions? options;
+
+  /// The user service to use for authentication and registration.
   final UserService? userService;
 
   /// Provide a widget to push after login is successful.
@@ -27,9 +29,6 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
 
   /// A callback function executed after successful registration.
   final VoidCallback? afterRegistration;
-  final ForgotPasswordTranslations? forgotPasswordTranslations;
-  final RegistrationOptions? registrationOptions;
-  final ForgotPasswordOptions forgotPasswordOptions;
 
   @override
   State<FlutterUserNavigatorUserstory> createState() =>
@@ -38,18 +37,13 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
 
 class _FlutterUserNavigatorUserstoryState
     extends State<FlutterUserNavigatorUserstory> {
-  late final UserService userService;
-  late final FlutterUserOptions options;
-  late final ForgotPasswordTranslations forgotPasswordTranslations;
-  late final RegistrationOptions registrationOptions;
+  late UserService userService;
+  late FlutterUserOptions options;
 
   @override
   void initState() {
     userService = widget.userService ?? UserService();
     options = widget.options ?? FlutterUserOptions();
-    forgotPasswordTranslations =
-        widget.forgotPasswordTranslations ?? const ForgotPasswordTranslations();
-    registrationOptions = widget.registrationOptions ?? RegistrationOptions();
     super.initState();
   }
 
@@ -68,21 +62,6 @@ class _FlutterUserNavigatorUserstoryState
         userService = widget.userService ?? UserService();
       });
     }
-
-    if (widget.forgotPasswordTranslations !=
-        oldWidget.forgotPasswordTranslations) {
-      setState(() {
-        forgotPasswordTranslations = widget.forgotPasswordTranslations ??
-            const ForgotPasswordTranslations();
-      });
-    }
-
-    if (widget.registrationOptions != oldWidget.registrationOptions) {
-      setState(() {
-        registrationOptions =
-            widget.registrationOptions ?? RegistrationOptions();
-      });
-    }
   }
 
   @override
@@ -90,12 +69,15 @@ class _FlutterUserNavigatorUserstoryState
 
   Widget _loginScreen() {
     var theme = Theme.of(context);
+    var textTheme = theme.textTheme;
+    var loginOptions = options.loginOptions;
+    var loginTranslations = loginOptions.translations;
 
     var title = Text(
-      options.loginTranslations.loginTitle,
-      style: theme.textTheme.headlineLarge,
+      loginTranslations.loginTitle,
+      style: textTheme.headlineLarge,
     );
-    var subtitle = Text(options.loginTranslations.loginSubtitle ?? "");
+    var subtitle = Text(loginTranslations.loginSubtitle ?? "");
 
     FutureOr<void> onLogin(String email, String password) async {
       await options.beforeLogin?.call(email, password);
@@ -156,15 +138,19 @@ class _FlutterUserNavigatorUserstoryState
 
   Widget _forgotPasswordScreen() {
     var theme = Theme.of(context);
+    var textTheme = theme.textTheme;
+    var forgotOptions = options.forgotPasswordOptions;
+    var forgotTranslations = forgotOptions.translations;
+
     var title = Text(
-      options.forgotPasswordTranslations.forgotPasswordTitle,
-      style: theme.textTheme.headlineLarge,
+      forgotTranslations.forgotPasswordTitle,
+      style: textTheme.headlineLarge,
     );
 
     var description = Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 32),
       child: Text(
-        options.forgotPasswordTranslations.forgotPasswordDescription,
+        forgotTranslations.forgotPasswordDescription,
         textAlign: TextAlign.center,
       ),
     );
@@ -197,13 +183,13 @@ class _FlutterUserNavigatorUserstoryState
       title: title,
       description: description,
       loginOptions: options.loginOptions,
-      forgotPasswordOptions: widget.forgotPasswordOptions,
+      forgotPasswordOptions: options.forgotPasswordOptions,
       onRequestForgotPassword: onRequestForgotPassword,
     );
   }
 
   Widget _forgotPasswordSuccessScreen() => ForgotPasswordSuccess(
-        translations: options.forgotPasswordTranslations,
+        translations: options.forgotPasswordOptions.translations,
         onRequestForgotPassword: () async {
           await options.onForgotPasswordSuccess?.call() ??
               // ignore: use_build_context_synchronously
@@ -212,7 +198,7 @@ class _FlutterUserNavigatorUserstoryState
       );
 
   Widget _forgotPasswordUnsuccessfullScreen() => ForgotPasswordUnsuccessfull(
-        translations: forgotPasswordTranslations,
+        translations: options.forgotPasswordOptions.translations,
         onPressed: () async {
           await options.onForgotPasswordUnsuccessful?.call() ??
               // ignore: use_build_context_synchronously
@@ -221,7 +207,7 @@ class _FlutterUserNavigatorUserstoryState
       );
 
   Widget _registrationScreen() => RegistrationScreen(
-        registrationOptions: registrationOptions,
+        registrationOptions: options.registrationOptions,
         userService: userService,
         onError: (error) async {
           var errorDetails = options.authExceptionFormatter.format(error);
@@ -248,7 +234,7 @@ class _FlutterUserNavigatorUserstoryState
       );
 
   Widget _registrationSuccessScreen() => RegistrationSuccess(
-        registrationOptions: registrationOptions,
+        registrationOptions: options.registrationOptions,
         onPressed: () async {
           await options.afterRegistrationSuccess?.call() ??
               // ignore: use_build_context_synchronously
@@ -258,7 +244,7 @@ class _FlutterUserNavigatorUserstoryState
 
   Widget _registrationUnsuccessfullScreen(AuthErrorDetails errorDetails) =>
       RegistrationUnsuccessfull(
-        registrationOptions: registrationOptions,
+        registrationOptions: options.registrationOptions,
         onPressed: () async {
           await options.afterRegistrationUnsuccessful?.call() ??
               // ignore: use_build_context_synchronously
