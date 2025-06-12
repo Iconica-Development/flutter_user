@@ -1,3 +1,7 @@
+## Unreleased
+
+- Changed afterLoginScreen to a nullable Widget so a screen isn't automatically pushed after login.
+
 ## 6.4.0
 
 - Added proper use of exceptions for all auth methods.

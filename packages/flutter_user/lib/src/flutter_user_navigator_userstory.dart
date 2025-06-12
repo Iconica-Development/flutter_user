@@ -6,7 +6,7 @@ import "package:flutter_user/src/models/auth_error_details.dart";
 
 class FlutterUserNavigatorUserstory extends StatefulWidget {
   const FlutterUserNavigatorUserstory({
-    required this.afterLoginScreen,
+    this.afterLoginScreen,
     this.afterRegistration,
     this.userService,
     this.options,
@@ -18,7 +18,12 @@ class FlutterUserNavigatorUserstory extends StatefulWidget {
 
   final FlutterUserOptions? options;
   final UserService? userService;
-  final Widget afterLoginScreen;
+
+  /// Provide a widget to push after login is successful.
+  /// If not provided, nothing will happen and you will need to handle the
+  /// navigation yourself through the [afterLogin] callback in the
+  /// [FlutterUserOptions].
+  final Widget? afterLoginScreen;
 
   /// A callback function executed after successful registration.
   final VoidCallback? afterRegistration;
@@ -123,13 +128,13 @@ class _FlutterUserNavigatorUserstoryState
               await options.onOnboardingComplete?.call(results);
               if (!mounted || !context.mounted) return;
               Navigator.of(context).pop();
-              await pushReplacement(widget.afterLoginScreen);
+              await pushReplacementIfNotNull(widget.afterLoginScreen);
             },
           ),
         );
       } else {
         if (!context.mounted) return;
-        await pushReplacement(widget.afterLoginScreen);
+        await pushReplacementIfNotNull(widget.afterLoginScreen);
       }
     }
 
@@ -176,7 +181,7 @@ class _FlutterUserNavigatorUserstoryState
         if (!mounted) return;
         Navigator.of(context).pop();
         if (response.requestSuccesfull) {
-          await pushReplacement(_forgotPasswordSuccessScreen());
+          await pushReplacementIfNotNull(_forgotPasswordSuccessScreen());
         } else {
           await push(_forgotPasswordUnsuccessfullScreen());
         }
@@ -238,7 +243,7 @@ class _FlutterUserNavigatorUserstoryState
         },
         afterRegistration: () async {
           options.afterRegistration?.call() ??
-              await pushReplacement(_registrationSuccessScreen());
+              await pushReplacementIfNotNull(_registrationSuccessScreen());
         },
       );
 
@@ -271,8 +276,10 @@ class _FlutterUserNavigatorUserstoryState
     );
   }
 
-  Future<void> pushReplacement(Widget screen) async {
-    if (!context.mounted) return;
+  /// Pushes a new screen and replaces the current one if the provided screen is
+  ///  not null.
+  Future<void> pushReplacementIfNotNull(Widget? screen) async {
+    if (!context.mounted || screen == null) return;
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => screen,
