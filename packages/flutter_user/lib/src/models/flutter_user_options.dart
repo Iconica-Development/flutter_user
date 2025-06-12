@@ -5,8 +5,7 @@ import "package:flutter_user/src/models/auth_error_details.dart";
 class FlutterUserOptions {
   FlutterUserOptions({
     this.loginOptions = const LoginOptions(),
-    this.loginTranslations = const LoginTranslations(),
-    this.forgotPasswordTranslations = const ForgotPasswordTranslations(),
+    this.forgotPasswordOptions = const ForgotPasswordOptions(),
     this.authExceptionFormatter = const AuthExceptionFormatter(),
     this.beforeLogin,
     this.afterLogin,
@@ -26,9 +25,8 @@ class FlutterUserOptions {
   }) : registrationOptions = registrationOptions ?? RegistrationOptions();
 
   final LoginOptions loginOptions;
-  final LoginTranslations loginTranslations;
-  final RegistrationOptions? registrationOptions;
-  final ForgotPasswordTranslations forgotPasswordTranslations;
+  final RegistrationOptions registrationOptions;
+  final ForgotPasswordOptions forgotPasswordOptions;
   final AuthExceptionFormatter authExceptionFormatter;
   final Future Function(String email, String password)? beforeLogin;
   final Future Function()? afterLogin;
