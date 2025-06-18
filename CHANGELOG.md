@@ -1,4 +1,5 @@
 ## Unreleased
+- Made all translations required in the constructor of ForgotPasswordTranslations and LoginTranslations.
 - Removed the default values for colors in the LoginOptions, RegistrationOptions, and ForgotPasswordOptions.
 - Added rest_user_repository package which is a REST implementation of the UserRepositoryInterface.
 - Changed afterLoginScreen to a nullable Widget so a screen isn't automatically pushed after login.

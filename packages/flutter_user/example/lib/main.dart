@@ -28,7 +28,7 @@ class UserstoryScreen extends StatelessWidget {
             biometricsOptions: LoginBiometricsOptions(
               loginWithBiometrics: true,
             ),
-            translations: LoginTranslations(
+            translations: LoginTranslations.empty(
               loginTitle: "Login",
               loginButton: "Log in",
               loginSubtitle: "Welcome back!",

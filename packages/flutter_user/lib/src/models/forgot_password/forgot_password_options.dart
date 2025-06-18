@@ -15,7 +15,7 @@ class ForgotPasswordOptions {
     ),
     this.forgotPasswordSpacerOptions = const ForgotPasswordSpacerOptions(),
     this.maxFormWidth = 300,
-    this.translations = const ForgotPasswordTranslations(),
+    this.translations = const ForgotPasswordTranslations.empty(),
     this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
     this.requestForgotPasswordButtonBuilder =
         _createRequestForgotPasswordButton,

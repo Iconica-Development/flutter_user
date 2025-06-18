@@ -12,7 +12,7 @@ class LoginOptions extends Equatable {
   const LoginOptions({
     this.image,
     this.spacers = const LoginSpacerOptions(),
-    this.translations = const LoginTranslations(),
+    this.translations = const LoginTranslations.empty(),
     this.validationService,
     this.biometricsOptions = const LoginBiometricsOptions(),
     this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
