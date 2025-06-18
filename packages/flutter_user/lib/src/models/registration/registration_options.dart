@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
-import "package:flutter_user/src/models/registration/auth_pass_field.dart";
-import "package:flutter_user/src/models/registration/auth_step.dart";
-import "package:flutter_user/src/models/registration/auth_text_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_pass_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_step.dart";
+import "package:flutter_user/src/models/registration/auth/auth_text_field.dart";
 import "package:flutter_user/src/models/registration/registration_spacer_options.dart";
 import "package:flutter_user/src/models/registration/registration_translations.dart";
 

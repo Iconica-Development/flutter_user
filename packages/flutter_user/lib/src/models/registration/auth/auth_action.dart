@@ -7,7 +7,7 @@ import "package:flutter/material.dart";
 /// An action that can be performed during authentication.
 class AuthAction {
   /// Constructs an [AuthAction] object.
-  AuthAction({
+  const AuthAction({
     required this.title,
     required this.onPress,
   });
