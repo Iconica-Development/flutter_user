@@ -11,7 +11,7 @@ environment:
 dependencies: 
   dart_api_service:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub/
-    version: ^1.1.1
+    version: ^1.1.2
   user_repository_interface:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub/
     version: ^6.4.0

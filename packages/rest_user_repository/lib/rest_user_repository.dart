@@ -23,24 +23,34 @@ class _TokenAuthService extends AuthenticationService<TokenAuthCredentials> {
 }
 
 /// An implementation of [UserRepositoryInterface] that uses a REST API.
-class RestUserRepository implements UserRepositoryInterface {
+class RestUserRepository extends HttpApiService<JsonObject>
+    implements UserRepositoryInterface {
   /// Creates an instance of the REST user repository.
   ///
   /// Requires the [baseUrl] for the API endpoints.
-  RestUserRepository({required String baseUrl}) {
-    _authService = _TokenAuthService();
-    _apiService = HttpApiService(
-      baseUrl: Uri.parse(baseUrl),
-      authenticationService: _authService,
-      defaultHeaders: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-    );
-  }
+  RestUserRepository({
+    required super.baseUrl, // Pass baseUrl to HttpApiService
+    super.client,
+    this.apiPrefix = "",
+  })  : _authService = _TokenAuthService(),
+        super(
+          authenticationService: _TokenAuthService(),
+          defaultHeaders: const {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          apiResponseConverter: const MapJsonResponseConverter(),
+        );
 
-  late final HttpApiService _apiService;
-  late final _TokenAuthService _authService;
+  final _TokenAuthService _authService;
+
+  /// The prefix for the API endpoints, allowing for versioning
+  /// or path adjustments.
+  final String apiPrefix;
+
+  /// The base endpoint for all API calls within this repository,
+  /// incorporating the [apiPrefix].
+  Endpoint<JsonObject, JsonObject> get _baseEndpoint => endpoint(apiPrefix);
 
   /// Logs in a user with the provided [email] and [password].
   ///
@@ -58,7 +68,7 @@ class RestUserRepository implements UserRepositoryInterface {
         serialize: (body) => body,
       );
       var endpoint =
-          _apiService.endpoint("/auth/login").withConverter(converter);
+          _baseEndpoint.child("/auth/token").withConverter(converter);
 
       var response = await endpoint.post(
         requestModel: {"email": email, "password": password},
@@ -87,8 +97,7 @@ class RestUserRepository implements UserRepositoryInterface {
         deserialize: (json) => AuthResponse(userObject: json["user"]),
         serialize: (body) => body,
       );
-      var endpoint =
-          _apiService.endpoint("/auth/register").withConverter(converter);
+      var endpoint = _baseEndpoint.child("/user").withConverter(converter);
 
       var response = await endpoint.post(requestModel: values);
 
@@ -117,13 +126,14 @@ class RestUserRepository implements UserRepositoryInterface {
         ),
         serialize: (body) => body,
       );
-      var endpoint = _apiService
-          .endpoint("/auth/request-password-change")
+      var endpoint = _baseEndpoint
+          .child("/user/password-reset/request")
           .withConverter(converter);
 
       var response = await endpoint.post(requestModel: {"email": email});
-
-      return response.result!;
+      return response.statusCode == 200
+          ? const RequestPasswordResponse(requestSuccesfull: true)
+          : response.result!;
     } on ApiException catch (e) {
       throw _handleAuthError(e);
     }
@@ -135,7 +145,7 @@ class RestUserRepository implements UserRepositoryInterface {
   @override
   Future getLoggedInUser() async {
     try {
-      var endpoint = _apiService.endpoint("/users/me").authenticate();
+      var endpoint = _baseEndpoint.child("/users/me").authenticate();
       var response = await endpoint.get();
       return jsonDecode(response.inner.body);
     } on ApiException catch (e) {
