@@ -5,6 +5,7 @@ import "package:flutter_accessibility/flutter_accessibility.dart";
 import "package:flutter_user/src/models/forgot_password/forgot_password_options.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
 import "package:flutter_user/src/screens/email_password_login_form.dart";
+import "package:flutter_user/src/widgets/optional_spacer.dart";
 
 class ForgotPasswordForm extends StatefulWidget {
   /// Constructs a [ForgotPasswordForm] widget.
@@ -77,10 +78,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
     return Scaffold(
       backgroundColor: forgotPasswordOptions.forgotPasswordBackgroundColor,
-      appBar: forgotPasswordOptions.forgotPasswordCustomAppBar ??
-          AppBar(
-            backgroundColor: const Color(0xffFAF9F6),
-          ),
+      appBar: forgotPasswordOptions.forgotPasswordCustomAppBar ?? AppBar(),
       body: Padding(
         padding: forgotPasswordOptions.forgotPasswordScreenPadding.padding,
         child: CustomScrollView(
@@ -91,14 +89,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               fillOverscroll: true,
               child: Column(
                 children: [
-                  if (forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerBeforeTitle !=
-                      null) ...[
-                    Spacer(
-                      flex: forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerBeforeTitle!,
-                    ),
-                  ],
+                  ...buildOptionalSpacer(
+                    forgotPasswordOptions
+                        .forgotPasswordSpacerOptions.spacerBeforeTitle,
+                  ),
                   Align(
                     alignment: Alignment.topCenter,
                     child: wrapWithDefaultStyle(
@@ -106,14 +100,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                       theme.textTheme.displaySmall,
                     ),
                   ),
-                  if (forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterTitle !=
-                      null) ...[
-                    Spacer(
-                      flex: forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterTitle!,
-                    ),
-                  ],
+                  ...buildOptionalSpacer(
+                    forgotPasswordOptions
+                        .forgotPasswordSpacerOptions.spacerAfterTitle,
+                  ),
                   Align(
                     alignment: Alignment.topCenter,
                     child: wrapWithDefaultStyle(
@@ -123,14 +113,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                       ),
                     ),
                   ),
-                  if (forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterDescription !=
-                      null) ...[
-                    Spacer(
-                      flex: forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterDescription!,
-                    ),
-                  ],
+                  ...buildOptionalSpacer(
+                    forgotPasswordOptions
+                        .forgotPasswordSpacerOptions.spacerAfterDescription,
+                  ),
                   Expanded(
                     flex: forgotPasswordOptions
                         .forgotPasswordSpacerOptions.formFlexValue,
@@ -168,14 +154,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                       ),
                     ),
                   ),
-                  if (forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerBeforeButton !=
-                      null) ...[
-                    Spacer(
-                      flex: forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerBeforeButton!,
-                    ),
-                  ],
+                  ...buildOptionalSpacer(
+                    forgotPasswordOptions
+                        .forgotPasswordSpacerOptions.spacerBeforeButton,
+                  ),
                   AnimatedBuilder(
                     animation: _formValid,
                     builder: (context, snapshot) => Align(
@@ -201,14 +183,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                       ),
                     ),
                   ),
-                  if (forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterButton !=
-                      null) ...[
-                    Spacer(
-                      flex: forgotPasswordOptions
-                          .forgotPasswordSpacerOptions.spacerAfterButton!,
-                    ),
-                  ],
+                  ...buildOptionalSpacer(
+                    forgotPasswordOptions
+                        .forgotPasswordSpacerOptions.spacerAfterButton,
+                  ),
                 ],
               ),
             ),

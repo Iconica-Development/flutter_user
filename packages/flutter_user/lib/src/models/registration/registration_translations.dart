@@ -29,20 +29,9 @@ class RegistrationTranslations {
     required this.registrationUnsuccessButtonTitle,
   });
 
-  // this.registrationSuccessTitle = "your registration was successful",
-  //   this.registrationSuccessButtonTitle = "Finish",
-  //   this.registrationUnsuccessfullTitle = "something went wrong",
-  //   this.registrationEmailUnsuccessfullDescription =
-  //       "This email address is already"
-  //           " associated with an account. Please try again.",
-  //   this.registrationPasswordUnsuccessfullDescription =
-  //       "The password you entered"
-  //           " is invalid. Please try again.",
-  //   this.registrationUnsuccessButtonTitle = "Try again",
-
   /// Constructs a [RegistrationTranslations] object with empty strings.
   const RegistrationTranslations.empty()
-      : title = "",
+      : title = "Registration",
         registerBtn = "Register",
         previousStepBtn = "Previous",
         nextStepBtn = "Next",

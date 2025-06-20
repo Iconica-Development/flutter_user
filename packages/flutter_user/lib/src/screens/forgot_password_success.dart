@@ -7,7 +7,7 @@ class ForgotPasswordSuccess extends StatelessWidget {
   /// Forgot Password Success constructor
   const ForgotPasswordSuccess({
     required this.onRequestForgotPassword,
-    this.translations = const ForgotPasswordTranslations(),
+    this.translations = const ForgotPasswordTranslations.empty(),
     super.key,
   });
 

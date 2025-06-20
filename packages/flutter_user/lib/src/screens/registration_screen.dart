@@ -116,6 +116,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var registrationOptions = widget.registrationOptions;
+
     return Scaffold(
       backgroundColor: registrationOptions.registrationBackgroundColor,
       appBar: registrationOptions.customAppbarBuilder.call(
@@ -213,6 +214,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           },
                                         ),
                                       ),
+                                  const SizedBox(width: 16),
                                   registrationOptions.nextButtonBuilder?.call(
                                         onPrevious,
                                         currentStep ==
@@ -247,6 +249,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           if (registrationOptions.loginButton != null) ...[
                             registrationOptions.loginButton!,
+                            const SizedBox(
+                              height: 8,
+                            ),
                           ],
                         ],
                       ),
