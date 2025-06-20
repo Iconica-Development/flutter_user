@@ -32,6 +32,11 @@ class RestUserRepository extends HttpApiService<JsonObject>
     required super.baseUrl, // Pass baseUrl to HttpApiService
     super.client,
     this.apiPrefix = "",
+    this.loginEndpoint = "/auth/token",
+    this.registerEndpoint = "/user",
+    this.passwordResetEndpoint = "/user/password-reset/request",
+    this.loggedInUserEndpoint = "/users/me",
+    this.onTokenReceived,
   })  : _authService = _TokenAuthService(),
         super(
           authenticationService: _TokenAuthService(),
@@ -47,6 +52,21 @@ class RestUserRepository extends HttpApiService<JsonObject>
   /// The prefix for the API endpoints, allowing for versioning
   /// or path adjustments.
   final String apiPrefix;
+
+  /// Endpoint for user login.
+  final String loginEndpoint;
+
+  /// Endpoint for user registration.
+  final String registerEndpoint;
+
+  /// Endpoint for password reset requests.
+  final String passwordResetEndpoint;
+
+  /// Endpoint for fetching the logged-in user's profile.
+  final String loggedInUserEndpoint;
+
+  /// Callback to handle the received token.
+  final void Function(String? token)? onTokenReceived;
 
   /// The base endpoint for all API calls within this repository,
   /// incorporating the [apiPrefix].
@@ -68,14 +88,16 @@ class RestUserRepository extends HttpApiService<JsonObject>
         serialize: (body) => body,
       );
       var endpoint =
-          _baseEndpoint.child("/auth/token").withConverter(converter);
+          _baseEndpoint.child(loginEndpoint).withConverter(converter);
 
       var response = await endpoint.post(
         requestModel: {"email": email, "password": password},
       );
 
       var userMap = response.result?.userObject as Map<String, dynamic>?;
-      _authService.token = userMap?["token"] as String?;
+      var token = userMap?["token"] as String?;
+      _authService.token = token;
+      onTokenReceived?.call(token);
 
       return response.result!;
     } on ApiException catch (e) {
@@ -97,12 +119,15 @@ class RestUserRepository extends HttpApiService<JsonObject>
         deserialize: (json) => AuthResponse(userObject: json["user"]),
         serialize: (body) => body,
       );
-      var endpoint = _baseEndpoint.child("/user").withConverter(converter);
+      var endpoint =
+          _baseEndpoint.child(registerEndpoint).withConverter(converter);
 
       var response = await endpoint.post(requestModel: values);
 
       var userMap = response.result?.userObject as Map<String, dynamic>?;
-      _authService.token = userMap?["token"] as String?;
+      var token = userMap?["token"] as String?;
+      _authService.token = token;
+      onTokenReceived?.call(token);
 
       return response.result!;
     } on ApiException catch (e) {
@@ -126,9 +151,8 @@ class RestUserRepository extends HttpApiService<JsonObject>
         ),
         serialize: (body) => body,
       );
-      var endpoint = _baseEndpoint
-          .child("/user/password-reset/request")
-          .withConverter(converter);
+      var endpoint =
+          _baseEndpoint.child(passwordResetEndpoint).withConverter(converter);
 
       var response = await endpoint.post(requestModel: {"email": email});
       return response.statusCode == 200
@@ -145,7 +169,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
   @override
   Future getLoggedInUser() async {
     try {
-      var endpoint = _baseEndpoint.child("/users/me").authenticate();
+      var endpoint = _baseEndpoint.child(loggedInUserEndpoint).authenticate();
       var response = await endpoint.get();
       return jsonDecode(response.inner.body);
     } on ApiException catch (e) {
@@ -161,6 +185,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
   @override
   Future<bool> logout() async {
     _authService.clearToken();
+    onTokenReceived?.call(null);
     return true;
   }
 
