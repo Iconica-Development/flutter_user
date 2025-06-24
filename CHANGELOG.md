@@ -1,4 +1,5 @@
 ## Unreleased
+- Fixed a bug with registration errors still triggering the success callback.
 - Made all translations required in the constructor of ForgotPasswordTranslations and LoginTranslations.
 - Removed the default values for colors in the LoginOptions, RegistrationOptions, and ForgotPasswordOptions.
 - Added rest_user_repository package which is a REST implementation of the UserRepositoryInterface.
