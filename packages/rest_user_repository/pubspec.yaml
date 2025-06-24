@@ -1,6 +1,6 @@
 name: rest_user_repository
 description: "RESTful implementation of the user_repository_interface for flutter_user package"
-version: 6.4.0
+version: 7.0.0
 repository: https://github.com/Iconica-Development/flutter_user
 
 publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
@@ -14,7 +14,7 @@ dependencies:
     version: ^1.1.2
   user_repository_interface:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub/
-    version: ^6.4.0
+    version: ^7.0.0
 
 dev_dependencies:
   flutter_iconica_analysis:

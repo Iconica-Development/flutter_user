@@ -1,4 +1,4 @@
-## Unreleased
+## 7.0.0
 - Fixed a bug with registration errors still triggering the success callback.
 - Made all translations required in the constructor of ForgotPasswordTranslations and LoginTranslations.
 - Removed the default values for colors in the LoginOptions, RegistrationOptions, and ForgotPasswordOptions.
