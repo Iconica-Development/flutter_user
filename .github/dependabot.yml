@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  - package-ecosystem: "pub"
+    directory: "packages/firebase_user_repository"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "packages/flutter_user"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "packages/rest_user_repository"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "packages/user_repository_interface"
+    schedule:
+      interval: "weekly"

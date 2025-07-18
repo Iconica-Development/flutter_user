@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
-import "package:flutter_user/src/models/registration/auth_pass_field.dart";
-import "package:flutter_user/src/models/registration/auth_step.dart";
-import "package:flutter_user/src/models/registration/auth_text_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_pass_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_step.dart";
+import "package:flutter_user/src/models/registration/auth/auth_text_field.dart";
 import "package:flutter_user/src/models/registration/registration_spacer_options.dart";
 import "package:flutter_user/src/models/registration/registration_translations.dart";
 
@@ -10,9 +10,9 @@ class RegistrationOptions {
   RegistrationOptions({
     this.translations = const RegistrationTranslations.empty(),
     this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
-    this.registrationBackgroundColor = const Color(0xffFAF9F6),
+    this.registrationBackgroundColor,
     this.maxFormWidth = 300,
-    this.customAppbarBuilder = _createCustomAppBar,
+    this.customAppbarBuilder = _defaultAppBar,
     this.steps = const [],
     this.title,
     this.spacerOptions = const RegistrationSpacerOptions(),
@@ -33,7 +33,7 @@ class RegistrationOptions {
   /// This is used for testing purposes.
   final LoginAccessibilityIdentifiers accessibilityIdentifiers;
 
-  final Color registrationBackgroundColor;
+  final Color? registrationBackgroundColor;
   final double maxFormWidth;
   final AppBar Function(String title) customAppbarBuilder;
   List<AuthStep> steps;
@@ -46,10 +46,8 @@ class RegistrationOptions {
   final Widget? loginButton;
 }
 
-AppBar _createCustomAppBar(String title) => AppBar(
-      iconTheme: const IconThemeData(color: Colors.black, size: 16),
+AppBar _defaultAppBar(String title) => AppBar(
       title: Text(title),
-      backgroundColor: Colors.transparent,
     );
 
 List<AuthStep> getDefaultSteps({
@@ -86,8 +84,6 @@ List<AuthStep> getDefaultSteps({
               contentPadding: const EdgeInsets.symmetric(horizontal: 8),
               label: labelBuilder?.call(translations.defaultEmailLabel),
               hintText: translations.defaultEmailHint,
-              border: const OutlineInputBorder(),
-              focusedBorder: const OutlineInputBorder(),
             ),
             textStyle: textStyle,
             padding: const EdgeInsets.symmetric(vertical: 20),

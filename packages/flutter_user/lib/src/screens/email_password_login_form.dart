@@ -5,6 +5,7 @@ import "package:flutter_accessibility/flutter_accessibility.dart";
 import "package:flutter_user/src/models/login/login_options.dart";
 import "package:flutter_user/src/services/local_auth.dart";
 import "package:flutter_user/src/widgets/biometrics_button.dart";
+import "package:flutter_user/src/widgets/optional_spacer.dart";
 
 class EmailPasswordLoginForm extends StatefulWidget {
   /// Constructs an [EmailPasswordLoginForm] widget.
@@ -223,7 +224,6 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
     return Scaffold(
       backgroundColor: options.loginBackgroundColor,
       body: CustomScrollView(
-        physics: const ScrollPhysics(),
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
@@ -263,9 +263,9 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                               ),
                             ),
                             forgotPasswordButton,
-                            if (options.spacers.spacerAfterForm != null) ...[
-                              Spacer(flex: options.spacers.spacerAfterForm!),
-                            ],
+                            ...buildOptionalSpacer(
+                              options.spacers.spacerAfterForm,
+                            ),
                             if (options
                                 .biometricsOptions.loginWithBiometrics) ...[
                               Row(
@@ -290,9 +290,9 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                             if (widget.onRegister != null) ...[
                               registerButton,
                             ],
-                            if (options.spacers.spacerAfterButton != null) ...[
-                              Spacer(flex: options.spacers.spacerAfterButton!),
-                            ],
+                            ...buildOptionalSpacer(
+                              options.spacers.spacerAfterButton,
+                            ),
                           ],
                         ),
                       ),
@@ -324,9 +324,18 @@ class _LoginTitle extends StatelessWidget {
     var theme = Theme.of(context);
     return Column(
       children: [
-        if (options.spacers.spacerBeforeTitle != null) ...[
-          Spacer(flex: options.spacers.spacerBeforeTitle!),
+        ...buildOptionalSpacer(
+          options.spacers.spacerBeforeImage,
+        ),
+        if (options.image != null) ...[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: options.image,
+          ),
         ],
+        ...buildOptionalSpacer(
+          options.spacers.spacerAfterImage,
+        ),
         if (title != null) ...[
           Align(
             alignment: Alignment.topCenter,
@@ -336,9 +345,9 @@ class _LoginTitle extends StatelessWidget {
             ),
           ),
         ],
-        if (options.spacers.spacerAfterTitle != null) ...[
-          Spacer(flex: options.spacers.spacerAfterTitle!),
-        ],
+        ...buildOptionalSpacer(
+          options.spacers.spacerAfterTitle,
+        ),
         if (subtitle != null) ...[
           Align(
             alignment: Alignment.topCenter,
@@ -348,18 +357,9 @@ class _LoginTitle extends StatelessWidget {
             ),
           ),
         ],
-        if (options.spacers.spacerAfterSubtitle != null) ...[
-          Spacer(flex: options.spacers.spacerAfterSubtitle!),
-        ],
-        if (options.image != null) ...[
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: options.image,
-          ),
-        ],
-        if (options.spacers.spacerAfterImage != null) ...[
-          Spacer(flex: options.spacers.spacerAfterImage!),
-        ],
+        ...buildOptionalSpacer(
+          options.spacers.spacerAfterSubtitle,
+        ),
       ],
     );
   }

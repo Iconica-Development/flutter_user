@@ -13,15 +13,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: "flutter_user Example",
         theme: theme,
-        home: FlutterUserNavigatorUserstory(
-          afterLoginScreen: const Home(),
-          options: FlutterUserOptions(
-            loginOptions: const LoginOptions(
-              biometricsOptions: LoginBiometricsOptions(
-                loginWithBiometrics: true,
-              ),
+        home: const UserstoryScreen(),
+      );
+}
+
+class UserstoryScreen extends StatelessWidget {
+  const UserstoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) => FlutterUserNavigatorUserstory(
+        afterLoginScreen: const Home(),
+        options: FlutterUserOptions(
+          loginOptions: const LoginOptions(
+            biometricsOptions: LoginBiometricsOptions(
+              loginWithBiometrics: true,
+            ),
+            translations: LoginTranslations.empty(
+              loginTitle: "Login",
+              loginButton: "Log in",
+              loginSubtitle: "Welcome back!",
             ),
           ),
+          forgotPasswordOptions: const ForgotPasswordOptions(),
+          registrationOptions: RegistrationOptions(),
         ),
       );
 }
@@ -39,9 +53,7 @@ class Home extends StatelessWidget {
             onPressed: () async => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const FlutterUserNavigatorUserstory(
-                  afterLoginScreen: Home(),
-                ),
+                builder: (context) => const UserstoryScreen(),
               ),
             ),
             child: const Text("Logout"),

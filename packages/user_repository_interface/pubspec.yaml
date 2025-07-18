@@ -1,17 +1,12 @@
 name: user_repository_interface
 description: "user_repository_interface for flutter_user package"
-version: 6.4.0
+version: 7.0.0
 repository: https://github.com/Iconica-Development/flutter_user
 
 publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
 
 environment:
   sdk: ^3.5.1
-  flutter: ">=1.17.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
 
 dev_dependencies:
   flutter_iconica_analysis:

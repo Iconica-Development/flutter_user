@@ -55,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Future<void> onNext() async {
+  Future<void> onClickNext() async {
     FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) {
@@ -65,57 +65,52 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _formKey.currentState!.save();
     _validate(_pageController.page!.toInt());
 
-    var success = await onFinish();
-    if (success) {
-      return;
-    }
-
-    await _pageController.nextPage(
-      duration: _animationDuration,
-      curve: _animationCurve,
-    );
+    await goToNextPage();
   }
 
-  Future<bool> onFinish() async {
+  Future<void> goToNextPage() async {
     if (_pageController.page!.toInt() ==
         widget.registrationOptions.steps.length - 1) {
-      var values = <String, dynamic>{};
-
-      for (var step in widget.registrationOptions.steps) {
-        for (var field in step.fields) {
-          values[field.name] = field.value;
-        }
-      }
-
-      try {
-        await widget.userService.register(values: values);
-      } on AuthException catch (e) {
-        var pageToReturn = await widget.onError.call(e);
-
-        if (pageToReturn != null) {
-          if (pageToReturn == _pageController.page!.toInt()) {
-            return true;
-          }
-          await _pageController.animateToPage(
-            pageToReturn,
-            duration: _animationDuration,
-            curve: _animationCurve,
-          );
-          return true;
-        }
-      }
-
-      await widget.afterRegistration.call();
-
-      return true;
+      await onFinish();
+    } else {
+      await _pageController.nextPage(
+        duration: _animationDuration,
+        curve: _animationCurve,
+      );
     }
-    return false;
+  }
+
+  Future<void> onFinish() async {
+    var values = <String, dynamic>{};
+
+    for (var step in widget.registrationOptions.steps) {
+      for (var field in step.fields) {
+        values[field.name] = field.value;
+      }
+    }
+
+    try {
+      await widget.userService.register(values: values);
+      await widget.afterRegistration.call();
+    } on AuthException catch (e) {
+      var pageToReturn = await widget.onError.call(e);
+
+      if (pageToReturn != null &&
+          pageToReturn != _pageController.page!.toInt()) {
+        await _pageController.animateToPage(
+          pageToReturn,
+          duration: _animationDuration,
+          curve: _animationCurve,
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var registrationOptions = widget.registrationOptions;
+
     return Scaffold(
       backgroundColor: registrationOptions.registrationBackgroundColor,
       appBar: registrationOptions.customAppbarBuilder.call(
@@ -141,16 +136,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.beforeTitleFlex,
-                              child: Container(),
                             ),
                             registrationOptions.title!,
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.afterTitleFlex,
-                              child: Container(),
                             ),
                           ],
                         ),
@@ -213,6 +206,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           },
                                         ),
                                       ),
+                                  const SizedBox(width: 16),
                                   registrationOptions.nextButtonBuilder?.call(
                                         onPrevious,
                                         currentStep ==
@@ -235,7 +229,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             : registrationOptions
                                                 .translations.nextStepBtn,
                                         onTap: () async {
-                                          await onNext();
+                                          await onClickNext();
                                         },
                                       ),
                                 ],
@@ -247,6 +241,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           if (registrationOptions.loginButton != null) ...[
                             registrationOptions.loginButton!,
+                            const SizedBox(
+                              height: 8,
+                            ),
                           ],
                         ],
                       ),

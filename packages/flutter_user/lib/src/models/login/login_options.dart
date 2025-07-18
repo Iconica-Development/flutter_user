@@ -12,7 +12,7 @@ class LoginOptions extends Equatable {
   const LoginOptions({
     this.image,
     this.spacers = const LoginSpacerOptions(),
-    this.translations = const LoginTranslations(),
+    this.translations = const LoginTranslations.empty(),
     this.validationService,
     this.biometricsOptions = const LoginBiometricsOptions(),
     this.accessibilityIdentifiers = const LoginAccessibilityIdentifiers.empty(),
@@ -26,7 +26,7 @@ class LoginOptions extends Equatable {
     this.showObscurePassword = true,
     this.suffixIconSize,
     this.suffixIconPadding,
-    this.loginBackgroundColor = const Color(0xffFAF9F6),
+    this.loginBackgroundColor,
     this.forgotPasswordButtonBuilder = _createForgotPasswordButton,
     this.loginButtonBuilder = _createLoginButton,
     this.registrationButtonBuilder = _createRegisterButton,
@@ -36,11 +36,6 @@ class LoginOptions extends Equatable {
       contentPadding: EdgeInsets.symmetric(horizontal: 8),
       labelText: "Email address",
       border: OutlineInputBorder(),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xff71C6D1),
-        ),
-      ),
       labelStyle: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w400,
@@ -51,11 +46,6 @@ class LoginOptions extends Equatable {
       contentPadding: EdgeInsets.symmetric(horizontal: 8),
       labelText: "Password",
       border: OutlineInputBorder(),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xff71C6D1),
-        ),
-      ),
       labelStyle: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w400,
@@ -83,7 +73,7 @@ class LoginOptions extends Equatable {
   final LoginButtonBuilder forgotPasswordButtonBuilder;
   final LoginButtonBuilder loginButtonBuilder;
   final LoginButtonBuilder registrationButtonBuilder;
-  final Color loginBackgroundColor;
+  final Color? loginBackgroundColor;
   final InputContainerBuilder emailInputContainerBuilder;
   final InputContainerBuilder passwordInputContainerBuilder;
 
