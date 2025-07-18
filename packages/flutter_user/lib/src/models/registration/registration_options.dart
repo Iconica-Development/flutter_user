@@ -84,8 +84,6 @@ List<AuthStep> getDefaultSteps({
               contentPadding: const EdgeInsets.symmetric(horizontal: 8),
               label: labelBuilder?.call(translations.defaultEmailLabel),
               hintText: translations.defaultEmailHint,
-              border: const OutlineInputBorder(),
-              focusedBorder: const OutlineInputBorder(),
             ),
             textStyle: textStyle,
             padding: const EdgeInsets.symmetric(vertical: 20),

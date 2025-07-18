@@ -136,16 +136,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.beforeTitleFlex,
-                              child: Container(),
                             ),
                             registrationOptions.title!,
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.afterTitleFlex,
-                              child: Container(),
                             ),
                           ],
                         ),

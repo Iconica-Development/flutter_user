@@ -224,7 +224,6 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
     return Scaffold(
       backgroundColor: options.loginBackgroundColor,
       body: CustomScrollView(
-        physics: const ScrollPhysics(),
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
@@ -326,7 +325,16 @@ class _LoginTitle extends StatelessWidget {
     return Column(
       children: [
         ...buildOptionalSpacer(
-          options.spacers.spacerBeforeTitle,
+          options.spacers.spacerBeforeImage,
+        ),
+        if (options.image != null) ...[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: options.image,
+          ),
+        ],
+        ...buildOptionalSpacer(
+          options.spacers.spacerAfterImage,
         ),
         if (title != null) ...[
           Align(
@@ -351,15 +359,6 @@ class _LoginTitle extends StatelessWidget {
         ],
         ...buildOptionalSpacer(
           options.spacers.spacerAfterSubtitle,
-        ),
-        if (options.image != null) ...[
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: options.image,
-          ),
-        ],
-        ...buildOptionalSpacer(
-          options.spacers.spacerAfterImage,
         ),
       ],
     );
