@@ -43,7 +43,7 @@ class ForgotPasswordSuccess extends StatelessWidget {
                 child: SafeArea(
                   bottom: true,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.all(20),
                     child: PrimaryButton(
                       buttonTitle:
                           translations.forgotPasswordSuccessButtonTitle,

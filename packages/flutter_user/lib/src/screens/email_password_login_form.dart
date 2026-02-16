@@ -262,7 +262,13 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                                 passwordTextFormField,
                               ),
                             ),
-                            forgotPasswordButton,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 4.0,
+                                bottom: 8.0,
+                              ),
+                              child: forgotPasswordButton,
+                            ),
                             ...buildOptionalSpacer(
                               options.spacers.spacerAfterForm,
                             ),
@@ -288,6 +294,9 @@ class _EmailPasswordLoginFormState extends State<EmailPasswordLoginForm> {
                               ),
                             ],
                             if (widget.onRegister != null) ...[
+                              const SizedBox(
+                                height: 8.0,
+                              ),
                               registerButton,
                             ],
                             ...buildOptionalSpacer(

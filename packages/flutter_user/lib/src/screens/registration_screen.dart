@@ -124,9 +124,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                for (var currentStep = 0;
-                    currentStep < registrationOptions.steps.length;
-                    currentStep++) ...[
+                for (var (index, step)
+                    in registrationOptions.steps.indexed) ...[
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,8 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: [
-                              for (AuthField field in registrationOptions
-                                  .steps[currentStep].fields) ...[
+                              for (AuthField field in step.fields) ...[
                                 if (field.title != null) ...[
                                   wrapWithDefaultStyle(
                                     style: theme.textTheme.headlineLarge!,
@@ -167,7 +165,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     maxWidth: registrationOptions.maxFormWidth,
                                   ),
                                   child: field.build(context, () {
-                                    _validate(currentStep);
+                                    _validate(index);
                                   }),
                                 ),
                               ],
@@ -194,10 +192,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         onPrevious,
                                         registrationOptions
                                             .translations.previousStepBtn,
-                                        currentStep,
+                                        index,
                                       ) ??
                                       Visibility(
-                                        visible: currentStep != 0,
+                                        visible: index != 0,
                                         child: stepButton(
                                           buttonText: registrationOptions
                                               .translations.previousStepBtn,
@@ -208,8 +206,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       ),
                                   const SizedBox(width: 16),
                                   registrationOptions.nextButtonBuilder?.call(
-                                        onPrevious,
-                                        currentStep ==
+                                        onClickNext,
+                                        index ==
                                                 registrationOptions
                                                         .steps.length -
                                                     1
@@ -217,10 +215,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 .translations.registerBtn
                                             : registrationOptions
                                                 .translations.nextStepBtn,
-                                        currentStep,
+                                        index,
                                       ) ??
                                       stepButton(
-                                        buttonText: currentStep ==
+                                        buttonText: index ==
                                                 registrationOptions
                                                         .steps.length -
                                                     1
@@ -236,14 +234,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
+                          const SizedBox(height: 8),
                           if (registrationOptions.loginButton != null) ...[
                             registrationOptions.loginButton!,
-                            const SizedBox(
-                              height: 8,
-                            ),
+                            const SizedBox(height: 8),
                           ],
                         ],
                       ),
