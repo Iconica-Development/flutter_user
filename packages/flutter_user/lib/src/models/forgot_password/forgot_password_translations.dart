@@ -1,5 +1,23 @@
+///
 class ForgotPasswordTranslations {
+  /// Creates a [ForgotPasswordTranslations] with the provided values.
   const ForgotPasswordTranslations({
+    required this.forgotPasswordTitle,
+    required this.forgotPasswordDescription,
+    required this.requestForgotPasswordButton,
+    required this.forgotPasswordSuccessTitle,
+    required this.forgotPasswordSuccessButtonTitle,
+    required this.registrationSuccessTitle,
+    required this.registrationSuccessButtonTitle,
+    required this.forgotPasswordUnsuccessfullTitle,
+    required this.forgotPasswordUnsuccessfullDescription,
+    required this.forgotPasswordUnsuccessButtonTitle,
+    required this.registrationUnsuccessfullTitle,
+  });
+
+  /// Creates a [ForgotPasswordTranslations] with default values.
+  /// /// This constructor is used when no specific translations are provided.
+  const ForgotPasswordTranslations.empty({
     this.forgotPasswordTitle = "forgot password",
     this.forgotPasswordDescription =
         "No worries. Enter your email address below"

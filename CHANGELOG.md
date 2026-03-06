@@ -1,3 +1,12 @@
+## 7.0.0
+- Fixed a bug with registration errors still triggering the success callback.
+- Made all translations required in the constructor of ForgotPasswordTranslations and LoginTranslations.
+- Removed the default values for colors in the LoginOptions, RegistrationOptions, and ForgotPasswordOptions.
+- Added rest_user_repository package which is a REST implementation of the UserRepositoryInterface.
+- Changed afterLoginScreen to a nullable Widget so a screen isn't automatically pushed after login.
+- Moved the RegistrationOptions and ForgotPasswordOptions to the FlutterUserOptions.
+- Changed the image option for the Login page to the top of the screen.
+
 ## 6.4.0
 
 - Added proper use of exceptions for all auth methods.

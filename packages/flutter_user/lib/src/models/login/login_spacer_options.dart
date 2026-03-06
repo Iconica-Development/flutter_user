@@ -9,22 +9,22 @@ class LoginSpacerOptions extends Equatable {
     this.spacerAfterForm,
     this.spacerAfterButton,
     this.titleSpacer = 1,
-    this.spacerBeforeTitle = 8,
+    this.spacerBeforeImage = 8,
     this.spacerAfterTitle = 2,
     this.formFlexValue = 2,
   });
 
-  /// Flex value for the spacer before the title.
-  final int? spacerBeforeTitle;
+  /// Flex value for the spacer before the image.
+  final int? spacerBeforeImage;
+
+  /// Flex value for the spacer between the image and title
+  final int? spacerAfterImage;
 
   /// Flex value for the spacer between the title and subtitle.
   final int? spacerAfterTitle;
 
-  /// Flex value for the spacer between the subtitle and image.
+  /// Flex value for the spacer between the subtitle and form
   final int? spacerAfterSubtitle;
-
-  /// Flex value for the spacer between the image and form.
-  final int? spacerAfterImage;
 
   /// Flex value for the spacer between the form and button.
   final int? spacerAfterForm;
@@ -40,7 +40,7 @@ class LoginSpacerOptions extends Equatable {
 
   @override
   List<Object?> get props => [
-        spacerBeforeTitle,
+        spacerBeforeImage,
         spacerAfterTitle,
         spacerAfterSubtitle,
         spacerAfterImage,

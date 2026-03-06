@@ -4,7 +4,7 @@
 
 import "package:flutter/material.dart";
 import "package:flutter_input_library/flutter_input_library.dart";
-import "package:flutter_user/src/models/registration/auth_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_field.dart";
 
 /// A field for capturing password inputs in a Flutter form.
 ///

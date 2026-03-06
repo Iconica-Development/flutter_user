@@ -2,6 +2,18 @@ import "package:equatable/equatable.dart";
 
 class LoginTranslations extends Equatable {
   const LoginTranslations({
+    required this.loginTitle,
+    required this.loginSubtitle,
+    required this.emailEmpty,
+    required this.passwordEmpty,
+    required this.emailInvalid,
+    required this.loginButton,
+    required this.forgotPasswordButton,
+    required this.registrationButton,
+    required this.biometricsLoginMessage,
+  });
+
+  const LoginTranslations.empty({
     this.loginTitle = "log in",
     this.loginSubtitle,
     this.emailEmpty = "Please enter your email address",

@@ -42,7 +42,7 @@ abstract class AuthField<T> {
   final Widget? title;
 
   /// A list of validation functions for the field.
-  List<String? Function(T?)> validators;
+  final List<String? Function(T?)> validators;
 
   /// Builds the widget representing the field.
   ///

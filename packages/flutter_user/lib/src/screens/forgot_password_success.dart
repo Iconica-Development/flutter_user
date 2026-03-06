@@ -7,7 +7,7 @@ class ForgotPasswordSuccess extends StatelessWidget {
   /// Forgot Password Success constructor
   const ForgotPasswordSuccess({
     required this.onRequestForgotPassword,
-    this.translations = const ForgotPasswordTranslations(),
+    this.translations = const ForgotPasswordTranslations.empty(),
     super.key,
   });
 
@@ -43,7 +43,7 @@ class ForgotPasswordSuccess extends StatelessWidget {
                 child: SafeArea(
                   bottom: true,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.all(20),
                     child: PrimaryButton(
                       buttonTitle:
                           translations.forgotPasswordSuccessButtonTitle,

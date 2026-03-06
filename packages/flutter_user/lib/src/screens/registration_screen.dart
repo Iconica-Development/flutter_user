@@ -55,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Future<void> onNext() async {
+  Future<void> onClickNext() async {
     FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) {
@@ -65,57 +65,52 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _formKey.currentState!.save();
     _validate(_pageController.page!.toInt());
 
-    var success = await onFinish();
-    if (success) {
-      return;
-    }
-
-    await _pageController.nextPage(
-      duration: _animationDuration,
-      curve: _animationCurve,
-    );
+    await goToNextPage();
   }
 
-  Future<bool> onFinish() async {
+  Future<void> goToNextPage() async {
     if (_pageController.page!.toInt() ==
         widget.registrationOptions.steps.length - 1) {
-      var values = <String, dynamic>{};
-
-      for (var step in widget.registrationOptions.steps) {
-        for (var field in step.fields) {
-          values[field.name] = field.value;
-        }
-      }
-
-      try {
-        await widget.userService.register(values: values);
-      } on AuthException catch (e) {
-        var pageToReturn = await widget.onError.call(e);
-
-        if (pageToReturn != null) {
-          if (pageToReturn == _pageController.page!.toInt()) {
-            return true;
-          }
-          await _pageController.animateToPage(
-            pageToReturn,
-            duration: _animationDuration,
-            curve: _animationCurve,
-          );
-          return true;
-        }
-      }
-
-      await widget.afterRegistration.call();
-
-      return true;
+      await onFinish();
+    } else {
+      await _pageController.nextPage(
+        duration: _animationDuration,
+        curve: _animationCurve,
+      );
     }
-    return false;
+  }
+
+  Future<void> onFinish() async {
+    var values = <String, dynamic>{};
+
+    for (var step in widget.registrationOptions.steps) {
+      for (var field in step.fields) {
+        values[field.name] = field.value;
+      }
+    }
+
+    try {
+      await widget.userService.register(values: values);
+      await widget.afterRegistration.call();
+    } on AuthException catch (e) {
+      var pageToReturn = await widget.onError.call(e);
+
+      if (pageToReturn != null &&
+          pageToReturn != _pageController.page!.toInt()) {
+        await _pageController.animateToPage(
+          pageToReturn,
+          duration: _animationDuration,
+          curve: _animationCurve,
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var registrationOptions = widget.registrationOptions;
+
     return Scaffold(
       backgroundColor: registrationOptions.registrationBackgroundColor,
       appBar: registrationOptions.customAppbarBuilder.call(
@@ -129,9 +124,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                for (var currentStep = 0;
-                    currentStep < registrationOptions.steps.length;
-                    currentStep++) ...[
+                for (var (index, step)
+                    in registrationOptions.steps.indexed) ...[
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,16 +135,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.beforeTitleFlex,
-                              child: Container(),
                             ),
                             registrationOptions.title!,
-                            Expanded(
+                            Spacer(
                               flex: registrationOptions
                                   .spacerOptions.afterTitleFlex,
-                              child: Container(),
                             ),
                           ],
                         ),
@@ -161,8 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           alignment: Alignment.topCenter,
                           child: Column(
                             children: [
-                              for (AuthField field in registrationOptions
-                                  .steps[currentStep].fields) ...[
+                              for (AuthField field in step.fields) ...[
                                 if (field.title != null) ...[
                                   wrapWithDefaultStyle(
                                     style: theme.textTheme.headlineLarge!,
@@ -174,7 +165,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     maxWidth: registrationOptions.maxFormWidth,
                                   ),
                                   child: field.build(context, () {
-                                    _validate(currentStep);
+                                    _validate(index);
                                   }),
                                 ),
                               ],
@@ -201,10 +192,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         onPrevious,
                                         registrationOptions
                                             .translations.previousStepBtn,
-                                        currentStep,
+                                        index,
                                       ) ??
                                       Visibility(
-                                        visible: currentStep != 0,
+                                        visible: index != 0,
                                         child: stepButton(
                                           buttonText: registrationOptions
                                               .translations.previousStepBtn,
@@ -213,9 +204,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           },
                                         ),
                                       ),
+                                  const SizedBox(width: 16),
                                   registrationOptions.nextButtonBuilder?.call(
-                                        onPrevious,
-                                        currentStep ==
+                                        onClickNext,
+                                        index ==
                                                 registrationOptions
                                                         .steps.length -
                                                     1
@@ -223,10 +215,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 .translations.registerBtn
                                             : registrationOptions
                                                 .translations.nextStepBtn,
-                                        currentStep,
+                                        index,
                                       ) ??
                                       stepButton(
-                                        buttonText: currentStep ==
+                                        buttonText: index ==
                                                 registrationOptions
                                                         .steps.length -
                                                     1
@@ -235,18 +227,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             : registrationOptions
                                                 .translations.nextStepBtn,
                                         onTap: () async {
-                                          await onNext();
+                                          await onClickNext();
                                         },
                                       ),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
+                          const SizedBox(height: 8),
                           if (registrationOptions.loginButton != null) ...[
                             registrationOptions.loginButton!,
+                            const SizedBox(height: 8),
                           ],
                         ],
                       ),

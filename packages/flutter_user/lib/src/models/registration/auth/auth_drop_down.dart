@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_user/src/models/registration/auth_field.dart";
+import "package:flutter_user/src/models/registration/auth/auth_field.dart";
 
 /// A field for capturing dropdown selections in a Flutter form.
 ///

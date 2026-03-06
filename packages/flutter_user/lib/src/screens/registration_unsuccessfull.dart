@@ -56,10 +56,13 @@ class RegistrationUnsuccessfull extends StatelessWidget {
                 ),
                 child: SafeArea(
                   bottom: true,
-                  child: PrimaryButton(
-                    buttonTitle: registrationOptions
-                        .translations.registrationUnsuccessButtonTitle,
-                    onPressed: onPressed,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: PrimaryButton(
+                      buttonTitle: registrationOptions
+                          .translations.registrationUnsuccessButtonTitle,
+                      onPressed: onPressed,
+                    ),
                   ),
                 ),
               ),
