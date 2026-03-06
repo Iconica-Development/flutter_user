@@ -66,7 +66,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
   final String loggedInUserEndpoint;
 
   /// Callback to handle the received token.
-  final void Function(String? token)? onTokenReceived;
+  final Future<void> Function(String? token)? onTokenReceived;
 
   /// The base endpoint for all API calls within this repository,
   /// incorporating the [apiPrefix].
@@ -97,7 +97,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
       var userMap = response.result?.userObject as Map<String, dynamic>?;
       var token = userMap?["token"] as String?;
       _authService.token = token;
-      onTokenReceived?.call(token);
+      await onTokenReceived?.call(token);
 
       return response.result!;
     } on ApiException catch (e) {
@@ -127,7 +127,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
       var userMap = response.result?.userObject as Map<String, dynamic>?;
       var token = userMap?["token"] as String?;
       _authService.token = token;
-      onTokenReceived?.call(token);
+      await onTokenReceived?.call(token);
 
       return response.result!;
     } on ApiException catch (e) {
@@ -185,7 +185,7 @@ class RestUserRepository extends HttpApiService<JsonObject>
   @override
   Future<bool> logout() async {
     _authService.clearToken();
-    onTokenReceived?.call(null);
+    await onTokenReceived?.call(null);
     return true;
   }
 
